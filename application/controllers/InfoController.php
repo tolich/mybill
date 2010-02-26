@@ -123,7 +123,7 @@ class InfoController extends Zend_Controller_Action
 	}
 
 	public function modulesAction(){
-		$moduleRenderCmd = "App.getModule('%s').render();";
+		$moduleRenderCmd = "var m=App.getModule('%s');if(m)m.render();";
 		$aModules =  Context::GetModules();
 		foreach ($aModules as $module=>$v)
 			$this->view->inlineScript()->appendScript(sprintf($moduleRenderCmd,$module));
