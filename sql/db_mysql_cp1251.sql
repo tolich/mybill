@@ -141,6 +141,7 @@ CREATE TABLE usergroup (
   id_tariff int(11) NOT NULL default '0',
   deposit decimal(15,2) NOT NULL default '0.00',
   freebyte decimal(15,3) NOT NULL default '0.000',
+  paybyte decimal(15,3) NOT NULL default '0.000',
   mindeposit decimal(15,2) NOT NULL default '0.00',
   dateofcheck int(2) NOT NULL default '0',	
   wwwpassword  varchar(64) NOT NULL default '', 
@@ -174,6 +175,10 @@ CREATE TABLE usergroup (
   pipe_method int NOT NULL default '0',
   newuser int NOT NULL default '0',
   role varchar(64) NOT NULL default 'user',
+  id_1c int(11),
+  id_repl int(11),
+  repl_status int(11) NOT NULL default 2,
+  is_repl int(11) NOT NULL default 1,
   PRIMARY KEY  (id),
   KEY username (username(32)),
   KEY groupname (groupname(32)),
@@ -183,7 +188,11 @@ CREATE TABLE usergroup (
   KEY address (address(32)),
   KEY in_ip (in_ip),
   KEY detail (detail),
-  KEY mac (mac)
+  KEY mac (mac),
+  KEY id_1c (id_1c),
+  KEY id_repl (id_repl),
+  KEY repl_status (repl_status),
+  KEY is_repl (is_repl)
 ) ENGINE=INNODB;
 
 #
@@ -309,6 +318,7 @@ CREATE TABLE intariffs (
   weightmb decimal(4,3) NOT NULL default '1',
   in_pipe int(11) NOT NULL default '0',
   out_pipe int(11) NOT NULL default '0',
+  action int NOT NULL default '1',
   flag varchar(5) NOT NULL default '0', #in or other freeByte
   PRIMARY KEY (id),
   KEY (idtariff),
@@ -324,6 +334,7 @@ CREATE TABLE payments (
   amount decimal(15,2) NOT NULL default '0.00',
   amountdeposit decimal(15,2) NOT NULL default '0.00',
   amountfreebyte decimal (15,3) NOT NULL default '0.000',
+  amountpaybyte decimal (15,3) NOT NULL default '0.000',
   rate decimal(10,2) NOT NULL default '0.00',
   lastdeposit decimal(15,2) NOT NULL default '0.00',
   lastfreebyte decimal(15,3) NOT NULL default '0.000',
@@ -331,9 +342,15 @@ CREATE TABLE payments (
   status int(11) NOT NULL default '0',
   amountbonus decimal(15,3) NOT NULL default '0.000',
   lastbonus decimal(15,3) NOT NULL default '0.000',
+  id_acctperiod int(11),
+  id_repl int(11)
+  repl_status int(11) NOT NULL default 0,
   PRIMARY KEY (id),
   KEY (iduser),
-  KEY (datepayment)
+  KEY (datepayment),
+  KEY (id_acctperiod),
+  KEY (id_repl),
+  KEY (repl_status)
 )ENGINE=INNODB;
 
 
@@ -582,3 +599,32 @@ CREATE TABLE acctperiod(
 )ENGINE=INNODB;
 
 INSERT INTO acctperiod (datestart) value (now());
+#
+# Table structure for table 'replication'
+#
+CREATE TABLE replication(
+  id int(11) NOT NULL auto_increment,
+  datestart datetime default '0000-00-00 00:00:00',
+  status int NOT NULL default 0, #0-new, 1-success, 2-failed, 3-undefined
+  PRIMARY KEY id (id),
+  KEY datestart (datestart),
+  KEY status (status)
+)ENGINE=INNODB;
+
+#
+#Table structure for table 'accruals'
+#
+CREATE TABLE accruals(
+	id int(11) NOT NULL auto_increment,
+	id_user int NOT NULL default 0,
+	id_acctperiod int NOT NULL default 0,
+	begin_deposit decimal(15,2) NOT NULL default '0.00',
+	payment_amount decimal(15,2) NOT NULL default '0.00',
+	end_deposit decimal(15,2) NOT NULL default '0.00',
+	id_repl int(11),
+	repl_status int(11) NOT NULL default 0,
+  	description varchar(200) NOT NULL default '',
+	PRIMARY KEY id (id),
+	KEY id_user (id_user),
+	KEY id_acctperiod (id_acctperiod)
+) ENGINE=INNODB;
