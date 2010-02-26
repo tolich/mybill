@@ -1,6 +1,5 @@
 Ext.SSL_SECURE_URL="/shared/icons/s.gif"; 
 Ext.BLANK_IMAGE_URL="/shared/icons/s.gif";
-
 Ext.namespace('Reports');
 Ext.QuickTips.init();
 Ext.form.Field.prototype.msgTarget = 'side';

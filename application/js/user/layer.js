@@ -1,6 +1,3 @@
-/**
- * Персональный кабинет пользователя	
- */
 Ext.SSL_SECURE_URL="/shared/icons/s.gif"; 
 Ext.BLANK_IMAGE_URL="/shared/icons/s.gif";
 Ext.ns('Ext.app.Layer');
