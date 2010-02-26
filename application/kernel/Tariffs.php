@@ -124,10 +124,9 @@ class Tariffs
 		$sql = $this->Db->select()
 					->from('intariffs')
 					->join('flags', 'intariffs.flag=flags.id', array('flagname'))
-					->joinLeft('zones', 'intariffs.idzone=zones.id', array('zonename','action'))
-					->where('idtariff=?', $id);
-		if ($sort!=null && $dir!=null)
-			$sql->order(array("$sort $dir"));
+					->joinLeft('zones', 'intariffs.idzone=zones.id', array('zonename'))
+					->where('idtariff=?', $id)
+                    ->order(array("$sort $dir"));
 		$aRows = $this->Db->fetchAll($sql);
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
