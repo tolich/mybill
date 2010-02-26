@@ -23,16 +23,16 @@ App.register(Ext.extend(Ext.app.Module, {
 		style: 'margin:10px 0 0 20px;',
 		cls1: 'paycard-activated', 
 		id_link1: 'paycard-activated',
-		msg1: 'Активация карты пополнения счета', 
-		desc1: 'Пополнение депозита с помощью карты пополнения.',
+		msg1: 'РђРєС‚РёРІР°С†РёСЏ РєР°СЂС‚С‹ РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡РµС‚Р°', 
+		desc1: 'РџРѕРїРѕР»РЅРµРЅРёРµ РґРµРїРѕР·РёС‚Р° СЃ РїРѕРјРѕС‰СЊСЋ РєР°СЂС‚С‹ РїРѕРїРѕР»РЅРµРЅРёСЏ.',
 		cls2: 'paycard-fee', 
 		id_link2: 'paycard-fee',
-		msg2: 'Включение доступа в интернет', 
-		desc2: 'Вы можете самостоятельно включить доступ в интернет, если депозит не меньше абонплаты выбранного Вами тарифа.',
+		msg2: 'Р’РєР»СЋС‡РµРЅРёРµ РґРѕСЃС‚СѓРїР° РІ РёРЅС‚РµСЂРЅРµС‚', 
+		desc2: 'Р’С‹ РјРѕР¶РµС‚Рµ СЃР°РјРѕСЃС‚РѕСЏС‚РµР»СЊРЅРѕ РІРєР»СЋС‡РёС‚СЊ РґРѕСЃС‚СѓРї РІ РёРЅС‚РµСЂРЅРµС‚, РµСЃР»Рё РґРµРїРѕР·РёС‚ РЅРµ РјРµРЅСЊС€Рµ Р°Р±РѕРЅРїР»Р°С‚С‹ РІС‹Р±СЂР°РЅРЅРѕРіРѕ Р’Р°РјРё С‚Р°СЂРёС„Р°.',
 		cls3: 'paycard-deposit-to-mb', 
 		id_link3: 'paycard-deposit-to-mb',
-		msg3: 'Перевод средств с депозита на МБ', 
-		desc3: 'Для пакетов с предоплаченным трафиком производится перевод средств с депозита в МБ для дальнейшего использования.'
+		msg3: 'РџРµСЂРµРІРѕРґ СЃСЂРµРґСЃС‚РІ СЃ РґРµРїРѕР·РёС‚Р° РЅР° РњР‘', 
+		desc3: 'Р”Р»СЏ РїР°РєРµС‚РѕРІ СЃ РїСЂРµРґРѕРїР»Р°С‡РµРЅРЅС‹Рј С‚СЂР°С„РёРєРѕРј РїСЂРѕРёР·РІРѕРґРёС‚СЃСЏ РїРµСЂРµРІРѕРґ СЃСЂРµРґСЃС‚РІ СЃ РґРµРїРѕР·РёС‚Р° РІ РњР‘ РґР»СЏ РґР°Р»СЊРЅРµР№С€РµРіРѕ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ.'
 	}
 	,onClickLink1: function(){
 		this.winCardActivated();
@@ -51,11 +51,11 @@ App.register(Ext.extend(Ext.app.Module, {
 	,accessOn: function(){
 		App.request({
 			url: '/ajax/modules/paycard/act/checkforaccess',
-			mask: 'Проверяем состояние счета ...',
+			mask: 'РџСЂРѕРІРµСЂСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ СЃС‡РµС‚Р° ...',
 			success: function(r, o, res){
 				Ext.Msg.show({
-					title:'Подтверждение',
-					msg: 'C депозита будет списано <b>'+(res.monthlyfee+res.dailyfee)+'</b><br> согласно Вашего тарифа <b>'+res.tariffname+'</b><br>Продолжить?',
+					title:'РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ',
+					msg: 'C РґРµРїРѕР·РёС‚Р° Р±СѓРґРµС‚ СЃРїРёСЃР°РЅРѕ <b>'+(res.monthlyfee+res.dailyfee)+'</b><br> СЃРѕРіР»Р°СЃРЅРѕ Р’Р°С€РµРіРѕ С‚Р°СЂРёС„Р° <b>'+res.tariffname+'</b><br>РџСЂРѕРґРѕР»Р¶РёС‚СЊ?',
 					buttons: Ext.MessageBox.YESNO,
 					icon: Ext.MessageBox.QUESTION,
 					width: '320',
@@ -86,7 +86,7 @@ App.register(Ext.extend(Ext.app.Module, {
 	        defaultType: 'textfield',
 	        items: 
 			[{
-	            fieldLabel: 'Введите сумму для перевода',
+	            fieldLabel: 'Р’РІРµРґРёС‚Рµ СЃСѓРјРјСѓ РґР»СЏ РїРµСЂРµРІРѕРґР°',
 	            id: uid+'-amount',
 				xtype: 'textfield',
 				allowBlank: false,
@@ -97,7 +97,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		var form = formPanel.getForm();
 		
 	    var win = new Ext.Window({
-	        title: 'Перевод средств с депозита в МБ',
+	        title: 'РџРµСЂРµРІРѕРґ СЃСЂРµРґСЃС‚РІ СЃ РґРµРїРѕР·РёС‚Р° РІ РњР‘',
 	        width: 320,
 	        height:130,
 	        minWidth: 320,
@@ -107,16 +107,16 @@ App.register(Ext.extend(Ext.app.Module, {
 	        items: formPanel,
 			modal: true,
 	        buttons: [{
-	            text: 'Ок',
+	            text: 'РћРє',
 				handler: function(){
 					if (form.isValid()) {
 						App.request({
 							url: '/ajax/modules/paycard/act/checkformb',
-							mask: 'Проверяем состояние счета ...',
+							mask: 'РџСЂРѕРІРµСЂСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ СЃС‡РµС‚Р° ...',
 							success: function(r, o, res){
 								Ext.Msg.show({
-									title:'Подтверждение',
-									msg: 'С депозита будет списано <b>'+ Ext.getCmp(uid+'-amount').getValue()+'</b><br>и добавлено к пакетным Мб  <b>'+res.mb+'</b><br>Продолжить?',
+									title:'РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ',
+									msg: 'РЎ РґРµРїРѕР·РёС‚Р° Р±СѓРґРµС‚ СЃРїРёСЃР°РЅРѕ <b>'+ Ext.getCmp(uid+'-amount').getValue()+'</b><br>Рё РґРѕР±Р°РІР»РµРЅРѕ Рє РїР°РєРµС‚РЅС‹Рј РњР±  <b>'+res.mb+'</b><br>РџСЂРѕРґРѕР»Р¶РёС‚СЊ?',
 									buttons: Ext.MessageBox.YESNO,
 									icon: Ext.MessageBox.QUESTION,
 									width: '320',
@@ -145,7 +145,7 @@ App.register(Ext.extend(Ext.app.Module, {
 				}
 				,scope: this
 	        },{
-	            text: 'Отмена',
+	            text: 'РћС‚РјРµРЅР°',
 				handler: function(){
 					win.hide();
 					win.destroy();
@@ -164,7 +164,7 @@ App.register(Ext.extend(Ext.app.Module, {
 	        defaultType: 'textfield',
 	        items: 
 			[{
-	            fieldLabel: 'Введите 16 цифр указанные на карте',
+	            fieldLabel: 'Р’РІРµРґРёС‚Рµ 16 С†РёС„СЂ СѓРєР°Р·Р°РЅРЅС‹Рµ РЅР° РєР°СЂС‚Рµ',
 	            id: uid+'-pin',
 				xtype: 'textfield',
 				allowBlank: false,
@@ -175,7 +175,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		var form = formPanel.getForm();
 		
 	    var win = new Ext.Window({
-	        title: 'Активация карты пополнения счета',
+	        title: 'РђРєС‚РёРІР°С†РёСЏ РєР°СЂС‚С‹ РїРѕРїРѕР»РЅРµРЅРёСЏ СЃС‡РµС‚Р°',
 	        width: 320,
 	        height:150,
 	        minWidth: 320,
@@ -185,17 +185,17 @@ App.register(Ext.extend(Ext.app.Module, {
 	        items: formPanel,
 			modal: true,
 	        buttons: [{
-	            text: 'Ок',
+	            text: 'РћРє',
 				handler: function(){
 					if (form.isValid()) {
 						win.el.mask();
 						App.request({
 							url: '/ajax/modules/paycard/act/checkcard',
-							mask: 'Проверяем код карты ...',
+							mask: 'РџСЂРѕРІРµСЂСЏРµРј РєРѕРґ РєР°СЂС‚С‹ ...',
 							success: function(r, o, res){
 								Ext.Msg.show({
-									title:'Подтверждение',
-									msg: 'Ваш депозит будет пополнен на <b>'+res.nominal+'</b> <br>Продолжить?',
+									title:'РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ',
+									msg: 'Р’Р°С€ РґРµРїРѕР·РёС‚ Р±СѓРґРµС‚ РїРѕРїРѕР»РЅРµРЅ РЅР° <b>'+res.nominal+'</b> <br>РџСЂРѕРґРѕР»Р¶РёС‚СЊ?',
 									buttons: Ext.MessageBox.YESNO,
 									icon: Ext.MessageBox.QUESTION,
 									width: '320',
@@ -227,7 +227,7 @@ App.register(Ext.extend(Ext.app.Module, {
 				}
 				,scope: this
 	        },{
-	            text: 'Отмена',
+	            text: 'РћС‚РјРµРЅР°',
 				handler: function(){
 					win.hide();
 					win.destroy();
