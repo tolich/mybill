@@ -77,7 +77,6 @@ Reports.gridPay = Ext.extend(Ext.grid.GridPanel,{
 			,baseParams: {limit:pageLimit}
 		});
         Ext.apply(this, {
-			//region: 'center',
 			margins: '0 5 5 0',
 			title: 'История платежей',
 			store: store,

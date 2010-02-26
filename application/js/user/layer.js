@@ -45,8 +45,6 @@ Ext.app.Layer=function(){
 				,layoutConfig: {
 					animate: true
 				}
-//				layout: 'fit',
-				//split: true,
 				,items:[{
 					id: 'account'
 					,title: 'Состояние счета'
