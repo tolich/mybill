@@ -1,0 +1,132 @@
+<table class="table-wrap">
+	<tr>
+		<td class="td-wrap">
+			Ф.И.О:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->surname ?> <?php echo $this->name ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Адрес:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->address ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			IP:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->in_ip ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Маска подсети:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->mask ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Предпочитаемый DNS:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->DNS ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Логин:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->username ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Пароль:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->password ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Персональная страница:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->URL ?>
+		</td>
+	</tr>
+	<tr>
+		<td class="td-wrap">
+			Пароль для статистики:&nbsp
+		</td>
+		<td class="td-wrap">
+			&nbsp <?php echo $this->wwwpassword ?>
+		</td>
+	</tr>
+</table>		
+<div class="print-only">
+<h3>Что делать, если при подключении возникла ошибка:</h>
+<table>
+	<tr><td>691</td></tr>
+	<tr><td>
+		<span class="print-subtitle">Может возникать в следующих случаях:</span>
+		<ol>
+			<li> Неверно набран логин или пароль.</li>
+			<li> Недостаточен баланс лицевого счета.</li>
+			<li> Поменялась сетевая карта на Вашем компьютере.</li>
+		</ol>
+		<span class="print-subtitle">Пути решения:</span>
+		<ol>
+			<li> Проверьте реквизиты доступа в сеть.</li> 
+			<li> Внимательно введите свой логин\пароль при подключении к Интернету.</li>
+			<li> Возможно, у Вас отрицательный баланс.
+					Проверить свой лицевой счет можно 
+					в кабинете личной статистики абонента по адресу: <?php echo $this->URL ?></li>
+			<li> Обратится в службу поддержки по тел. <?php echo $this->tel ?></li>
+		</ol>
+	</td></tr>
+	<tr><td>
+		678<br>
+		800 Ошибка возникает не сразу<br>
+		815 (Vista) 
+	</td></tr>
+	<tr><td><p>
+		<span class="print-subtitle">Может возникать в следующих случаях:</span>
+		<ol>
+			<li> Отсутствует связь между Вашим компьютером и сервером доступа.</li>
+		</ol>
+		<span class="print-subtitle">Пути решения:</span>
+		<ol>
+			<li> Обратитесь в службу поддержки по тел. <?php echo $this->tel ?></li>
+		</ol>
+	</p></td></tr>
+	<tr><td>
+		769<br>
+		800 Ошибка возникает сразу<br>
+		814 (Vista)<br>
+	</td></tr>
+	<tr><td><p>
+		<span class="print-subtitle">Может возникать в следующих случаях:</span>
+		<ol>
+			<li> Произошло подвисание оборудования.</li>
+			<li> Установлен неверный драйвер сетевой карты.</li>
+			<li> Сетевая карта отключена.</li>
+		</ol>
+		<span class="print-subtitle">Пути решения:</span>
+		<ol>
+			<li> Перезагрузите компьютер.</li>
+			<li> Установите драйвер изготовителя оборудования.</li>
+			<li> Необходимо включить сетевой адаптер который подключен к сети
+				(Откройте «Пуск»-«Панель управления»-«Сетевые подключения». 
+				Обычно, сетевой адаптер имеет название «Подключение по локальной сети».) и повторить попытку подключения.</li>
+	</p></td></tr>
+</table>
+</div>

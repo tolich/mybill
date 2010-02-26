@@ -1,0 +1,21 @@
+.aclmanager{
+    background-image: url(/shared/icons/silk/key.png) !important;
+}
+.aclmanager-role-0{
+    background-image: url(/shared/icons/silk/group_key.png) !important;
+}
+.aclmanager-role-1{
+    background-image: url(/shared/icons/silk/group_gear.png) !important;
+}
+.aclmanager-role-changed{
+	font-style:italic;
+}
+.aclmanager-create-roles{
+    background-image: url(/shared/icons/silk/key_add.png) !important;
+}
+.aclmanager-save-roles{
+    background-image: url(/shared/icons/silk/disk.png) !important;
+}
+.aclmanager-reset-roles{
+    background-image: url(/shared/icons/silk/arrow_undo.png) !important;
+}

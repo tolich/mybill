@@ -1,0 +1,176 @@
+html, body {
+    font: normal 12px verdana,tahoma,arial,sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    overflow: hidden;
+    height: 100%;
+}
+
+li {
+    font: normal 11px verdana,tahoma,arial,sans-serif;
+}
+
+.x-panel-body p {
+    margin: 5px;
+}
+
+.x-column-layout-ct .x-panel {
+    margin-bottom: 5px;
+}
+
+.x-column-layout-ct .x-panel-dd-spacer {
+    margin-bottom: 5px;
+}
+/*
+.folder-settings {
+    background-image: url(/shared/icons/silk/folder_wrench.png) !important;
+}
+
+.folder-nav {
+    background-image: url(/shared/icons/silk/folder_go.png) !important;
+}
+
+.folder-table {
+    background-image: url(/shared/icons/silk/folder_table.png) !important;
+}
+
+.table {
+    background-image: url(/shared/icons/silk/table.png) !important;
+}
+
+.arrow-right {
+    background-image: url(/shared/icons/silk/arrow_right.png) !important;
+}
+
+.user-del {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/user_gray.png) no-repeat;
+}
+
+.user-add{
+    background-image: url(/shared/icons/silk/user_add.png) !important;
+}
+
+.user-payment{
+    background-image: url(/shared/icons/silk/money_add.png) !important;
+}
+
+.user-edit{
+    background-image: url(/shared/icons/silk/user_edit.png) !important;
+}
+*/
+
+.exit {
+    background-image: url(/shared/icons/silk/door_in.png) !important;
+}
+
+.information{
+    background-image: url(/shared/icons/silk/information.png) !important;
+}
+
+.account{
+    background-image: url(/shared/icons/silk/money.png) !important;
+}
+
+.personal{
+    background-image: url(/shared/icons/silk/user.png) !important;
+}
+
+.message{
+    background-image: url(/shared/icons/silk/email.png) !important;
+}
+
+.res-block {
+    padding-top:5px;
+    background:transparent url(/shared/icons/block-top.gif) no-repeat;
+    margin-bottom:15px;
+	width:500px;
+}
+.res-block-inner {
+    padding:6px 11px;
+    background:transparent url(/shared/icons/block-bottom.gif) no-repeat left bottom;
+}
+
+.res-block ul {
+    list-style-type: disc;
+    margin-left:15px;
+    font: normal 12px tahoma,arial,sans-serif;
+    color:#555;
+}
+
+.div-wrap {
+	background: #F8F8F8 none repeat scroll 0%;
+	border:1px dotted #CCCCCC;
+	line-height:14px;
+	margin:10px;
+	padding:10px 10px;
+	float:left;
+	width:320px;
+}
+
+.div-wrap div {
+    font: 11px verdana,tahoma,arial,sans-serif;
+	color: gray;
+	width:200px;
+	float:left;
+	text-align:right;
+}
+
+.icon-1 {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/user.png) no-repeat 0 2px;
+}
+
+.icon-0 {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/user_gray.png) no-repeat 0 2px;
+}
+
+.icon-3 {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/user_red.png) no-repeat 0 2px;
+}
+
+.code-num {
+	color: grey;
+}
+
+.div-msg div {
+    font: 11px;
+	color: blue;
+	width:130px;
+	float:left;
+	text-align:left;
+}
+
+.notify {
+	font:10px verdana,tahoma,arial,sans-serif;
+	color: gray;
+}
+
+.tab-link{
+    background-image: url(/shared/icons/mini/list_links.gif) !important;
+}
+
+.tab-general{
+    background-image: url(/shared/icons/silk/note.png) !important;
+}
+.tab-payment{
+    background-image: url(/shared/icons/silk/money.png) !important;
+}
+.tab-tariff{
+    background-image: url(/shared/icons/silk/chart_curve_go.png) !important;
+}
+.tab-intariff{
+    background-image: url(/shared/icons/silk/world_link.png) !important;
+}
+.x-grid3-cell-inner, .x-grid3-hd-inner { 
+	white-space:normal !important; 
+}
+.x-grid3-cell {
+   border-right: solid 1px #EDEDED;
+}
+.tariff{
+    background-image: url(/shared/icons/silk/chart_curve.png) !important;
+}

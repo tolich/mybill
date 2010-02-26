@@ -1,0 +1,27 @@
+<?php
+	require_once '../configs/config.php';
+
+	$session = new Zend_Session_Namespace('brbill');
+    Zend_Registry::set('session', $session);
+
+	// Определяем объект соединения с БД
+    $db = Zend_Db::factory(DB_DRIVER, $aDBParams);
+    Zend_Registry::set('db', $db);
+
+	// Определяем контекст в котором хранится информация о текущей сессии пользователя
+//	$context = new Context();
+//	Zend_Registry::set('context', $context);
+
+	$frontController = Zend_Controller_Front::getInstance()
+					-> setParam('useModules', true)
+					-> throwExceptions(true)
+					-> setControllerDirectory(array(
+							'default'	=>DOCUMENT_ROOT.'application/controllers',
+							'ajax'		=>DOCUMENT_ROOT.'application/ajax/controllers'));
+
+	foreach($_PLUGINS as $plugin)
+	{
+		$frontController->registerPlugin(new $plugin);
+	}
+	$frontController->dispatch();
+?>

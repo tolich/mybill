@@ -1,0 +1,574 @@
+html, body {
+    font: normal 12px verdana,tahoma,arial,sans-serif;
+    margin: 0;
+    padding: 0;
+    border: 0 none;
+    overflow: hidden;
+    height: 100%;
+}
+
+/*
+.x-panel-body p {
+    margin: 5px;
+}
+
+.x-column-layout-ct .x-panel {
+    margin-bottom: 5px;
+}
+
+.x-column-layout-ct .x-panel-dd-spacer {
+    margin-bottom: 5px;
+}
+*/
+.tab-link{
+    background-image: url(/shared/icons/mini/list_links.gif) !important;
+}
+.tab-note{
+    background-image: url(/shared/icons/silk/note.png) !important;
+}
+
+.tab-payment{
+    background-image: url(/shared/icons/silk/money.png) !important;
+}
+.tab-tariff{
+    background-image: url(/shared/icons/silk/chart_curve.png) !important;
+}
+
+.folder-settings {
+    background-image: url(/shared/icons/silk/folder_wrench.png) !important;
+}
+
+.folder-nav {
+    background-image: url(/shared/icons/silk/folder_go.png) !important;
+}
+
+.folder-table {
+    background-image: url(/shared/icons/silk/folder_table.png) !important;
+}
+
+.table {
+    background-image: url(/shared/icons/silk/table.png) !important;
+}
+
+.report {
+    background-image: url(/shared/icons/silk/report.png) !important;
+}
+
+.arrow-right {
+    background-image: url(/shared/icons/silk/arrow_right.png) !important;
+}
+
+.user-del {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/user_gray.png) no-repeat;
+}
+
+.user-add{
+    background-image: url(/shared/icons/silk/user_add.png) !important;
+}
+
+.user-admin{
+    background-image: url(/shared/icons/silk/user_suit.png) !important;
+}
+
+.user-payment{
+    background-image: url(/shared/icons/silk/money_add.png) !important;
+}
+
+.user-fee{
+    background-image: url(/shared/icons/silk/money_delete.png) !important;
+}
+
+.user-stat{
+    background-image: url(/shared/icons/silk/chart_bar.png) !important;
+}
+
+.user-debtsoff{
+    background-image: url(/shared/icons/silk/vcard_edit.png) !important;
+}
+
+.daily-fee{
+    background-image: url(/shared/icons/silk/date.png) !important;
+}
+
+.monthly-fee{
+    background-image: url(/shared/icons/silk/calendar.png) !important;
+}
+.pay-fee{
+    background-image: url(/shared/icons/silk/calendar_add.png) !important;
+}
+
+.daily-pay{
+    background-image: url(/shared/icons/silk/date_next.png) !important;
+}
+
+.monthly-pay{
+    background-image: url(/shared/icons/silk/calendar_view_month.png) !important;
+}
+
+.payment{
+    background-image: url(/shared/icons/silk/money.png) !important;
+}
+
+.user-edit{
+    background-image: url(/shared/icons/silk/user_edit.png) !important;
+}
+.user-chtariff{
+    background-image: url(/shared/icons/silk/chart_curve_edit.png) !important;
+}
+.user-on{
+    background-image: url(/shared/icons/silk/tick.png) !important;
+}
+
+.user-off{
+    background-image: url(/shared/icons/silk/cancel.png) !important;
+}
+
+.user-task{
+    background-image: url(/shared/icons/silk/calendar_edit.png) !important;
+}
+
+.res-block {
+    padding-top:5px;
+    background:transparent url(/shared/icons/block-top.gif) no-repeat;
+    margin-bottom:15px;
+	width:500px;
+}
+.res-block-inner {
+    padding:6px 11px;
+    background:transparent url(/shared/icons/block-bottom.gif) no-repeat left bottom;
+}
+
+.res-block ul {
+    list-style-type: disc;
+    margin-left:15px;
+    font: normal 12px tahoma,arial,sans-serif;
+    color:#555;
+}
+
+.table-wrap {
+	width:100%;
+}
+.td-wrap {
+	background: #F8F8F8 none repeat scroll 0%;
+	border:1px dotted #CCCCCC;
+	line-height:14px;
+	margin:10px;
+	padding:10px 10px;
+}
+
+.td-wrap div {
+    font: 11px verdana,tahoma,arial,sans-serif;
+	color: gray;
+	width:200px;
+	float:left;
+	text-align:right;
+}
+
+.user-list-note {
+    width:20px;
+    cursor:pointer;
+    background:transparent url(/shared/icons/silk/bell.png) no-repeat 0 2px;
+}
+
+.user-list-note-empty {
+    width:20px;
+}
+
+.icon-1 {
+    width:20px;
+    background:transparent url(/shared/icons/silk/user.png) no-repeat 0 2px;
+}
+
+.icon-0 {
+    width:20px;
+    background:transparent url(/shared/icons/silk/user_gray.png) no-repeat 0 2px;
+}
+
+.icon-3 {
+    width:20px;
+    background:transparent url(/shared/icons/silk/user_red.png) no-repeat 0 2px;
+}
+
+.code-num {
+	color: gray;
+}
+
+.div-msg {
+	background: none repeat scroll 0%;
+	border:1px dotted blue;
+	color: blue;
+	line-height:14px;
+	margin:10px 0 0 0;
+	padding:10px 10px;
+	float:left;
+	width:250px;
+	text-align:right;
+}
+
+.div-msg div {
+    font: 11px;
+	color: blue;
+	width:125px;
+	float:left;
+	text-align:left;
+}
+.exit {
+    background-image: url(/shared/icons/silk/door_in.png) !important;
+}
+
+.settings {
+    background-image: url(/shared/icons/silk/wrench.png) !important;
+}
+.savesettings {
+    background-image: url(/shared/icons/silk/drive_disk.png) !important;
+}
+.delsettings {
+    background-image: url(/shared/icons/silk/drive_delete.png) !important;
+}
+
+.refresh{
+    background-image: url(/shared/icons/silk/arrow_refresh.png) !important;
+}
+
+.payment-apply{
+    background-image: url(/shared/icons/silk/calculator_add.png) !important;
+}
+
+.payment-delete{
+    background-image: url(/shared/icons/silk/calculator_delete.png) !important;
+}
+
+.payment-edit{
+    background-image: url(/shared/icons/silk/calculator_edit.png) !important;
+}
+
+.zone-add{
+    background-image: url(/shared/icons/silk/world_add.png) !important;
+}
+
+.zone-delete{
+    background-image: url(/shared/icons/silk/world_delete.png) !important;
+}
+
+.zone-edit{
+    background-image: url(/shared/icons/silk/world_edit.png) !important;
+}
+
+.zone-allow{
+    background-image: url(/shared/icons/silk/link.png) !important;
+}
+
+.zone-deny{
+    background-image: url(/shared/icons/silk/link_break.png) !important;
+}
+
+.zone{
+    background-image: url(/shared/icons/silk/world.png) !important;
+}
+
+.session-delete{
+    background-image: url(/shared/icons/silk/link_delete.png) !important;
+}
+
+.session-close{
+    background-image: url(/shared/icons/silk/thumb_down.png) !important;
+}
+
+.session{
+    background-image: url(/shared/icons/silk/link.png) !important;
+}
+
+.sluice-add{
+    background-image: url(/shared/icons/silk/computer_add.png) !important;
+}
+
+.sluice-delete{
+    background-image: url(/shared/icons/silk/computer_delete.png) !important;
+}
+
+.sluice-edit{
+    background-image: url(/shared/icons/silk/computer_edit.png) !important;
+}
+
+.sluice{
+    background-image: url(/shared/icons/silk/computer.png) !important;
+}
+
+.admin-add{
+    background-image: url(/shared/icons/silk/group_add.png) !important;
+}
+
+.admin-delete{
+    background-image: url(/shared/icons/silk/group_delete.png) !important;
+}
+
+.admin-edit{
+    background-image: url(/shared/icons/silk/group_edit.png) !important;
+}
+
+.admin{
+    background-image: url(/shared/icons/silk/group.png) !important;
+}
+
+.nas-add{
+    background-image: url(/shared/icons/silk/server_add.png) !important;
+}
+
+.nas-delete{
+    background-image: url(/shared/icons/silk/server_delete.png) !important;
+}
+
+.nas-edit{
+    background-image: url(/shared/icons/silk/server_edit.png) !important;
+}
+
+.nas{
+    background-image: url(/shared/icons/silk/server.png) !important;
+}
+
+.pool-add{
+    background-image: url(/shared/icons/silk/transmit_add.png) !important;
+}
+
+.pool-delete{
+    background-image: url(/shared/icons/silk/transmit_delete.png) !important;
+}
+
+.pool-edit{
+    background-image: url(/shared/icons/silk/transmit_edit.png) !important;
+}
+
+.pool{
+    background-image: url(/shared/icons/silk/transmit.png) !important;
+}
+
+.task{
+    background-image: url(/shared/icons/silk/calendar.png) !important;
+}
+
+.task-link{
+    background-image: url(/shared/icons/silk/calendar_link.png) !important;
+}
+
+.task-tree-root{
+    background-image: url(/shared/icons/silk/cog.png) !important;
+}
+
+.task-tree-add{
+    background-image: url(/shared/icons/silk/cog_add.png) !important;
+}
+
+.task-tree{
+    background-image: url(/shared/icons/silk/cog_go.png) !important;
+}
+
+.task-add{
+    background-image: url(/shared/icons/silk/calendar_add.png) !important;
+}
+
+.task-delete{
+    background-image: url(/shared/icons/silk/calendar_delete.png) !important;
+}
+
+.task-edit{
+    background-image: url(/shared/icons/silk/calendar_edit.png) !important;
+}
+
+.tariff-add{
+    background-image: url(/shared/icons/silk/chart_curve_add.png) !important;
+}
+
+.tariff-delete{
+    background-image: url(/shared/icons/silk/chart_curve_delete.png) !important;
+}
+
+.tariff-edit{
+    background-image: url(/shared/icons/silk/chart_curve_edit.png) !important;
+}
+
+.tariff-apply{
+    background-image: url(/shared/icons/silk/chart_curve_link.png) !important;
+}
+
+.tariff{
+    background-image: url(/shared/icons/silk/chart_curve.png) !important;
+}
+
+.tariff_go{
+    background-image: url(/shared/icons/silk/chart_curve_go.png) !important;
+}
+
+.tariff-addzone{
+    background-image: url(/shared/icons/silk/world_add.png) !important;
+}
+
+.tariff-editzone{
+    background-image: url(/shared/icons/silk/world_edit.png) !important;
+}
+
+.tariff-delzone{
+    background-image: url(/shared/icons/silk/world_delete.png) !important;
+}
+
+.new-payment-rows-class .x-grid3-cell-inner{
+	font-weight: bold !important;
+	color: blue !important;
+}
+
+.payment-rows-class .x-grid3-cell-inner{
+	color: green !important;
+}
+
+.col{
+    background:transparent url(/shared/icons/svs-logo.jpg) no-repeat 0 2px;
+}
+
+.table{
+    background-image: url(/shared/icons/silk/table.png) !important;
+}
+
+.cart{
+    background-image: url(/shared/icons/silk/cart.png) !important;
+}
+
+
+.x-grid3-cell-inner {
+	white-space:normal !important; 
+}
+/*
+.x-grid3-hd-inner { 
+	white-space:normal !important; 
+}
+*/
+/*
+.x-grid3-cell {
+	padding-right:1px;
+    border-right: solid 1px #EDEDED;
+}
+*/
+.sys-info {
+    background-image: url(/shared/icons/silk/server_chart.png) !important;
+}
+.mpd-info {
+    background-image: url(/shared/icons/silk/server_link.png) !important;
+}
+/*
+ * FileUploadField component styles
+ */
+.x-form-file-wrap {
+    position: relative;
+    height: 22px;
+}
+.x-form-file-wrap .x-form-file {
+	position: absolute;
+	right: 0;
+	-moz-opacity: 0;
+	filter:alpha(opacity: 0);
+	opacity: 0;
+	z-index: 2;
+    height: 22px;
+}
+.x-form-file-wrap .x-form-file-btn {
+	position: absolute;
+	right: 0;
+	z-index: 1;
+}
+.x-form-file-wrap .x-form-file-text {
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    color: #777;
+}
+/*
+*[class~=row-bold-class][class~=x-grid3-row-selected] .x-grid3-cell-inner{
+	font-weight: bold !important;
+}
+*/
+/* Arrowers */
+
+.x-grid3-body .x-grid3-td-arrower .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-selected .x-grid3-row-arrower {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_go.png);
+}
+.x-grid3-row-arrower {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_green.png);
+}
+/* Arrowers */
+.week label{
+	color:blue;
+}
+.weekend label{
+	color:red;
+}
+/**/
+
+.cell-date-from{
+	padding-right: 1px;
+	align: center;
+}
+.cell-date-tail{
+	padding-left: 1px;
+	align: center;
+}
+
+.info-panel {
+	font-family: tahoma,arial,helvetica,sans-serif;
+	font-size: 12px;
+	padding: 5px; 
+	margin: 0 0 5px 0;
+	height: 50px;
+	padding-left: 55px;
+    background-position:3px 5px;
+    background-repeat:no-repeat;
+    background-color:#ffffcc;
+	background-image:url(/shared/icons/nuvola/48x48/mimetypes/readme.png);
+	 	
+}
+
+.item-bullet-active{
+	background:#ebf3fd url(/shared/icons/silk/bullet_go.png)no-repeat 3px center;
+	border:1px solid #aaccf6;
+	padding: 0;
+}
+
+.print-only {
+	display:none;
+}
+.print{
+    background-image: url(/shared/icons/silk/printer.png) !important;
+}
+.plugin{
+    background-image: url(/shared/icons/silk/plugin.png) !important;
+}
+.add-plugin{
+    background-image: url(/shared/icons/silk/plugin_add.png) !important;
+}
+.delete-plugin{
+    background-image: url(/shared/icons/silk/plugin_delete.png) !important;
+}
+.print-order{
+    background-image: url(/shared/icons/silk/vcard.png) !important;
+}
+.settings-billing{
+    background-image: url(/shared/icons/silk/database_gear.png) !important;
+}
+.settings-company{
+    background-image: url(/shared/icons/silk/table_gear.png) !important;
+}
+.settings-main{
+    background-image: url(/shared/icons/silk/group_gear.png) !important;
+}

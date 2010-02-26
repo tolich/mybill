@@ -1,0 +1,24 @@
+.paycard-activated{
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/money_add.png) no-repeat 0 2px;
+}
+#paycard-activated{
+	text-decoration:underline;
+	cursor:pointer;
+}
+.paycard-deposit-to-mb{
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/cart_put.png) no-repeat 0 2px;
+}
+#paycard-deposit-to-mb{
+	text-decoration:underline;
+	cursor:pointer;
+}
+.paycard-fee{
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/world_link.png) no-repeat 0 2px;
+}
+#paycard-fee{
+	text-decoration:underline;
+	cursor:pointer;
+}

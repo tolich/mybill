@@ -1,0 +1,46 @@
+<?xml version ='1.0' encoding ='UTF-8' ?>
+<definitions name='SvsIP'
+    targetNamespace='http://localhost/'
+    xmlns:tns='http://localhost/svs/'
+    xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'
+    xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+    xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/'
+    xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+	xmlns:xs1='http://localhost/svs/schema'
+    xmlns='http://schemas.xmlsoap.org/wsdl/'>
+<message name='getRequest'>
+    <part name='login' type='xsd:string'/>
+    <part name='password' type='xsd:string'/>
+</message>
+
+<message name='getResponse'>
+    <part name='result' type='xsd:string'/>
+</message>
+
+<portType name='SvsIPPortType'>
+    <operation name='GetIP'>
+	<input message='tns:getRequest'/>
+	<output message='tns:getResponse'/>
+    </operation>
+</portType>
+
+<binding name='SvsIPBinding' type='tns:SvsIPPortType'>
+    <soap:binding style='rpc'
+	transport='http://schemas.xmlsoap.org/soap/http'/>
+    <operation name='GetIP'>
+	<soap:operation soapAction='GetIP'/>
+      <input>
+      <soap:body use="literal" />
+        </input>
+          <output>
+          <soap:body use="literal" />
+        </output>
+    </operation>
+</binding>
+
+<service name='SvsIPService'>
+    <port name='Port' binding='SvsIPBinding'>
+	<soap:address location='http://billing.localhost/settings/server/SvsIPServer.php'/>
+    </port>
+</service>
+</definitions>

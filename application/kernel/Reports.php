@@ -1,0 +1,101 @@
+<?php
+class Reports
+{
+	/**
+	* Дискриптор базы данных
+	* $var resource
+	*/
+	protected $Db=null;
+
+	/**
+     * Конструктор
+     * @param Zend_Db_Adapter_Abstract $db Объект соединения с БД
+	 */
+	function __construct()
+	{	
+		$this->Db = Zend_Registry::get('db');
+	}
+
+	/**
+	 * Список платежей
+	 */
+	public function GetStatList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
+	{
+		if (null===$username) $username = Context::GetUserData('username');
+		$sql = $this->Db->select()
+					->from('radacct', array('COUNT(*)'))
+					->where('radacct.username = ?', $username);
+		$aCount = $this->Db->fetchOne($sql);
+					
+		$sql = $this->Db->select()
+					->from('radacct', array('acctstarttime', 'acctstoptime', 'acctsessiontime',
+							'acctinputoctets', 'acctoutputoctets','callingstationid'))
+					->where('radacct.username = ?', $username)
+					->limit($limit, $start)
+					->order(array("$sort $dir"));
+		$aRows = $this->Db->fetchAll($sql);
+
+		$aData = array( 'totalCount'=>$aCount,
+						'data' => $aRows);
+		return $aData;
+	}
+
+	public function GetTariffList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
+	{
+		if (null===$username) $username = Context::GetUserData('username');
+		$sql = $this->Db->select()
+					->from('tasks', array('COUNT(*)'))
+					->where('tasks.username = ?', $username)
+					->where('tasks.attribute = ?', 'Change-tariff')
+					->where('tasks.execresult = ?', 'Successful');
+		$aCount = $this->Db->fetchOne($sql);
+					
+		$sql = $this->Db->select()
+					->from('tasks', array('rdate'=>'execdate'))
+					->join('tariffs', 'tasks.value=tariffs.id', array('tariffname'))
+					->where('tasks.username = ?', $username)
+					->where('tasks.attribute = ?', 'Change-tariff')
+					->where('tasks.execresult = ?', 'Successful')
+					->limit($limit, $start)
+					->order(array("$sort $dir"));
+		$aRows = $this->Db->fetchAll($sql);
+		$aData = array( 'totalCount'=>$aCount,
+						'data' => $aRows);
+		return $aData;
+	}
+
+	public function GetPayList($start=null, $limit=null, $sort=null, $dir=null, $userid=null)
+	{
+		if (null===$userid) $userid = Context::GetUserData('id');
+		$sql = $this->Db->select()
+					->from('payments', array('COUNT(*)'))
+					->where('payments.iduser = ?', $userid);
+		$aCount = $this->Db->fetchOne($sql);
+					
+		$sql = $this->Db->select()
+					->from('payments', array('id','datepayment', 'amount', 'amountdeposit',
+							'amountfreebyte', 'amountbonus','lastdeposit', 'lastfreebyte', 'lastbonus', 'description', 'status'))
+					->where('payments.iduser = ?', $userid)
+					->where('payments.status = 1')
+					->limit($limit, $start)
+					->order(array("$sort $dir"));
+		$aRows = $this->Db->fetchAll($sql);
+
+		Utils::encode($aRows);
+		foreach ($aRows as &$aRow)
+		{
+			$aRow['amount']=sprintf("%0.2f", $aRow['amount']/1024/1024);
+			$aRow['amountfreebyte']=sprintf("%0.3f", $aRow['amountfreebyte']/1024/1024);
+			$aRow['amountdeposit']=sprintf("%0.2f", $aRow['amountdeposit']/1024/1024);
+			$aRow['amountbonus']=sprintf("%0.3f", $aRow['amountbonus']/1024/1024);
+			$aRow['lastfreebyte']=sprintf("%0.3f", $aRow['lastfreebyte']/1024/1024);
+			$aRow['lastdeposit']=sprintf("%0.2f", $aRow['lastdeposit']/1024/1024);
+			$aRow['lastbonus']=sprintf("%0.3f", $aRow['lastbonus']/1024/1024);
+		}
+		$aData = array( 'totalCount'=>$aCount,
+						'data' => $aRows);
+		return $aData;
+	}
+
+}
+?>

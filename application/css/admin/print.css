@@ -1,0 +1,30 @@
+@media print { /* Стиль для печати */
+	body {
+	    font: normal 11px verdana,tahoma,arial,sans-serif;
+		overflow:visible;
+		border:0 none;
+		height:10in;
+	}
+	.print-only{
+		display:inline;
+	    font: normal 10px verdana,tahoma,arial,sans-serif;
+		color:#000;
+	}
+	.print-only ol{
+	    font: normal 9px verdana,tahoma,arial,sans-serif;
+		color:#000;
+	}
+	.print-subtitle{
+	    font: normal 10px verdana,tahoma,arial,sans-serif;
+		color:#000;
+	}
+	.table-wrap {
+		width:100%;
+	}
+	.td-wrap {
+		border:1px solid #000;
+		line-height:14px;
+		margin:10px;
+		padding:10px 10px;
+	}
+}

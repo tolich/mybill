@@ -1,0 +1,23 @@
+.paycard{
+    background-image: url(/shared/icons/silk/coins.png) !important;
+}
+.paycard-add-card{
+    background-image: url(/shared/icons/silk/coins_add.png) !important;
+}
+.paycard-delete-card{
+    background-image: url(/shared/icons/silk/delete.png) !important;
+}
+.paycard-restore-card{
+    background-image: url(/shared/icons/silk/accept.png) !important;
+}
+.paycard-print{
+    background-image: url(/shared/icons/silk/printer.png) !important;
+}
+.paycard-sale{
+    background-image: url(/shared/icons/silk/basket_go.png) !important;
+}
+@media print {
+	span{
+  		color: #c0c0c0; 
+	}
+}

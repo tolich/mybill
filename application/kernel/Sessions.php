@@ -1,0 +1,220 @@
+<?php
+class Sessions
+{
+	/**
+	* Дискриптор базы данных
+	* $var resource
+	*/
+	protected $Db=null;
+
+
+	/**
+     * Конструктор
+     * @param Zend_Db_Adapter_Abstract $db Объект соединения с БД
+	 */
+	function __construct()
+	{	
+		$this->Db = Zend_Registry::get('db');
+	}
+	
+	public function CheckSessions(){
+		$oNas = new Nas();
+		$aNas = $oNas->GetList();
+		$n = 0;
+		foreach ($aNas as $nas){
+			$user = $nas['username'];
+			$pass = $nas['password'];
+			Log::writeCliLog("getting sessions from {$nas['nasname']}:{$nas['ports']}");
+			$aSessions=array();
+			if (function_exists('http_get')){
+				$sessions=http_get("http://{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions",array('httpauth'=>"{$nas['username']}:{$nas['password']}"),$info);
+				if ($info['response_code']=='200'){
+					preg_match_all("/^ng.*$/im",$sessions,$aSessions);
+				}
+				$aSessionId = array();
+				foreach ($aSessions[0] as $session){
+					$link = preg_split('/\s+/',$session);
+					$aSessionId[]=$link[6];
+					Log::writeCliLog("{$link[6]}");
+				}
+				$n += $this->Db->delete('sessions', "acctsessionid not in ('".implode("','",$aSessionId)."') and nasipaddress='{$nas['nasname']}'");
+			} else {
+				Log::writeCliLog("php not configured");
+			}
+		}
+		return $n;
+	}
+	
+	/**
+	 * Список активных сессий
+	 * @param $sort string
+	 * @param $dir string
+	 */
+	public function GetList($start=null, $limit=null, $sort=null, $dir=null, $filter=null)
+	{
+		$as = array(
+		    'acctsessionid'=>'sessions.acctsessionid',
+		    'acctuniqueid'=>'sessions.acctuniqueid',
+		    'username'=>'sessions.username',
+		    'username'=>'concat_ws(" ",sessions.username,usergroup.name,usergroup.surname,usergroup.address)',
+		    'callingstationid'=>'sessions.callingstationid',
+		    'nasipaddress'=>'sessions.nasipaddress',
+		    'iface'=>'sessions.iface',
+		    'framedipaddress'=>'sessions.framedipaddress',
+		    'acctstarttime'=>'sessions.acctstarttime'
+		);
+		$sql = $this->Db->select()
+					->from('sessions', array('COUNT(*)'))
+					->join('radacct','radacct.acctuniqueid = sessions.acctuniqueid',array('acctinputoctets','acctoutputoctets','acctsessiontime'))
+					->join('usergroup','sessions.username = usergroup.username',array('name','surname','address'));
+		if (is_array($filter)) $this->_filter($sql, $filter, $as);
+		$aCount = $this->Db->fetchOne($sql);
+
+		$sql = $this->Db->select()
+					->from('sessions')
+					->join('radacct','radacct.acctuniqueid = sessions.acctuniqueid',array('acctinputoctets','acctoutputoctets','acctsessiontime'))
+					->join('usergroup','sessions.username = usergroup.username',array('name','surname','address'))
+					->order(array("$sort $dir"))
+					->limit($limit, $start);
+		if (is_array($filter)) $this->_filter($sql, $filter, $as);
+		$aRows = $this->Db->fetchAll($sql);
+		Utils::encode($aRows);
+		foreach ($aRows as &$aRow){
+			if ($aRow['acctsessiontime']!=0){
+				$aRow['rateinput']=ceil((int)$aRow['acctinputoctets']/(int)$aRow['acctsessiontime']);
+				$aRow['rate']=ceil((int)$aRow['acctoutputoctets']/(int)$aRow['acctsessiontime']);
+			} else {
+				$aRow['rateinput']=0;
+				$aRow['rateoutput']=0;
+            }
+		}
+		$aData = array( 'totalCount'=>$aCount,
+						'data' => $aRows);
+		return $aData;
+	}
+
+	/**
+	 * Закрывает сессию 
+	 * @param $id int
+	 */
+	public function Close ($id)
+	{
+		$sql = $this->Db->select()
+						->from('sessions',array('acctsessionid'))
+						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
+						->where('acctuniqueid=?',$id);
+		$session = $this->Db->fetchRow($sql);
+		if (function_exists('http_get')){
+			if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
+				http_get("http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close",array('httpauth'=>"{$session['username']}:{$session['password']}"),$info);
+				if ($info['response_code']=='200')
+					$aResult = array('success'=>true);
+				else
+					$aResult = array('errors'=>array('msg'=>$info['error']));
+			} else {
+				$aResult = array('errors'=>array('msg'=>'Link extract failed'));
+			}
+		} else{
+			$aResult = array('errors'=>array('msg'=>'php not configured'));
+		}
+		return $aResult;
+	}
+
+	/**
+	 * Закрывает сессии с отрицательным балансом 
+	 * @param $id int
+	 */
+	public function CloseCredits ()
+	{
+		$sql = $this->Db->select()
+					->from('acctperiod',array(
+						'datestart','now' => new Zend_Db_Expr("UNIX_TIMESTAMP(CURDATE())")))
+					->where('status=0');
+		$aRow=$this->Db->fetchRow($sql);
+
+		$sql = $this->Db->select()
+						->from('sessions',array('acctsessionid'))
+						->join('usergroup','sessions.username=usergroup.username',array())
+						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
+						->where("(deposit < mindeposit) and (UNIX_TIMESTAMP(DATE_ADD('{$aRow['datestart']}', INTERVAL dateofcheck DAY)) <= '{$aRow['now']}') or (freebyte + bonus < freemblimit and check_mb=1)")
+						->orWhere('access=0');
+		$aSessions = $this->Db->fetchAll($sql);
+		$aResult = array(
+			'success' => 0,
+			'failed'  => 0 
+		);
+		if (function_exists('http_get')){
+			foreach ($aSessions as $session){
+				if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
+					http_get("http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close",array('httpauth'=>"{$session['username']}:{$session['password']}"),$info);
+					if ($info['response_code']=='200')
+						$aResult['success']++;
+					else
+						$aResult['failed']++;
+				} else {
+						$aResult['failed']++;
+				}
+			}
+		} else{
+			$aResult['failed']++;
+		}
+		return $aResult;
+	}
+
+	/**
+	 * Удаляет 
+	 * @param $id int
+	 */
+	public function Delete ($id)
+	{
+		$where = $this->Db->quoteInto('acctuniqueid=?',$id);
+		$r = $this->Db->delete('sessions', $where);
+		if ($r)
+			$aResult = array('success'=>true);
+		else
+			$aResult = array('errors'=>array('msg'=>'Error'));
+		return $aResult;
+	}
+	
+	private function _filter(Zend_Db_Select &$sql, array $filter, array $as=array())  
+	{
+		foreach ($filter as $flt){
+			$value = Utils::decode($flt['data']['value']);
+			if (array_key_exists($flt['field'],$as))
+				$field=$as[$flt['field']];
+			else
+				$field=$flt['field'];
+
+			switch($flt['data']['type']){
+				case 'string' : 
+					$sql->where("$field LIKE ?", "%".str_replace('*','%',$value)."%"); 
+				break;
+				case 'list' : 
+					if (strstr($value,',')){
+						$sql->where("$field IN (?)", explode(',',$value)); 
+					}else{
+						$sql->where("$field = ?", $value); 
+					}
+				break;
+				case 'boolean' : 
+					$sql->where("$field = ?", $value=='true'?'1':'0'); 
+				break;
+				case 'numeric' : 
+					switch ($flt['data']['comparison']) {
+						case 'eq' : $sql->where("$field = ?", $value); break;
+						case 'lt' : $sql->where("$field < ?", $value);  break;
+						case 'gt' : $sql->where("$field > ?", $value);  break;
+					}
+				break;
+				case 'date' : 
+					switch ($flt['data']['comparison']) {
+						case 'eq' : $sql->where("$field = ?", date('Y-m-d',strtotime($value))); break;
+						case 'lt' : $sql->where("$field < ?", date('Y-m-d',strtotime($value))); break;
+						case 'gt' : $sql->where("$field > ?", date('Y-m-d',strtotime($value))); break;
+					}
+				break;
+			}
+		}	
+	}
+}
+?>
