@@ -1,2 +1,2 @@
 #pass/deny zone
-ALTER TABLE zones ADD COLUMN action int NOT NULL default '1';
+ALTER TABLE intariffs ADD COLUMN action int NOT NULL default '1';

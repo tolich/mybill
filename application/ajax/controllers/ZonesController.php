@@ -52,27 +52,4 @@ class Ajax_ZonesController extends Zend_Controller_Action
 		$result = $oZones->Delete($this->_getParam('id'));
 		$this->_helper->json($result);
 	  }
-
-	 /**
-	  * Запрещает зону
-   	  * право: submit
-	  */ 
-	  public function denyAction()
-	  {
-		$oZones = new Zones();
-		$result = $oZones->Deny($this->_getParam('id'));
-		$this->_helper->json($result);
-	  }
-
-	 /**
-	  * Разрешает зону
-   	  * право: submit
-	  */ 
-	  public function allowAction()
-	  {
-		$oZones = new Zones();
-		$result = $oZones->Allow($this->_getParam('id'));
-		$this->_helper->json($result);
-	  }
 }
-?>

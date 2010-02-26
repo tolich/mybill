@@ -476,17 +476,15 @@ class Settings {
 					'apply'
 				),
 				'tariffs'=>array(
-					'apply'
+					'apply',
+					'deny',
+					'allow'
 				),
 				'reports'=>array(
 					'order',
 				),
 				'sessions'=>array(
 					'close'
-				),
-				'zones'=>array(
-					'deny',
-					'allow'
 				)
 			),
 		);

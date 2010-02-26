@@ -156,5 +156,27 @@ class Ajax_TariffsController extends Zend_Controller_Action
 		$result = $oTariffs->Apply($this->_getParam('id'), $this->_getParam('path'));
 		$this->_helper->json($result);
 	}
+
+	 /**
+	  * Запрещает зону
+   	  * право: submit
+	  */ 
+	  public function denyAction()
+	  {
+		$oTariffs = new Tariffs();
+		$result = $oTariffs->Deny($this->_getParam('id'));
+		$this->_helper->json($result);
+	  }
+
+	 /**
+	  * Разрешает зону
+   	  * право: submit
+	  */ 
+	  public function allowAction()
+	  {
+		$oTariffs = new Tariffs();
+		$result = $oTariffs->Allow($this->_getParam('id'));
+		$this->_helper->json($result);
+	  }
 }
 

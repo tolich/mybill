@@ -86,7 +86,7 @@ Ext.app.Tariffs.InTariffGrid = Ext.extend(Ext.grid.GridPanel, {
 						fn:function(response) {
 							if('yes' == response) {
 								App.request({
-									url: '/ajax/zones/deny',
+									url: '/ajax/tariffs/deny',
 									params: {
 										id:record.id
 									},
@@ -113,7 +113,7 @@ Ext.app.Tariffs.InTariffGrid = Ext.extend(Ext.grid.GridPanel, {
 						fn:function(response) {
 							if('yes' == response) {
 								App.request({
-									url: '/ajax/zones/allow',
+									url: '/ajax/tariffs/allow',
 									params: {
 										id:record.id
 									},

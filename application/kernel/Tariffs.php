@@ -370,5 +370,31 @@ class Tariffs
 		}
 		return $days;
 	}
+    
+	/**
+	 * Разрешает зону
+	 * @param $param array
+	 */
+	public function Allow ($param)
+	{
+		$where = $this->Db->quoteInto('id=?',$param['id']);
+		$aUpdateData = array('action'=>'1');
+		$this->Db->update('intariffs', $aUpdateData, $where);
+		$aResult = array('success'=>true);
+		return $aResult;
+	}
+
+	/**
+	 * Запрещает зону
+	 * @param $param array
+	 */
+	public function Deny ($param)
+	{
+		$where = $this->Db->quoteInto('id=?',$param['id']);
+		$aUpdateData = array('action'=>'0');
+		$this->Db->update('intariffs', $aUpdateData, $where);
+		$aResult = array('success'=>true);
+		return $aResult;
+	}
 }
 ?>

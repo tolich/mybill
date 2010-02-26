@@ -106,31 +106,5 @@ class Zones
 		}
 		return $aResult;
 	}
-
-	/**
-	 * Разрешает зону
-	 * @param $param array
-	 */
-	public function Allow ($param)
-	{
-		$where = $this->Db->quoteInto('id=?',$param['id']);
-		$aUpdateData = array('action'=>'1');
-		$this->Db->update('zones', $aUpdateData, $where);
-		$aResult = array('success'=>true);
-		return $aResult;
-	}
-
-	/**
-	 * Запрещает зону
-	 * @param $param array
-	 */
-	public function Deny ($param)
-	{
-		$where = $this->Db->quoteInto('id=?',$param['id']);
-		$aUpdateData = array('action'=>'0');
-		$this->Db->update('zones', $aUpdateData, $where);
-		$aResult = array('success'=>true);
-		return $aResult;
-	}
 }
 
