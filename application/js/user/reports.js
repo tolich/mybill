@@ -79,7 +79,7 @@ Reports.gridPay = Ext.extend(Ext.grid.GridPanel,{
         Ext.apply(this, {
 			//region: 'center',
 			margins: '0 5 5 0',
-			title: 'История платежей',
+			title: 'РСЃС‚РѕСЂРёСЏ РїР»Р°С‚РµР¶РµР№',
 			store: store,
 			columns: [
 				{
@@ -87,27 +87,27 @@ Reports.gridPay = Ext.extend(Ext.grid.GridPanel,{
 					,dataIndex:'id'
 					,hidden: true
 				},{
-					header: 'Дата платежа'
+					header: 'Р”Р°С‚Р° РїР»Р°С‚РµР¶Р°'
 					,dataIndex: 'datepayment'
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y H:i:s')
 				},{
-					header: 'Сумма'
+					header: 'РЎСѓРјРјР°'
 					,dataIndex: 'amount'
 					,align: 'right'
 				},{
-					header: 'На депозит'
+					header: 'РќР° РґРµРїРѕР·РёС‚'
 					,dataIndex: 'amountdeposit'
 					,align: 'right'
 				},{
-					header: 'На предопл. Мб'
+					header: 'РќР° РїСЂРµРґРѕРїР». РњР±'
 					,dataIndex: 'amountfreebyte'
 					,align: 'right'
 				},{ 
-					header: 'На бонус. Мб'
+					header: 'РќР° Р±РѕРЅСѓСЃ. РњР±'
 					,dataIndex: 'amountbonus'
 					,align: 'right'
 				},{
-					header: 'Основание'
+					header: 'РћСЃРЅРѕРІР°РЅРёРµ'
 					,dataIndex: 'description'
 					,align: 'right'
 				}
@@ -157,15 +157,15 @@ Reports.gridTariff = Ext.extend(Ext.grid.GridPanel,{
         Ext.apply(this, {
 			//region: 'center',
 			margins: '0 5 5 0',
-			title: 'История тарифов',
+			title: 'РСЃС‚РѕСЂРёСЏ С‚Р°СЂРёС„РѕРІ',
 			store: store,
 			columns: [
 				{
-					header:'Тариф'
+					header:'РўР°СЂРёС„'
 					,dataIndex:'tariffname'
 					,sortable:true
 				},{
-					header:'Дата активации'
+					header:'Р”Р°С‚Р° Р°РєС‚РёРІР°С†РёРё'
 					,dataIndex:'rdate'
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y H:i:s')
 					,sortable:true
@@ -215,19 +215,19 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
         Ext.apply(this, {
 			//region: 'center',
 			margins: '0 5 5 0',
-			title: 'Статистика подключений',
+			title: 'РЎС‚Р°С‚РёСЃС‚РёРєР° РїРѕРґРєР»СЋС‡РµРЅРёР№',
 			store: store,
 			columns: [
 				{
-					header: 'Начало сессии',
+					header: 'РќР°С‡Р°Р»Рѕ СЃРµСЃСЃРёРё',
 					dataIndex:'acctstarttime'
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y H:i:s')
 				},{ 
-					header: 'Конец сессии',
+					header: 'РљРѕРЅРµС† СЃРµСЃСЃРёРё',
 					dataIndex:'acctstoptime'
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y H:i:s')
 				},{
-					header: 'Длительность (сек.)',
+					header: 'Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ (СЃРµРє.)',
 					dataIndex:'acctsessiontime',
 					align:'right'
 					,renderer: function(v){
@@ -235,24 +235,24 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
 						var h = Math.floor((v-d*86400)/3600);
 						var m = Math.floor((v-d*86400-h*3600)/60);
 						var s = v-d*86400-h*3600-m*60;
-						return (d!=0?d+" дн ":"")+(h!=0?h+" ч ":"")+(m!=0?m+" мин ":"")+s+" сек"
+						return (d!=0?d+" РґРЅ ":"")+(h!=0?h+" С‡ ":"")+(m!=0?m+" РјРёРЅ ":"")+s+" СЃРµРє"
 					}
 				},{
-					header: 'Исх. траф. (байт)',
+					header: 'РСЃС…. С‚СЂР°С„. (Р±Р°Р№С‚)',
 					dataIndex:'acctinputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
-					header: 'Вх. траф. (байт)',
+					header: 'Р’С…. С‚СЂР°С„. (Р±Р°Р№С‚)',
 					dataIndex:'acctoutputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
-					header: 'Информация',
+					header: 'РРЅС„РѕСЂРјР°С†РёСЏ',
 					dataIndex:'callingstationid',
 					width: 170,
 					align: 'center'
@@ -296,38 +296,38 @@ Reports.gridInTariff = Ext.extend(Ext.grid.GridPanel,{
         Ext.apply(this, {
 			//region: 'center',
 			margins: '0 5 5 0',
-			title: 'Информация по зонам',
+			title: 'РРЅС„РѕСЂРјР°С†РёСЏ РїРѕ Р·РѕРЅР°Рј',
 			store: store,
 			columns: [
 				{
-					header:'Зона'
+					header:'Р—РѕРЅР°'
 					,dataIndex:'zonename'
 				},{
-					header:'Вес МБ'
+					header:'Р’РµСЃ РњР‘'
 					,dataIndex:'weightmb'
 					,align: 'right'
 				},{
-					header:'Стоимость вх.трафика'
+					header:'РЎС‚РѕРёРјРѕСЃС‚СЊ РІС….С‚СЂР°С„РёРєР°'
 					,dataIndex:'pricein'
 					,align: 'right'
 				},{
-					header:'Стоимость исх.трафика'
+					header:'РЎС‚РѕРёРјРѕСЃС‚СЊ РёСЃС….С‚СЂР°С„РёРєР°'
 					,dataIndex:'priceout'
 					,align: 'right'
 				},{
-					header:'Исх.скорость'
+					header:'РСЃС….СЃРєРѕСЂРѕСЃС‚СЊ'
 					,dataIndex:'in_pipe'
 					,renderer: function(v,p,r){
 						return Ext.util.Format.rateSpeed(v)
 					}
 				},{
-					header:'Вх.скорость'
+					header:'Р’С….СЃРєРѕСЂРѕСЃС‚СЊ'
 					,dataIndex:'out_pipe'
 					,renderer: function(v,p,r){
 						return Ext.util.Format.rateSpeed(v)
 					}
 				},{
-					header:'Как считать'
+					header:'РљР°Рє СЃС‡РёС‚Р°С‚СЊ'
 					,dataIndex:'flagname'
 				}
 			],

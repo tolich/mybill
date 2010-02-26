@@ -1,5 +1,5 @@
 /**
- * Персональный кабинет пользователя	
+ * РџРµСЂСЃРѕРЅР°Р»СЊРЅС‹Р№ РєР°Р±РёРЅРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ	
  */
 Ext.SSL_SECURE_URL="/shared/icons/s.gif"; 
 Ext.BLANK_IMAGE_URL="/shared/icons/s.gif";
@@ -14,7 +14,7 @@ Ext.app.Layer=function(){
 				,border: false
 				,margins: '0 0 5 0'
 		        ,tbar:['->',{
-		        	text: 'Выход'
+		        	text: 'Р’С‹С…РѕРґ'
 		        	,iconCls: 'exit'
 		        	,handler: function(){
 		        		Ext.Ajax.request({
@@ -28,7 +28,7 @@ Ext.app.Layer=function(){
 		    },{
 				region: 'west'
 				,id: 'west-panel'
-				,title: 'Информация'
+				,title: 'РРЅС„РѕСЂРјР°С†РёСЏ'
 				,iconCls: 'information'
 				,split: true
 				,width: 320
@@ -49,7 +49,7 @@ Ext.app.Layer=function(){
 				//split: true,
 				,items:[{
 					id: 'account'
-					,title: 'Состояние счета'
+					,title: 'РЎРѕСЃС‚РѕСЏРЅРёРµ СЃС‡РµС‚Р°'
 					,collapsible: true
 					,autoScroll: true
 					,border: true
@@ -58,7 +58,7 @@ Ext.app.Layer=function(){
 					,tools:[
 						{
 						    id:'refresh',
-						    qtip: 'Обновить',
+						    qtip: 'РћР±РЅРѕРІРёС‚СЊ',
 						    handler: function(event, toolEl, panel){
 						        panel.load('/info/account');
 						    }
@@ -66,7 +66,7 @@ Ext.app.Layer=function(){
 					]
 				}, {
 					id: 'personal'
-					,title: 'Персональная'
+					,title: 'РџРµСЂСЃРѕРЅР°Р»СЊРЅР°СЏ'
 					,collapsible: true
 					,autoScroll: true
 					,border: true
@@ -75,7 +75,7 @@ Ext.app.Layer=function(){
 					,tools:[
 						{
 						    id:'refresh',
-						    qtip: 'Обновить',
+						    qtip: 'РћР±РЅРѕРІРёС‚СЊ',
 						    handler: function(event, toolEl, panel){
 						        panel.load('/info/personal');
 						    }
@@ -83,7 +83,7 @@ Ext.app.Layer=function(){
 					]
 				},{
 					id: 'tariff'
-					,title: 'Информация о тарифе'
+					,title: 'РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚Р°СЂРёС„Рµ'
 					,collapsible: true
 					,autoScroll: true
 					,border: true
@@ -92,7 +92,7 @@ Ext.app.Layer=function(){
 					,tools:[
 						{
 						    id:'refresh',
-						    qtip: 'Обновить',
+						    qtip: 'РћР±РЅРѕРІРёС‚СЊ',
 						    handler: function(event, toolEl, panel){
 						        panel.load('/info/tariff');
 						    }
@@ -100,7 +100,7 @@ Ext.app.Layer=function(){
 					]
 				},{
 					id: 'message'
-					,title: 'Сообщения'
+					,title: 'РЎРѕРѕР±С‰РµРЅРёСЏ'
 					,collapsible: true
 					,autoScroll: true
 					,border: true
@@ -109,7 +109,7 @@ Ext.app.Layer=function(){
 					,tools:[
 						{
 						    id:'refresh',
-						    qtip: 'Обновить',
+						    qtip: 'РћР±РЅРѕРІРёС‚СЊ',
 						    handler: function(event, toolEl, panel){
 						        panel.load('/info/message');
 						    }
@@ -133,7 +133,7 @@ Ext.app.Layer=function(){
 					,defaults:{
 						bodyStyle: 'padding:0 0 0 5px;font:11px verdana,tahoma,arial,sans-serif'
 					}
-					,title: 'Общее'
+					,title: 'РћР±С‰РµРµ'
 					,autoScroll: true
 					,items:[{
 						columnWidth: 1
