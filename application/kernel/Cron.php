@@ -7,7 +7,7 @@ class Cron {
 			$oSettings = new Settings();
 			Context::SetSettings($oSettings->GetAppParams());
 		}
-		Log::writeCliLog("Starting cron script");
+		AppLog::output("Starting cron script");
 		$this->obj = array(
 			'users'		=>new Users(),
 			'tasks'		=>new Tasks(),
@@ -17,11 +17,11 @@ class Cron {
 	}
 	
 	public function __destruct(){
-		Log::writeCliLog("Cron script stopped.");
+		AppLog::output("Cron script stopped.");
 	}
 	
 	public function daily(){
-		Log::writeCliLog("\tdaily");
+		AppLog::output("\tdaily");
 		$this->ChangeTariff();
 		$this->DailyFee();
 		$this->MonthlyFee();
@@ -32,9 +32,9 @@ class Cron {
 	}
 	
 	public function sessions(){
-		Log::writeCliLog("\tsessions");
+		AppLog::output("\tsessions");
 		$r = $this->obj['sessions']->CheckSessions();
-		Log::writeCliLog("\tclean $r session(s)");
+		AppLog::output("\tclean $r session(s)");
 	}
 	
 	/**
@@ -53,7 +53,7 @@ class Cron {
 			$this->obj['users']->ChangeTariff($param);
 			$this->obj['tasks']->SetStatus($task['id'],'Successful');
 			$this->obj['tasks']->Periodic($task['id_period']);
-			Log::writeCliLog("Change tariff for user(s) {$task['username']}");
+			AppLog::output("Change tariff for user(s) {$task['username']}");
 		}
 	}
 	
@@ -67,7 +67,7 @@ class Cron {
 			$this->obj['users']->MonthlyFee($task['username'],false,$task['opdate']);
 			$this->obj['tasks']->SetStatus($task['id'],'Successful');
 			$this->obj['tasks']->Periodic($task['id']);
-			Log::writeCliLog("Monthly fee for user(s) {$task['username']}");
+			AppLog::output("Monthly fee for user(s) {$task['username']}");
 		}
 	}
 
@@ -81,7 +81,7 @@ class Cron {
 			$this->obj['users']->DailyFee($task['username'],false,$task['opdate']);
 			$this->obj['tasks']->SetStatus($task['id'],'Successful');
 			$this->obj['tasks']->Periodic($task['id']);
-			Log::writeCliLog("Daily fee for user(s) {$task['username']}");
+			AppLog::output("Daily fee for user(s) {$task['username']}");
 		}
 	}
 
@@ -95,7 +95,7 @@ class Cron {
 			$this->obj['users']->On($task['username']);
 			$this->obj['tasks']->SetStatus($task['id'],'Successful');
 			$this->obj['tasks']->Periodic($task['id']);
-			Log::writeCliLog("Activate user(s) {$task['username']}");
+			AppLog::output("Activate user(s) {$task['username']}");
 		}
 	}
 
@@ -109,7 +109,7 @@ class Cron {
 			$this->obj['users']->Off($task['username']);
 			$this->obj['tasks']->SetStatus($task['id'],'Successful');
 			$this->obj['tasks']->Periodic($task['id']);
-			Log::writeCliLog("Deactivate user(s) {$task['username']}");
+			AppLog::output("Deactivate user(s) {$task['username']}");
 		}
 	}
 
@@ -130,7 +130,7 @@ class Cron {
 		if (date("d")==Settings::Billing('date_fee')){
 			$this->Db->beginTransaction();
 			try {
-				Log::writeCliLog("Change current acctperiod");
+				AppLog::output("Change current acctperiod");
 				$sql = $this->Db->select()
 							->from('acctperiod',array('id','name'))
 							->where('status=0');
@@ -187,7 +187,7 @@ class Cron {
 				$this->Db->commit();
 			} catch (Exception $e){
 				$this->Db->rollBack();
-				Log::writeCliLog($e->getMessage());
+				AppLog::output($e->getMessage());
 			}
 		}
 	}
@@ -197,10 +197,10 @@ class Cron {
 	 * @return 
 	 */
 	private function CloseCreditSessions(){
-		Log::writeCliLog("Finalizing debtor's sessions");
+		AppLog::output("Finalizing debtor's sessions");
 		$r = $this->obj['sessions']->CloseCredits();
-		Log::writeCliLog("\tsuccess close {$r['success']} session(s)");
-		Log::writeCliLog("\tfailed close {$r['failed']} session(s)");
+		AppLog::output("\tsuccess close {$r['success']} session(s)");
+		AppLog::output("\tfailed close {$r['failed']} session(s)");
 	}
 }
 ?>

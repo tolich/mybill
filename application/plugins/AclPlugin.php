@@ -5,15 +5,8 @@
 
 class AclPlugin extends Zend_Controller_Plugin_Abstract
 {
-	/**
-     * Instance of Zend_Controller_Dispatcher_Interface
-     * @var Zend_Controller_Dispatcher_Interface
-     */
-	protected $_dispatcher = null;
-	
 	protected $acl;
-	
-	
+
 	public function __construct()
 	{
 		$this->acl=Zend_Registry::get('acl');

@@ -9,7 +9,7 @@ class Settings {
 	}
 
 	public function DeinstallModules(){
-		Log::writeCliLog("Deinstall modules ...");
+		AppLog::output("Deinstall modules ...");
 		$oManager = new Manager();
 		$aModules = $oManager->GetAllModules();
 		foreach ($aModules as $k=>$v){
@@ -30,7 +30,7 @@ class Settings {
 	}
 
 	public function SetDefPeriods(){
-		Log::writeCliLog("Periods ...");
+		AppLog::output("Periods ...");
 		$aData = array(
 			array(
 				'id'		=> '1',
@@ -53,7 +53,7 @@ class Settings {
 	}
 
 	public function SetDefFlags(){
-		Log::writeCliLog("Flags ...");
+		AppLog::output("Flags ...");
 		$aData = array(
 			array(
 				'id'		=> '1',
@@ -72,7 +72,7 @@ class Settings {
 	}
 	
 	public function SetDefTaskattribute(){
-		Log::writeCliLog("Taskattribute ...");
+		AppLog::output("Taskattribute ...");
 		$aData = array(
 			array(
 				'attrname'		=> 'Monthly-fee',
@@ -113,7 +113,7 @@ class Settings {
 	}
 	
 	public function SetDefRole(){
-		Log::writeCliLog("Role ...");
+		AppLog::output("Role ...");
 		$aData = array(
 			array(
 				'id'		=> '1',
@@ -166,7 +166,7 @@ class Settings {
 	}
 	
 	public function SetDefRoleparent(){
-		Log::writeCliLog("Roleparent ...");
+		AppLog::output("Roleparent ...");
 		$aData = array(
 			array(
 				'id_role'		=> '2',
@@ -196,7 +196,7 @@ class Settings {
 	}
 	
 	public function SetDefResource(){
-		Log::writeCliLog("Resource ...");
+		AppLog::output("Resource ...");
 		$aData = array(
 			array(
 				'resource'		=> 'auth',
@@ -271,7 +271,7 @@ class Settings {
 	}
 	
 	public function SetDefRightaction(){
-		Log::writeCliLog("Rightaction ...");
+		AppLog::output("Rightaction ...");
 		$aData = array(
 			'view'=>array(
 				'admin'=>array(
@@ -504,7 +504,7 @@ class Settings {
 	}
 
 	public function SetDefSettings(){
-		Log::writeCliLog("Settings ...");
+		AppLog::output("Settings ...");
 		$aData = array(
 			array(
 				'text'		=> 'Наименование',
@@ -617,6 +617,26 @@ class Settings {
 				'param'		=> 'URL',
 				'value'		=> 'http://',
 				'answer'	=> array(),							
+				'type'		=> SETTINGS_BILLING
+			),
+			array(
+				'text'		=> 'Детализация логов',
+				'param'		=> 'log_priority',
+				'value'		=> '4',
+				'answer'	=> array(							
+									array('rvalue'	=> '1',
+										  'name'	=> 'Тревога'),
+									array('rvalue'	=> '2',
+										  'name'	=> 'Критические'),
+									array('rvalue'	=> '3',
+										  'name'	=> 'Ошибки'),
+									array('rvalue'	=> '4',
+										  'name'	=> 'Предупреждения'),
+									array('rvalue'	=> '5',
+										  'name'	=> 'Информация'),
+									array('rvalue'	=> '6',
+										  'name'	=> 'Все'),
+							   ),
 				'type'		=> SETTINGS_BILLING
 			),
 			array(

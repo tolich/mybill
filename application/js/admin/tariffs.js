@@ -79,7 +79,7 @@ Ext.app.Tariffs.InTariffGrid = Ext.extend(Ext.grid.GridPanel, {
                	callback: function(grid, record, action, rowIndex, colIndex, e){
 					Ext.Msg.show({
 						title:'Подтверждение',
-						msg: "Вы действительно хотите запретить <b>"+record.get('zonename')+"</b>",
+						msg: "Вы действительно хотите запретить <b>"+record.get('zonename')+"</b>?",
 						icon:Ext.Msg.QUESTION,
 						buttons:Ext.Msg.YESNO,
 						scope:this,
@@ -106,7 +106,7 @@ Ext.app.Tariffs.InTariffGrid = Ext.extend(Ext.grid.GridPanel, {
                	callback: function(grid, record, action, rowIndex, colIndex, e){
 					Ext.Msg.show({
 						title:'Подтверждение',
-						msg: "Вы действительно хотите разрешить <b>"+record.get('zonename')+"</b>",
+						msg: "Вы действительно хотите разрешить <b>"+record.get('zonename')+"</b>?",
 						icon:Ext.Msg.QUESTION,
 						buttons:Ext.Msg.YESNO,
 						scope:this,

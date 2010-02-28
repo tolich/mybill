@@ -40,9 +40,11 @@ class Authorize
 					Context::SetModules($oManager->GetModules());
 					$aResult = array('success'=>true, 'username'=>$strName);
 					if (method_exists($this->claim,'setTimeLogin')) $this->claim->setTimeLogin();
+                    AppLog::info('Авторизация');
 				}
 				else
 				{
+                    AppLog::warn('Неудачная авторизация',$strName);
 					$aResult = array('errors'=>array(array('id'=>'username', 'msg'=>'Пользователь не найден...'),
 													 array('id'=>'password', 'msg'=>'или неверный пароль')));
 				}

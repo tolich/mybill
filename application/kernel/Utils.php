@@ -242,20 +242,20 @@ class Utils
 		$item=self::nhtml_entity_decode($item);
 	}
 	
-	/**
-	 * Выводит строку с отладочной информацией в файл LOGS_DIR
-	 * Файл доступен для браузера  
-	 */
-	public static function Debug($rvalue)
-	{
- 		if ($handle = fopen(LOGS_DIR.'log.txt', 'a'))
-		 {
-				fwrite($handle, "\n");
-			  	fwrite($handle, var_export($rvalue,true));
-			  	 
-			  	fclose($handle);
-		 }
-	}
+//	/**
+//	 * Выводит строку с отладочной информацией в файл LOGS_DIR
+//	 * Файл доступен для браузера  
+//	 */
+//	public static function Debug($rvalue)
+//	{
+// 		if ($handle = fopen(LOGS_DIR.'log.txt', 'a'))
+//		 {
+//				fwrite($handle, "\n");
+//			  	fwrite($handle, var_export($rvalue,true));
+//			  	 
+//			  	fclose($handle);
+//		 }
+//	}
 	
 	/**
 	 * Возвращает параметры клиентский браузер

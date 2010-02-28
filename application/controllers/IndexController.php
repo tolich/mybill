@@ -14,7 +14,6 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {   
 		$aModules =  Context::GetModules();
-    	$theme 	= Settings::Main('theme');
 
 		$doctypeHelper = new Zend_View_Helper_Doctype();
 		$doctypeHelper->doctype('HTML4_STRICT');
@@ -33,6 +32,11 @@ class IndexController extends Zend_Controller_Action
 
 		if (Context::IsAuthorize()){
 			if (Context::GetScript()=='admin'){
+            	$theme 	= Settings::Main('theme');
+        		if ($theme!='default'){
+        			$this->view->headLink()
+        				->appendStylesheet("/shared/themes/$theme/css/xtheme-$theme.css");
+        		}
 				$this->view->headLink()->appendStylesheet("/css/admin/layer.css");
 
 				//Modules
@@ -54,11 +58,6 @@ class IndexController extends Zend_Controller_Action
 					}					
 				}
 			}
-		}
-
-		if ($theme!='default'){
-			$this->view->headLink()
-				->appendStylesheet("/shared/themes/$theme/css/xtheme-$theme.css");
 		}
 
 		if (DEBUG_MODE)	{

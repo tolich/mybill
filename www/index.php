@@ -1,14 +1,12 @@
 <?php
 	require_once '../configs/config.php';
 
-	// ���������� ������ ���������� � ��
-    $db = Zend_Db::factory(DB_DRIVER, $aDBParams);
-    Zend_Registry::set('db', $db);
+    $db = Db::factory();
+	Zend_Registry::set('db', $db);
 
-	// ���������� ������ ���� �������
     $acl = new Acl();
     Zend_Registry::set('acl', $acl);
-
+    
 	$frontController = Zend_Controller_Front::getInstance()
 					-> setParam('useModules', true)
 					-> throwExceptions(DEBUG_MODE)
@@ -21,4 +19,3 @@
 		$frontController->registerPlugin(new $plugin);
 	}
 	$frontController->dispatch();
-?>

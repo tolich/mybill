@@ -15,7 +15,7 @@
 	foreach (glob(DOCUMENT_ROOT.'application/modules/*') as $dir) {
 		Utils::AppendToIncludePath($dir);
 	}
-
+    
 	function __autoload($name) 
 	{
 	    $zend ='zend_';	
@@ -25,5 +25,3 @@
 	        if (Zend_Loader::isReadable($name.'.php'))
 	        	require_once ($name.'.php');
 	}
-
-?>

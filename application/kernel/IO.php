@@ -179,56 +179,56 @@ class IO {
 	);
 
 	public function __construct(){
-		Log::writeCliLog("Starting IO script");
+		AppLog::output("Starting IO script");
 		$this->Db = Zend_Registry::get('db');
 	}
 
 	public function __destruct(){
-		Log::writeCliLog("IO script stopped.");
+		AppLog::output("IO script stopped.");
 	}
 	
 	public function export(){
-		Log::writeCliLog("Starting export");
+		AppLog::output("Starting export");
 		foreach ($this->etable as $table){
-			Log::writeCliLog("\t{$table['tablename']}");
+			AppLog::output("\t{$table['tablename']}");
 			if (count($table['fields'])!=0){
 				$sql = "SELECT `".implode("`,`",$table['fields'])."`
 					FROM `{$table['tablename']}`". 
 					(array_key_exists('where', $table)?" WHERE {$table['where']}":"").
 					" INTO OUTFILE '{$this->path}/{$table['tablename']}.exp'";
 				$this->Db->query($sql);
-				Log::writeCliLog("\t{$table['tablename']} export success!");
+				AppLog::output("\t{$table['tablename']} export success!");
 			}else{
-				Log::writeCliLog("\tno fields for export!");
+				AppLog::output("\tno fields for export!");
 			}
 		}
 	}
 
 	public function import(){
-		Log::writeCliLog("Starting import");
+		AppLog::output("Starting import");
 		foreach ($this->itable as $table){
-			Log::writeCliLog("\t{$table['tablename']}");
-			Log::writeCliLog("\tclean");
+			AppLog::output("\t{$table['tablename']}");
+			AppLog::output("\tclean");
 			$this->Db->delete($table['tablename']);
 			if (count($table['fields'])!=0){
 				$sql = "LOAD DATA INFILE '{$this->path}/{$table['tablename']}.exp'
 					INTO TABLE `{$table['tablename']}`(`".implode("`,`",$table['fields'])."`)";
 				$this->Db->query($sql);
-				Log::writeCliLog("\t{$table['tablename']} import success!");
+				AppLog::output("\t{$table['tablename']} import success!");
 			}else{
-				Log::writeCliLog("\tno fields for export!");
+				AppLog::output("\tno fields for export!");
 			}
 		}
-		Log::writeCliLog("\tApply tariffs settings for users");
+		AppLog::output("\tApply tariffs settings for users");
 		$oTariffs = new Tariffs();
 		$oTariffs->ApplyAll();
-		Log::writeCliLog("\tApply defaults settings");
+		AppLog::output("\tApply defaults settings");
 		$oSettings = new Settings();
 		$oSettings->SetDefault();
 	}
 
 	public function defsettings(){
-		Log::writeCliLog("Apply defaults settings");
+		AppLog::output("Apply defaults settings");
 		$oSettings = new Settings();
 		$oSettings->SetDefault();
 	}
@@ -239,22 +239,22 @@ class IO {
 		$oSettings = new Settings();
 		$aParams = $oSettings->GetAppParams();
 		$path = $aParams[SETTINGS_BILLING]['backup_path'];
-		Log::writeCliLog($path);
+		AppLog::output($path);
 		if (mkdir("$path/$date")) {
 			$path = "$path/$date";	
 			chmod($path, 0777);
-			Log::writeCliLog("Starting backup");
+			AppLog::output("Starting backup");
 			foreach ($this->backup_table as $table){
-				Log::writeCliLog("\t{$table['tablename']}");
+				AppLog::output("\t{$table['tablename']}");
 				if (count($table['fields'])!=0){
 					$sql = "SELECT `".implode("`,`",$table['fields'])."`
 						FROM `{$table['tablename']}`". 
 						(array_key_exists('where', $table)?" WHERE {$table['where']}":"").
 						" INTO OUTFILE '$path/{$table['tablename']}.exp'";
 					$this->Db->query($sql);
-					Log::writeCliLog("\t{$table['tablename']} backup success!");
+					AppLog::output("\t{$table['tablename']} backup success!");
 				}else{
-					Log::writeCliLog("\tno fields for backup!");
+					AppLog::output("\tno fields for backup!");
 				}
 			}
 			if (system("cd $path && tar -cvzf $path.tar.gz *")!==false) {
@@ -264,7 +264,7 @@ class IO {
 			    rmdir($path);
 			}
 		} else {
-			Log::writeCliLog("\tbackup failed! Dir not created!");
+			AppLog::output("\tbackup failed! Dir not created!");
 		}
 	}
 
