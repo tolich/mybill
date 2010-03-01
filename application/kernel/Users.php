@@ -235,6 +235,7 @@ class Users
 			$aRows = $this->Db->fetchAssoc($sql);
 			ksort($aRows);
 			$aRows = array_values($aRows);
+    		Utils::encode($aRows);
 			array_unshift($aRows, array('id'=>'%', 'username'=>'Все пользователи'));
 			if ($start!=null && $limit!=null )
 				$aRows = array_slice($aRows, $start, $limit);
@@ -250,11 +251,11 @@ class Users
 			if ($query)
 				$sql->where("CONCAT_WS(' ', username, surname, name, address) LIKE ?", '%'.Utils::decode(str_replace('*','%',$query)).'%');
 			$aRows = $this->Db->fetchAll($sql);
+    		Utils::encode($aRows);
 			if ($start==0)
 				array_unshift($aRows, array('id'=>'%', 'username'=>'Все пользователи'));
 		}
 
-		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
 		{
 			$aRow = Utils::ClearPostData($aRow, array('id', 'username'));	

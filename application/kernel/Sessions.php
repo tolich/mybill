@@ -20,31 +20,124 @@ class Sessions
 	public function CheckSessions(){
 		$oNas = new Nas();
 		$aNas = $oNas->GetList();
-		$n = 0;
+		$total = 0;
 		foreach ($aNas as $nas){
 			$user = $nas['username'];
 			$pass = $nas['password'];
-			Log::writeCliLog("getting sessions from {$nas['nasname']}:{$nas['ports']}");
+            $url = "http://{$nas['username']}:{$nas['password']}@{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
+			AppLog::output("getting sessions from {$nas['nasname']}:{$nas['ports']}");
 			$aSessions=array();
-			if (function_exists('http_get')){
-				$sessions=http_get("http://{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions",array('httpauth'=>"{$nas['username']}:{$nas['password']}"),$info);
-				if ($info['response_code']=='200'){
-					preg_match_all("/^ng.*$/im",$sessions,$aSessions);
-				}
-				$aSessionId = array();
-				foreach ($aSessions[0] as $session){
-					$link = preg_split('/\s+/',$session);
-					$aSessionId[]=$link[6];
-					Log::writeCliLog("{$link[6]}");
-				}
-				$n += $this->Db->delete('sessions', "acctsessionid not in ('".implode("','",$aSessionId)."') and nasipaddress='{$nas['nasname']}'");
+			$aSessionId = array();
+            $ch = curl_init();
+            curl_setopt( $ch, CURLOPT_URL, $url );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $sessions = curl_exec( $ch );
+            $info = curl_getinfo( $ch );
+            curl_close ( $ch );
+			switch ($info['http_code']){
+			    case '0':
+      				AppLog::output("not response");
+                break;
+			    case '200':
+    				preg_match_all("/^ng.*$/im",$sessions,$aSessions);
+        		    AppLog::output("find ".count($aSessions[0])." sessions");
+        			foreach ($aSessions[0] as $session){
+        				$link = preg_split('/\s+/',$session);
+        				$aSessionId[]=$link[6];
+        				AppLog::output("{$link[6]}");
+        			}
+                break;
+			    case '401':
+      				AppLog::output("{$info['http_code']} unauthorized");
+                break;
+			    case '403':
+      				AppLog::output("{$info['http_code']} forbidden");
+                break;
+			    case '404':
+      				AppLog::output("{$info['http_code']} not found");
+                break;
+			}
+			$n = $this->Db->delete('sessions', "acctsessionid not in ('".implode("','",$aSessionId)."') and nasipaddress='{$nas['nasname']}'");
+			AppLog::output("clean $n session(s) on {$nas['nasname']}:{$nas['ports']}");
+            $total += $n;
+		}
+		return $total;
+	}
+
+	/**
+	 * Закрывает сессию 
+	 * @param $id int
+	 */
+	public function Close ($id)
+	{
+		$sql = $this->Db->select()
+						->from('sessions',array('acctsessionid'))
+						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
+						->where('acctuniqueid=?',$id);
+		$session = $this->Db->fetchRow($sql);
+		if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
+            $url = "http://{$session['username']}:{$session['password']}@{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
+            $ch = curl_init();
+            curl_setopt( $ch, CURLOPT_URL, $url );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $sessions = curl_exec( $ch );
+            $info = curl_getinfo( $ch );
+            curl_close ( $ch );
+			if ($info['http_code']=='200'){
+				$aResult = array('success'=>true);
 			} else {
-				Log::writeCliLog("php not configured");
+				$aResult = array('errors'=>array('msg'=>$info['error']));
+            }
+		} else {
+			$aResult = array('errors'=>array('msg'=>'Link extract failed'));
+		}
+		return $aResult;
+	}
+
+	/**
+	 * Закрывает сессии с отрицательным балансом 
+	 * @param $id int
+	 */
+	public function CloseCredits ()
+	{
+		$sql = $this->Db->select()
+					->from('acctperiod',array(
+						'datestart','now' => new Zend_Db_Expr("UNIX_TIMESTAMP(CURDATE())")))
+					->where('status=0');
+		$aRow=$this->Db->fetchRow($sql);
+
+		$sql = $this->Db->select()
+						->from('sessions',array('acctsessionid'))
+						->join('usergroup','sessions.username=usergroup.username',array())
+						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
+						->where("(deposit < mindeposit) and (UNIX_TIMESTAMP(DATE_ADD('{$aRow['datestart']}', INTERVAL dateofcheck DAY)) <= '{$aRow['now']}') or (freebyte + bonus < freemblimit and check_mb=1)")
+						->orWhere('access=0');
+		$aSessions = $this->Db->fetchAll($sql);
+		$aResult = array(
+			'success' => 0,
+			'failed'  => 0 
+		);
+		foreach ($aSessions as $session){
+			if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
+                $url = "http://{$session['username']}:{$session['password']}@{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
+                $ch = curl_init();
+                curl_setopt( $ch, CURLOPT_URL, $url );
+                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+                $sessions = curl_exec( $ch );
+                $info = curl_getinfo( $ch );
+                curl_close ( $ch );
+				if ($info['http_code']=='200'){
+					$aResult['success']++;
+				} else{
+					$aResult['failed']++;
+                }
+			} else {
+				$aResult['failed']++;
 			}
 		}
-		return $n;
+		return $aResult;
 	}
-	
+
 	/**
 	 * Список активных сессий
 	 * @param $sort string
@@ -91,74 +184,6 @@ class Sessions
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
 		return $aData;
-	}
-
-	/**
-	 * Закрывает сессию 
-	 * @param $id int
-	 */
-	public function Close ($id)
-	{
-		$sql = $this->Db->select()
-						->from('sessions',array('acctsessionid'))
-						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
-						->where('acctuniqueid=?',$id);
-		$session = $this->Db->fetchRow($sql);
-		if (function_exists('http_get')){
-			if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-				http_get("http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close",array('httpauth'=>"{$session['username']}:{$session['password']}"),$info);
-				if ($info['response_code']=='200')
-					$aResult = array('success'=>true);
-				else
-					$aResult = array('errors'=>array('msg'=>$info['error']));
-			} else {
-				$aResult = array('errors'=>array('msg'=>'Link extract failed'));
-			}
-		} else{
-			$aResult = array('errors'=>array('msg'=>'php not configured'));
-		}
-		return $aResult;
-	}
-
-	/**
-	 * Закрывает сессии с отрицательным балансом 
-	 * @param $id int
-	 */
-	public function CloseCredits ()
-	{
-		$sql = $this->Db->select()
-					->from('acctperiod',array(
-						'datestart','now' => new Zend_Db_Expr("UNIX_TIMESTAMP(CURDATE())")))
-					->where('status=0');
-		$aRow=$this->Db->fetchRow($sql);
-
-		$sql = $this->Db->select()
-						->from('sessions',array('acctsessionid'))
-						->join('usergroup','sessions.username=usergroup.username',array())
-						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
-						->where("(deposit < mindeposit) and (UNIX_TIMESTAMP(DATE_ADD('{$aRow['datestart']}', INTERVAL dateofcheck DAY)) <= '{$aRow['now']}') or (freebyte + bonus < freemblimit and check_mb=1)")
-						->orWhere('access=0');
-		$aSessions = $this->Db->fetchAll($sql);
-		$aResult = array(
-			'success' => 0,
-			'failed'  => 0 
-		);
-		if (function_exists('http_get')){
-			foreach ($aSessions as $session){
-				if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-					http_get("http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close",array('httpauth'=>"{$session['username']}:{$session['password']}"),$info);
-					if ($info['response_code']=='200')
-						$aResult['success']++;
-					else
-						$aResult['failed']++;
-				} else {
-						$aResult['failed']++;
-				}
-			}
-		} else{
-			$aResult['failed']++;
-		}
-		return $aResult;
 	}
 
 	/**
@@ -217,4 +242,3 @@ class Sessions
 		}	
 	}
 }
-?>

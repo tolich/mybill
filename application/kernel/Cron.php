@@ -34,7 +34,7 @@ class Cron {
 	public function sessions(){
 		AppLog::output("\tsessions");
 		$r = $this->obj['sessions']->CheckSessions();
-		AppLog::output("\tclean $r session(s)");
+		AppLog::output("\ttotal clean $r session(s)");
 	}
 	
 	/**

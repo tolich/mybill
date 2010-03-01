@@ -79,7 +79,7 @@ App.register(Ext.extend(Ext.app.Module, {
 					App.request({
 						url : '/ajax/sessions/close'
 						,success: function(r, o){
-							Ext.getCmp('session-grid').getStore().reload();
+							this.onRefresh();
 						}
 						,params: {id: this.getContext().id}
 						,scope: this

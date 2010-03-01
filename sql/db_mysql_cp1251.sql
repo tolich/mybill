@@ -192,6 +192,7 @@ CREATE TABLE usergroup (
   KEY id_1c (id_1c),
   KEY id_repl (id_repl),
   KEY repl_status (repl_status),
+  KEY dateofcheck (dateofcheck),
   KEY is_repl (is_repl)
 ) ENGINE=INNODB;
 
