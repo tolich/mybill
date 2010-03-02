@@ -204,7 +204,9 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
 			url: App.proxy('/ajax/reports/stat')
 			,root: 'data'
 			,totalProperty: 'totalCount'
-			,fields: [{name:'acctstarttime',type:'date',dateFormat:'Y-m-d H:i:s'}, {name:'acctstoptime',type:'date',dateFormat:'Y-m-d H:i:s'}, 'acctsessiontime', 'acctinputoctets', 'acctoutputoctets','callingstationid']
+			,fields: [{name:'acctstarttime',type:'date',dateFormat:'Y-m-d H:i:s'}, 
+                        {name:'acctstoptime',type:'date',dateFormat:'Y-m-d H:i:s'}, 
+                        'acctsessiontime', 'acctinputoctets', 'acctoutputoctets','callingstationid']
 			,id: 'id'
 			,remoteSort: true
 			,sortInfo:{field:'acctstarttime', direction:'desc'}

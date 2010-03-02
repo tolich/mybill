@@ -55,6 +55,7 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 	,moduleItems: new Ext.util.MixedCollection
 	,context: new Ext.util.MixedCollection
 	,settings: {}
+    ,billsettings: {}
 	,mainsettings: {}
 	,rights: {allow:[],deny:null}
     ,emptyMod:{
@@ -265,10 +266,12 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
                     try {
                         Ext.apply(this.settings, Ext.decode(s.settings || "{}"));
                         Ext.apply(this.mainsettings, s.mainsettings || "{}");
+                        Ext.apply(this.billsettings, s.billsettings || "{}");
                         Ext.apply(this.rights, s.rights);
                     } catch (e) {
                         Ext.apply(this.settings, {});
                         Ext.apply(this.mainsettings, {});
+                        Ext.apply(this.billsettings, {});
                         Ext.apply(this.rights, s.rights);
                     }
                 }

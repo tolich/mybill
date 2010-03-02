@@ -796,7 +796,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		var pass = '';
 		for (i=0; i<10;i++)
 			pass+=str.charAt(Math.floor(str.length*Math.random()));
-		var usr = 'usr'+Math.ceil(9999*Math.random());
+		var usr = '';//'usr'+Math.ceil(9999*Math.random());
 		App.request({
 		   url: '/ajax/users/getbyid',
 		   callback: function(){
@@ -2054,7 +2054,7 @@ App.register(Ext.extend(Ext.app.Module, {
 					}
 				}]
 			});
-			win.setTitle((st=='off'?'Деа':'А')+'ктивация - ' + this.app.getContext('users').username);
+			win.setTitle((st=='off'?'Деа':'А')+'ктивация - ' + this.getContext().username);
 		}
 		win.show();
 	} // End winChangeState

@@ -74,7 +74,9 @@ class IndexController extends Zend_Controller_Action
 			->appendFile("/shared/js/ext31patch.js")
 			->appendFile("/shared/js/ext-lang-ru.js")
 			->appendFile("/shared/js/ext-lang-ru-ux.js")
-			->appendFile("/js/proxy.js");
+    		->appendFile("/shared/js/cookies.js")
+			->appendFile("/js/proxy.js")
+			->appendFile("/js/winlogin.js");
 
 		if (Context::IsAuthorize()){
 			if (Context::GetScript()=='admin'){
@@ -121,8 +123,7 @@ class IndexController extends Zend_Controller_Action
 			}
 		} else {
 			$this->view->headScript()
-				->appendFile("/js/index/userlogin.js")
-				->appendFile("/shared/js/cookies.js");
+				->appendFile("/js/index/userlogin.js");
 		}
     }
 }

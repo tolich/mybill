@@ -37,25 +37,37 @@ function AppProxy(url){
 					var res = Ext.decode(r.responseText);
 					if (res&&res.success===false) {
 						res.errors = res.errors || {};
-						Ext.Msg.show({
-							title:'Ошибка!',
-							msg: res.errors.msg,
-							buttons: Ext.MessageBox.OK,
-							icon: Ext.MessageBox.ERROR,
-							width: '300',
-							fn: function(){
-							if (failure)
-								failure.call(this,r,o);
-								if (res.id) {
-									switch (res.id){
-										case '-1' :
-											window.location = '/admin'
-										break;
-									}
-								}
-							},
-							scope: this
-						});
+						if (res.id) {
+                            switch (res.id) {
+                                case '-1':
+                                    var win = new Ext.app.LoginWin({
+                                        title: 'Разблокировать',
+                                        modal: true,
+                                        lock: true,
+                                        url: '/ajax/auth/unlock',
+                                        fn: function(){
+                                            //Ext.Ajax.request(req);
+                                            return true;
+                                        }
+                                    });
+                                    win.show();
+                                    break;
+                            }
+                        }
+                        else {
+                            Ext.Msg.show({
+                                title: 'Ошибка!',
+                                msg: res.errors.msg,
+                                buttons: Ext.MessageBox.OK,
+                                icon: Ext.MessageBox.ERROR,
+                                width: '300',
+                                fn: function(){
+                                    if (failure) 
+                                        failure.call(this, r, o);
+                                },
+                                scope: this
+                            });
+                        }
 					}
 					else
 					{

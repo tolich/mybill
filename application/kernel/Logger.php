@@ -20,7 +20,8 @@ class Logger
         $message = array_shift($params);
         $extras  = array_merge(array(
                 'remote_addr' => $_SERVER['REMOTE_ADDR'],
-                'http_user_agent'=> $_SERVER['HTTP_USER_AGENT']
+                'http_user_agent'=> $_SERVER['HTTP_USER_AGENT'],
+                'role'    => Context::GetRole()
             ),(array)array_shift($params));
         $this->_logger->$method($message,$extras);
     }
@@ -42,6 +43,7 @@ class Logger
             'level'           => 'priority', 
             'msg'             => 'message',
             'username'        => 'username',
+            'role'            => 'role',
             'remote_addr'     => 'remote_addr',
             'http_user_agent' => 'http_user_agent',
         );

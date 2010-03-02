@@ -207,20 +207,20 @@ class Payments
 	public function GetListByDay($start=null, $limit=null, $sort=null, $dir=null)
 	{
 		$sql = $this->Db->select()
+						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT DATE(datepayment))")))
+						->where('status=1');
+		$aCount = $this->Db->fetchOne($sql);
+
+		$sql = $this->Db->select()
 						->from('payments', array('rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
 						->where('status=1')
 						->group('rdate')
 						->limit($limit, $start)
 						->order("$sort $dir");
 		$aRows = $this->Db->fetchAll($sql);
-		$aCount = count($aRows);
 
-		$aRows = $this->Db->fetchAll($sql);
 		foreach ($aRows as &$aRow)
 		{
-//			if (($timestamp = strtotime($aRow['rdate'])) !== -1){
-//				$aRow['rdate']=date('Y/m/d',$timestamp);
-//			}
 			$aRow['sumamount']=sprintf("%0.2f", $aRow['sumamount']/1024/1024);
 			$aRow['avg']=sprintf("%0.2f", $aRow['avg']/1024/1024);
 		}	
@@ -231,18 +231,22 @@ class Payments
 	}
 
 	/**
-	 * Список платежей по дням
+	 * Список платежей по месяцам
 	 */
 	public function GetListByMonth($start=null, $limit=null, $sort=null, $dir=null)
 	{
 		$sql = $this->Db->select()
-						->from('payments', array('rdate'=>new Zend_Db_Expr('date_format(datepayment, \'%Y-%m-01\')'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
+						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT date_format(datepayment, '%Y-%m-01'))")))
+						->where('status=1');
+		$aCount = $this->Db->fetchOne($sql);
+
+		$sql = $this->Db->select()
+						->from('payments', array('rdate'=>new Zend_Db_Expr("date_format(datepayment, '%Y-%m-01')"), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
 						->where('status=1')
 						->group('rdate')
 						->limit($limit, $start)
 						->order("$sort $dir");
 		$aRows = $this->Db->fetchAll($sql);
-		$aCount = count($aRows);
 
 		$aRows = $this->Db->fetchAll($sql);
 		

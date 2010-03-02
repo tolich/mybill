@@ -285,16 +285,6 @@ App.register(Ext.extend(Ext.app.Module, {
 						id: 'month-payment-grid'
 					}]
 				}]
-			//        ,buttons: [{
-			//            text: 'Ок'
-			//			,handler: function(){}
-			//		},{
-			//           text: 'Cancel'
-			//			,handler: function(){
-			//				win.hide();
-			//				win.destroy();
-			//			}
-			//		}]
 			});
 		}
 		win.show();
@@ -338,52 +328,61 @@ Ext.app.Payments.Grid = Ext.extend(Ext.grid.GridPanel, {
 		}, {
 			header: "Логин"
 			,dataIndex: 'username'
+            ,sortable: true
 		}, {
 			header: "Ф.И.О."
 			,dataIndex: 'surname'
 			,renderer: renderFullName
 			,width:200
+            ,sortable: true
 		}, {
 			header: "Дата"
 			,dataIndex: 'datepayment'
 			,width:80
 			,renderer: Ext.util.Format.dateRenderer('d.m.Y')
 			,align: 'center'
+            ,sortable: true
 		}, {
 			header: "Сумма"
 			,dataIndex: 'amount'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "На депозит"
 			,dataIndex: 'amountdeposit'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "На пр.МБ"
 			,dataIndex: 'amountfreebyte'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "На бн.МБ"
 			,dataIndex: 'amountbonus'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "Деп-т до опл."
 			,dataIndex: 'lastdeposit'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "Пр. МБ до опл."
 			,dataIndex: 'lastfreebyte'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "Бн. МБ до опл."
 			,dataIndex: 'lastbonus'
 			,align: 'right'
+            ,sortable: true
 		}, {
 			header: "Основание"
 			,dataIndex: 'description'
+            ,sortable: true
 		}]);
 		
-		cm.defaultSortable = true;
-
         Ext.apply(this, {
 			margins: '0 5 5 0'
 			//title: 'Пользователи',
@@ -519,19 +518,21 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
 			header: "Дата"
 			,dataIndex: 'rdate'
 			,renderer: new Ext.util.Format.dateRenderer('d.m.Y, l')
+            ,sortable: true
 		}, {
 			header: "Сумма"
 			,dataIndex: 'sumamount'
+            ,sortable: true
 		}, {
 			header: "Кол-во платежей"
 			,dataIndex: 'count'
+            ,sortable: true
 		}, {
 			header: "Средняя сумма"
 			,dataIndex: 'avg'
+            ,sortable: true
 		}]);
 		
-		cm.defaultSortable = true;
-
         Ext.apply(this, {
 			margins: '0 5 5 0'
 			,store: store
@@ -596,19 +597,21 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
 			header: "Месяц, год"
 			,dataIndex: 'rdate'
 			,renderer: new Ext.util.Format.dateRenderer('F Y')
+            ,sortable: true
 		}, {
 			header: "Сумма"
 			,dataIndex: 'sumamount'
+            ,sortable: true
 		}, {
 			header: "Кол-во платежей"
 			,dataIndex: 'count'
+            ,sortable: true
 		}, {
 			header: "Средняя сумма"
 			,dataIndex: 'avg'
+            ,sortable: true
 		}]);
 		
-		cm.defaultSortable = true;
-
         Ext.apply(this, {
 			margins: '0 5 5 0'
 			,store: store

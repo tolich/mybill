@@ -1024,6 +1024,9 @@ class Users
 						->where('var = ?', 'cookie');
 		$aResult['settings'] = $this->Db->fetchOne($sql);
 		$aResult['mainsettings'] = Settings::Main();
+		$aResult['billsettings'] = array(
+                            'currency'=>Settings::Billing('currency')
+                        );
 		$acl=Zend_Registry::get('acl');
 		$aResult['rights'] = $acl->getAllRights(Context::GetRole());
 		return $aResult;

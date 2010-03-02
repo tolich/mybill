@@ -133,12 +133,14 @@ if (Ext.util.Format) {
 				return (Math.round(((size * 10) / 1048576)) / 10) + " Mбит/сек " + "(" + r + ")";
 			}
 	};
-    Ext.util.Format.dateRenderer = function(format){
+    Ext.util.Format.dateRenderer= function(format){
         return function(v){
-			if(Date.parse(v))
-	            return Ext.util.Format.date(v, format);
-			else
-				return "-";
+			if (Date.parse(v)>0) {
+                return Ext.util.Format.date(v, format);
+            }
+            else {
+                return "-";
+            }
         };
     }
 }

@@ -243,7 +243,7 @@ class Acl {
 	public function __construct()
 	{	
 		$this->Db = Zend_Registry::get('db');
-		$this->_init();
+		$this->_init(true);
 	}
 	
 	public function reInit(){

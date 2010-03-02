@@ -29,6 +29,17 @@ class Ajax_AuthController extends Zend_Controller_Action
 		$result = $oAuth->Login($this->_getParam('username'), $this->_getParam('password'));
 		$this->_helper->json($result);
     }                                                                                                                               
+
+	/**
+	 * право: view
+	 * @return 
+	 */
+    public function unlockAction()                                                                                                   
+    {  
+		$oAuth = new Authorize('admins');
+		$result = $oAuth->Unlock($this->_getParam('password'));
+		$this->_helper->json($result);
+    }                                                                                                                               
 	
 	/**
 	 * право: submit

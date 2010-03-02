@@ -57,7 +57,11 @@ class Sessions
       				AppLog::output("{$info['http_code']} not found");
                 break;
 			}
-			$n = $this->Db->delete('sessions', "acctsessionid not in ('".implode("','",$aSessionId)."') and nasipaddress='{$nas['nasname']}'");
+            $aWhere[] = "acctsessionid not in ('".implode("','",$aSessionId)."')";
+            $aWhere[] = "nasipaddress='{$nas['nasname']}'";
+			$n = $this->Db->delete('sessions', $aWhere);
+            $aWhere[] = "acctstoptime='0000-00-00 00:00:00'";
+            $this->Db->update('radacct',array('acctstoptime'=>date('Y-m-d H:i:s')),$aWhere);
 			AppLog::output("clean $n session(s) on {$nas['nasname']}:{$nas['ports']}");
             $total += $n;
 		}
@@ -187,12 +191,13 @@ class Sessions
 	}
 
 	/**
-	 * Удаляет 
+	 * Удаляет зависшую сессию
 	 * @param $id int
 	 */
 	public function Delete ($id)
 	{
 		$where = $this->Db->quoteInto('acctuniqueid=?',$id);
+        $this->Db->update('radacct',array('acctstoptime'=>date('Y-m-d H:i:s')),$where);
 		$r = $this->Db->delete('sessions', $where);
 		if ($r)
 			$aResult = array('success'=>true);

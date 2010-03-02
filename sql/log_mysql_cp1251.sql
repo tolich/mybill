@@ -12,6 +12,7 @@ CREATE TABLE log(
   date_log timestamp,
   level int NOT NULL default 0,
   username varchar(64) NOT NULL default '',
+  role varchar(64) NOT NULL default '',
   msg text,
   remote_addr varchar(15),
   http_user_agent text,

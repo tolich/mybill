@@ -281,6 +281,7 @@ class Settings {
 				),
 				'auth'=>array(
 					'admin',
+                    'unlock',
 					'getsettings',
 				),
 				'modules'=>array(
@@ -616,6 +617,13 @@ class Settings {
 				'text'		=> 'URL статистики для печати',
 				'param'		=> 'URL',
 				'value'		=> 'http://',
+				'answer'	=> array(),							
+				'type'		=> SETTINGS_BILLING
+			),
+			array(
+				'text'		=> 'Валюта',
+				'param'		=> 'currency',
+				'value'		=> 'грн',
 				'answer'	=> array(),							
 				'type'		=> SETTINGS_BILLING
 			),

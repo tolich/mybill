@@ -29,7 +29,7 @@ class InfoController extends Zend_Controller_Action
     {   
     	$Users = new Users();
     	$title=array('t_tariffname'=>'Тариф',
-    				 't_deposit'=>'Депозит',
+    				 't_deposit'=>'Депозит, '.Settings::Billing('currency'),
     				 't_freebyte'=>'Остаток пакетных Мб',
     				 't_bonus'=>'Остаток бонусных Мб',
     				 't_dateofcheck'=>'Отстрочка платежа, дн.',

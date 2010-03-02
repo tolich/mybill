@@ -55,7 +55,7 @@ App.register(Ext.extend(Ext.app.Module, {
 			success: function(r, o, res){
 				Ext.Msg.show({
 					title:'Подтверждение',
-					msg: 'C депозита будет списано <b>'+(res.monthlyfee+res.dailyfee)+'</b><br> согласно Вашего тарифа <b>'+res.tariffname+'</b><br>Продолжить?',
+					msg: 'C депозита будет списано <b>'+(res.monthlyfee+res.dailyfee)+' '+App.billsettings.currency+'</b><br> согласно Вашего тарифа <b>'+res.tariffname+'</b><br>Продолжить?',
 					buttons: Ext.MessageBox.YESNO,
 					icon: Ext.MessageBox.QUESTION,
 					width: '320',
@@ -116,7 +116,7 @@ App.register(Ext.extend(Ext.app.Module, {
 							success: function(r, o, res){
 								Ext.Msg.show({
 									title:'Подтверждение',
-									msg: 'С депозита будет списано <b>'+ Ext.getCmp(uid+'-amount').getValue()+'</b><br>и добавлено к пакетным Мб  <b>'+res.mb+'</b><br>Продолжить?',
+									msg: 'С депозита будет списано <b>'+ Ext.getCmp(uid+'-amount').getValue()+' '+App.billsettings.currency+'</b><br>и добавлено к пакетным <b>'+res.mb+' Мб</b><br>Продолжить?',
 									buttons: Ext.MessageBox.YESNO,
 									icon: Ext.MessageBox.QUESTION,
 									width: '320',
@@ -195,7 +195,7 @@ App.register(Ext.extend(Ext.app.Module, {
 							success: function(r, o, res){
 								Ext.Msg.show({
 									title:'Подтверждение',
-									msg: 'Ваш депозит будет пополнен на <b>'+res.nominal+'</b> <br>Продолжить?',
+									msg: 'Ваш депозит будет пополнен на <b>'+res.nominal+' '+App.billsettings.currency+'</b> <br>Продолжить?',
 									buttons: Ext.MessageBox.YESNO,
 									icon: Ext.MessageBox.QUESTION,
 									width: '320',

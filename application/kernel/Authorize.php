@@ -9,6 +9,28 @@ class Authorize
 			$this->claim = new $class;
 		}
 	}
+
+	public function Unlock($strPassword)
+	{
+		$aResult = array();
+		if (null!==$this->claim){
+		    $strName = Context::GetUserData('username');
+			$aInfo=$this->claim->GetUserInfo(array('username'=>$strName,'wwwpassword'=>$strPassword));
+			if ($aInfo!==false)
+			{
+				$aResult = array('success'=>true, 'username'=>$strName);
+                AppLog::info('Разблокировка');
+			}
+			else
+			{
+                AppLog::warn('Неудачная разблокировка',$strName);
+				$aResult = array('errors'=>array(array('id'=>'username', 'msg'=>'Пользователь не найден...'),
+												 array('id'=>'password', 'msg'=>'или неверный пароль')));
+			}
+		}
+		return $aResult;
+	}
+    
 	/**
 	 * Проверяет логин/пароль пользователя и его статус.
 	 * @param string $strName

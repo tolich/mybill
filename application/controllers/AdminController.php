@@ -25,7 +25,9 @@ class AdminController extends Zend_Controller_Action
 		}
 		$this->view->headScript()
 			->appendFile("/shared/js/ext-lang-ru-cp1251.js")
+    		->appendFile("/shared/js/cookies.js")
 			->appendFile("/js/proxy.js")
+			->appendFile("/js/winlogin.js")
 			->appendFile("/js/index/adminlogin.js");
 	}
 }
