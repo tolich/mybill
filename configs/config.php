@@ -6,8 +6,9 @@
 	 */
 	define('VERSION',				    '0.2.0');
 	
-//	$_PLUGINS = array('NAuthPlugin');// Список подключаемых плагинов
-	
+    /**
+     * Список подключаемых плагинов
+     */ 
 	$_PLUGINS = array('AclPlugin');
 	
 	$_PROTO = (@$_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://'); 
@@ -54,10 +55,16 @@
 	define('TMP_DIR', 					DOCUMENT_ROOT.'tmp/');
 	define('WSDL_DIR', 					DOCUMENT_ROOT.'soap/');
 
-	set_include_path('.'.PATH_SEPARATOR.DOCUMENT_ROOT.
-					 './library'.PATH_SEPARATOR.DOCUMENT_ROOT.
-					 './application/'.PATH_SEPARATOR.
-					 get_include_path());
+	set_include_path(
+        implode(PATH_SEPARATOR, 
+            array(
+                '.',
+                DOCUMENT_ROOT.'./library',
+                DOCUMENT_ROOT.'./application/',
+                get_include_path()
+            )
+        )
+    );
 	
 	require_once DOCUMENT_ROOT . 'configs/autoloader.php';
 	require_once DOCUMENT_ROOT . 'configs/localconfig.php';

@@ -1017,12 +1017,16 @@ class Users
 	 */
 	public function GetSettings()
 	{
-		$aResult = array('success'=>true);
-		$sql = $this->Db->select()
-						->from('usersettings', array('value'))
-						->where('id_user = ?', Context::GetUserData('id'))		
-						->where('var = ?', 'cookie');
-		$aResult['settings'] = $this->Db->fetchOne($sql);
+		$aResult = array('success'=>true); 
+        if (Context::GetScript()=='admin'){
+    		$sql = $this->Db->select()
+    						->from('usersettings', array('value'))
+    						->where('id_user = ?', Context::GetUserData('id'))		
+    						->where('var = ?', 'cookie');
+    		$aResult['settings'] = $this->Db->fetchOne($sql);
+        } else {
+    		$aResult['settings'] = Zend_Json::encode(Zend_Registry::get('info_block'));
+        }
 		$aResult['mainsettings'] = Settings::Main();
 		$aResult['billsettings'] = array(
                             'currency'=>Settings::Billing('currency')

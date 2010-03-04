@@ -6,23 +6,24 @@ class InfoController extends Zend_Controller_Action
 {
     public function indexAction()
     {   
-    	$title=array('report'=>'Отчеты',
-    				 'connect'=>'Статистика подключений',
-    				 'payment'=>'История платежей',
-    				 'tariffs'=>'История тарифов',
-    				 'site'=>'Посетите',
-    				 'help'=>'Помощь',
-    				 'home'=>'Наш сайт',
-    				 'forum'=>'Форум',
-    				 'foto'=>'Фотогаллерея',
-    				 'cs16'=>'Статистика CS 1.6',
-    				 'stream'=>'Сетевое радио',
-    				 'сustomer'=>'Поддержка',
-    				 'office'=>'Телефон абон. отдела '. Settings::Company('tel'),
-    				 'icq'=>'ICQ ' . Settings::Company('icq'),
-					 'network'=>'Сетевые ресурсы'
-    				 );
-    	$this->view->assign($title);
+//    	$title=array('report'=>'Отчеты',
+//    				 'connect'=>'Статистика подключений',
+//    				 'payment'=>'История платежей',
+//    				 'tariffs'=>'История тарифов',
+//    				 'site'=>'Посетите',
+//    				 'help'=>'Помощь',
+//    				 'home'=>'Наш сайт',
+//    				 'forum'=>'Форум',
+//    				 'foto'=>'Фотогаллерея',
+//    				 'cs16'=>'Статистика CS 1.6',
+//    				 'stream'=>'Сетевое радио',
+//    				 'сustomer'=>'Поддержка',
+//    				 'office'=>'Телефон абон. отдела '. Settings::Company('tel'),
+//    				 'icq'=>'ICQ ' . Settings::Company('icq'),
+//					 'network'=>'Сетевые ресурсы'
+//    				 );
+        $title = Zend_Registry::get('info_title');
+    	$this->view->assign('info_title',$title);
     }
 
     public function accountAction()
@@ -117,8 +118,8 @@ class InfoController extends Zend_Controller_Action
 				'tel'=>Settings::Company('tel'),
 			)
 		);
-		foreach ($aTitle as &$title)
-			$title = $title;
+//		foreach ($aTitle as &$title)
+//			$title = $title;
     	$this->view->assign($aTitle);
 	}
 
