@@ -5,7 +5,9 @@
 
 	include 'Zend/Loader.php';
 	require_once DOCUMENT_ROOT . 'application/kernel/Utils.php';
-	
+
+	Utils::AppendToIncludePath(DOCUMENT_ROOT.'library/Minify');
+
 	foreach (glob(DOCUMENT_ROOT.'application/*') as $dir) {
 		Utils::AppendToIncludePath($dir);
 	}

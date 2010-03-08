@@ -5,4 +5,11 @@
 		<b><?php echo $this->statusmsg ?></b><br>
 		<?php echo $this->statusdescr ?>
 	</div>
+    <?php if ($this->check_mac==1 && $this->status==1): ?>
+    	<div class="shield"
+    		style="margin:0 0 0 20px; height:50px;">
+    		<b><?php echo $this->checkmsg ?></b><br>
+    		<?php echo $this->checkdescr ?>
+    	</div>
+    <?php endif ?>
 </div>

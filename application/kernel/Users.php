@@ -58,6 +58,8 @@ class Users
     		}
     	}
     	$aInfo = $this->Db->fetchRow($select);
+        unset($aInfo['password']);
+        unset($aInfo['wwwpassword']);
    		return $aInfo;
     }
 
@@ -91,84 +93,58 @@ class Users
 		}
 		$aCount = $this->Db->fetchOne($sql);
 
-//		if ($sort!=null && $dir!=null )
-//		{
-			if (PHP_SORT){
-				$sql = $this->Db->select()
-						->from('usergroup', array_unique(array(new Zend_Db_Expr("CONCAT_WS('_', $sort, usergroup.id) as 'key'"), 'id', 'code', 'username', 'deposit',
-								'freebyte', 'mindeposit', 'dateofcheck', 'wwwpassword', 'email', 'maxlogin', 'id_pool',
-								'name', 'surname', 'detail', 'in_ip', 'out_ip', 'in_pipe', 'out_pipe','mac', 'access', 
-								'freemblimit', 'bonus', 'laststatsupdate', 'address', 'check_mb','newuser','activatedate')))
-						->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname',
-								't_in_pipe'=>'in_pipe', 't_out_pipe'=>'out_pipe','monthlyfee','dailyfee','price'))
-						->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
-						->where('usergroup.groupname != ?', 'admin')
-						->where('usergroup.access LIKE ?', $access);
-		
-				if (is_array($filter)) $this->_filter($sql, $filter);
+		if (PHP_SORT){
+			$sql = $this->Db->select()
+					->from('usergroup', array_unique(array(new Zend_Db_Expr("CONCAT_WS('_', $sort, usergroup.id) as 'key'"), 'id', 'code', 'username', 'deposit',
+							'freebyte', 'mindeposit', 'dateofcheck', 'wwwpassword', 'email', 'maxlogin', 'id_pool',
+							'name', 'surname', 'detail', 'in_ip', 'out_ip', 'in_pipe', 'out_pipe','mac', 'access', 
+							'freemblimit', 'bonus', 'laststatsupdate', 'address', 'check_mb','newuser','activatedate')))
+					->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname',
+							't_in_pipe'=>'in_pipe', 't_out_pipe'=>'out_pipe','monthlyfee','dailyfee','price'))
+					->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
+					->where('usergroup.groupname != ?', 'admin')
+					->where('usergroup.access LIKE ?', $access);
+	
+			if (is_array($filter)) $this->_filter($sql, $filter);
 
-				if ($query){
-					$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
-				}
-				
-				$aRows = $this->Db->fetchAssoc($sql);
-				if (strtolower($dir)=='asc')
-				{
-					ksort($aRows);
-				}
-				else
-				{
-					krsort($aRows);
-				}
-				$aRows = array_values($aRows);
-				if ($start!=null && $limit!=null )
-					$aRows = array_slice($aRows, $start, $limit);
-			} else {
-				$sql = $this->Db->select()
-						->from('usergroup', array('id', 'code', 'username', 'deposit', 'maxlogin', 
-								'freebyte', 'mindeposit', 'dateofcheck', 'wwwpassword', 'email', 'id_pool',
-								'name', 'surname', 'detail', 'in_ip', 'out_ip', 'in_pipe', 'out_pipe','mac', 'access', 
-								'freemblimit', 'bonus', 'laststatsupdate', 'address', 'check_mb','activatedate'))
-						->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname',
-								't_in_pipe'=>'in_pipe', 't_out_pipe'=>'out_pipe','monthlyfee','dailyfee','price'))
-						->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
+			if ($query){
+				$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
+			}
+			
+			$aRows = $this->Db->fetchAssoc($sql);
+			if (strtolower($dir)=='asc')
+			{
+				ksort($aRows);
+			}
+			else
+			{
+				krsort($aRows);
+			}
+			$aRows = array_values($aRows);
+			if ($start!=null && $limit!=null )
+				$aRows = array_slice($aRows, $start, $limit);
+		} else {
+			$sql = $this->Db->select()
+					->from('usergroup', array('id', 'code', 'username', 'deposit', 'maxlogin', 
+							'freebyte', 'mindeposit', 'dateofcheck', 'wwwpassword', 'email', 'id_pool',
+							'name', 'surname', 'detail', 'in_ip', 'out_ip', 'in_pipe', 'out_pipe','mac', 'access', 
+							'freemblimit', 'bonus', 'laststatsupdate', 'address', 'check_mb','activatedate'))
+					->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname',
+							't_in_pipe'=>'in_pipe', 't_out_pipe'=>'out_pipe','monthlyfee','dailyfee','price'))
+					->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
 //                        ->joinLeft(array('t'=>$tsql),'t.username=usergroup.username', array('taskscount'))
-						->where('usergroup.groupname = ?', 'user')
-						->where('usergroup.access LIKE ?', $access)
-						->limit($limit,$start)
-						->order(array("$sort $dir"));
+					->where('usergroup.groupname = ?', 'user')
+					->where('usergroup.access LIKE ?', $access)
+					->limit($limit,$start)
+					->order(array("$sort $dir"));
 
-				if (is_array($filter)) $this->_filter($sql, $filter);
-				
-				if ($query){
-					$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
-				}
-				$aRows = $this->Db->fetchAll($sql);
-//        		Utils::debug($aRows);
-			}	
-//		} else {
-//			$sql = $this->Db->select()
-//						->from('usergroup', array('id', 'code', 'username', 'deposit', 'maxlogin',
-//								'freebyte', 'mindeposit', 'dateofcheck', 'wwwpassword', 'email', 'id_pool',
-//								'name', 'surname', 'detail', 'in_ip', 'out_ip', 'in_pipe', 'out_pipe','mac', 'access', 
-//								'freemblimit', 'bonus', 'laststatsupdate', 'address', 'check_mb','activatedate'))
-//						->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname',
-//								't_in_pipe'=>'in_pipe', 't_out_pipe'=>'out_pipe','monthlyfee','dailyfee','price'))
-//						->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
-//                        ->joinLeft('tasks','tasks.username=usergroup.username', array('taskscount'=>new Zend_Db_Expr('COUNT(*)')))
-//						->where('tasks.execresult != ""')
-//						->where('usergroup.groupname != ?', 'user')
-//						->where('usergroup.access LIKE ?', $access);
-//		
-//			if (is_array($filter)) $this->_filter($sql, $filter);
-//			
-//			if ($start!=null && $limit!=null )
-//				$sql->limit($limit, $start);
-//			if ($query){
-//				$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
-//			}
-//			$aRows = $this->Db->fetchAll($sql);
-//		}
+			if (is_array($filter)) $this->_filter($sql, $filter);
+			
+			if ($query){
+				$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
+			}
+			$aRows = $this->Db->fetchAll($sql);
+		}	
 		Utils::encode($aRows);
 	    $sql = $this->Db->select()
                 ->from('tasks', array('username','taskscount'=>new Zend_Db_Expr('COUNT(tasks.id)')))
@@ -195,12 +171,6 @@ class Users
                 $aRow['taskscount'] = 0;
             }
 		}
-//		$sql = $this->Db->select()
-//						->from('tariffs', array('id'=>'tariffname', 'tariffname'));
-//		$aTariffs = $this->Db->fetchAll($sql);
-//		Utils::encode($aTariffs);
-//		array_unshift($aTariffs, array('id'=>'Не установлен!', 'tariffname'=>'Не установлен!'));
-			
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
 		return $aData;

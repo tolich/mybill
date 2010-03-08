@@ -22,8 +22,8 @@ class ErrorController extends Zend_Controller_Action
                 // ошибка приложения; выводим страницу ошибки,
                 // но не меняем код статуса
 		    	$title=array(
-					'title'=>Utils::encode('Произошла ошибка.'),
-					'message'=>Utils::encode('Сообщите об этой ошибке администратору.')
+					'title'=>'Произошла ошибка.',
+					'message'=>'Сообщите об этой ошибке администратору.'
 		    	);
 		    	$this->view->assign($title);
                 break;

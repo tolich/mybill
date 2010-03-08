@@ -27,7 +27,7 @@ class IndexController extends Zend_Controller_Action
 				 
 		$this->view->headLink()
 			->appendStylesheet("/extjs/resources/css/ext-all.css")
-			->appendStylesheet("/shared/js/ux/css/ux-all.css")
+			->appendStylesheet("/extjs/ux/css/ux-all.css")
 			->appendStylesheet("/shared/css/rowactions.css");
 
 		if (Context::IsAuthorize()){
@@ -63,11 +63,11 @@ class IndexController extends Zend_Controller_Action
 		if (DEBUG_MODE)	{
 			$this->view->headScript()->appendFile("/extjs/adapter/ext/ext-base-debug.js")
 									 ->appendFile("/extjs/ext-all-debug.js")
-									 ->appendFile("/shared/js/ux/ux-all-debug.js");
+									 ->appendFile("/extjs/ux/ux-all-debug.js");
 		} else {
 			$this->view->headScript()->appendFile("/extjs/adapter/ext/ext-base.js")
 									 ->appendFile("/extjs/ext-all.js")
-									 ->appendFile("/shared/js/ux/ux-all.js");
+									 ->appendFile("/extjs/ux/ux-all.js");
 		}
 			
 		$this->view->headScript()
@@ -103,7 +103,7 @@ class IndexController extends Zend_Controller_Action
 				foreach ($aModules as $module=>$v){
 					foreach (glob(MODULES_DIR."$module/admin/js/*.js") as $js){
 						if (file_exists($js))
-							$this->view->headScript()->appendFile("modules/$module/admin/js/".basename($js));
+							$this->view->headScript()->appendFile("/modules/$module/admin/js/".basename($js));
 					}					
 				}
 			} else {
@@ -117,7 +117,7 @@ class IndexController extends Zend_Controller_Action
 				foreach ($aModules as $module=>$v){
 					foreach (glob(MODULES_DIR."$module/user/js/*.js") as $js){
 						if (file_exists($js))
-							$this->view->headScript()->appendFile("modules/$module/user/js/".basename($js));
+							$this->view->headScript()->appendFile("/modules/$module/user/js/".basename($js));
 					}					
 				}
 			}
@@ -125,6 +125,29 @@ class IndexController extends Zend_Controller_Action
 			$this->view->headScript()
 				->appendFile("/js/index/userlogin.js");
 		}
+        
+        if (!DEBUG_MODE){
+            $this->view->minifyHeadLink()
+                       ->setCacheDir(CACHE_DIR)
+                       ->setSymlinks(array(
+                            '/extjs'    => '/library/ExtJS',
+                            '/css'      => '/application/css',
+                            '/shared'   => '/application/shared',
+                            '/modules'  => '/application/modules'
+                         ));
+            $this->view->minifyHeadScript()
+                       ->setCacheDir(CACHE_DIR)
+                       ->setSymlinks(array(
+                            '/extjs'    => '/library/ExtJS',
+                            '/js'       => '/application/js',
+                            '/shared'   => '/application/shared',
+                            '/modules'  => '/application/modules'
+                         ));
+            if(GZIP_MODE && strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip') !== false ){
+                $this->view->minifyHeadLink()->setEncode();
+                $this->view->minifyHeadScript()->setEncode();
+            } 
+        }
     }
 }
 

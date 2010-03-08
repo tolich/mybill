@@ -45,5 +45,3 @@ class AclPlugin extends Zend_Controller_Plugin_Abstract
 		}
 	}
 }
-
-?>

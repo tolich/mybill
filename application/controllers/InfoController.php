@@ -6,22 +6,6 @@ class InfoController extends Zend_Controller_Action
 {
     public function indexAction()
     {   
-//    	$title=array('report'=>'Отчеты',
-//    				 'connect'=>'Статистика подключений',
-//    				 'payment'=>'История платежей',
-//    				 'tariffs'=>'История тарифов',
-//    				 'site'=>'Посетите',
-//    				 'help'=>'Помощь',
-//    				 'home'=>'Наш сайт',
-//    				 'forum'=>'Форум',
-//    				 'foto'=>'Фотогаллерея',
-//    				 'cs16'=>'Статистика CS 1.6',
-//    				 'stream'=>'Сетевое радио',
-//    				 'сustomer'=>'Поддержка',
-//    				 'office'=>'Телефон абон. отдела '. Settings::Company('tel'),
-//    				 'icq'=>'ICQ ' . Settings::Company('icq'),
-//					 'network'=>'Сетевые ресурсы'
-//    				 );
         $title = Zend_Registry::get('info_title');
     	$this->view->assign('info_title',$title);
     }
@@ -91,18 +75,22 @@ class InfoController extends Zend_Controller_Action
     			break;
     		case 1:
     			$statusMsg = sprintf($statusMsg, 'включен');
-    			$statusDescr = "Если Вам не удается подключится к Интернету обратитесь за помощью в абон.отдел ". Settings::Company('name');
+    			$statusDescr = "Если Вам не удается подключится к Интернету сообщите код ошибки в абон.отдел ". Settings::Company('name');
     			break;
     		case 3:
     			$statusMsg = sprintf($statusMsg, 'временно отключен');
     			$statusDescr = "Возможно, на Вашем счету недостаточно средств для продолжения работы в этом месяце.";
     			break;
     	}
+		$this->view->assign('check_mac',Context::GetUserData('check_calling'));
+    	$checkMsg = "У Вас включена дополнительная проверка сетевого идентификатора.";
+    	$checkDescr = "Если у Вас новый компьютер или сетевая карта, и при подключении к интернету возникает ошибка при проверке пароля - обратитесь за помощью по тел. ".Settings::Company('tel');
     	$title=array('wellcome'=>sprintf("%s, %s", Context::GetUserData('username'), 'добро пожаловать на персональную страницу!'),
     				 'statusmsg'=>$statusMsg,
     				 'statusdescr'=>$statusDescr,
+    				 'checkmsg'=>$checkMsg,
+    				 'checkdescr'=>$checkDescr,
 		);
-		
     	$title = array_merge($title,$status);
     	$this->view->assign($title);
     }

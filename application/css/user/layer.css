@@ -132,6 +132,16 @@ li {
     background:transparent url(/shared/icons/silk/user_red.png) no-repeat 0 2px;
 }
 
+.exclamation {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/exclamation.png) no-repeat 0 2px;
+}
+
+.shield {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/shield.png) no-repeat 0 2px;
+}
+
 .code-num {
 	color: grey;
 }

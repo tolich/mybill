@@ -9,14 +9,20 @@
     /**
      * Список подключаемых плагинов
      */ 
-	$_PLUGINS = array('AclPlugin');
+	$_PLUGINS = array('AuthPlugin','AclPlugin');
 	
 	$_PROTO = (@$_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://'); 
 
 	/**
 	 * Режим отладки extjs
 	 */
-	define('DEBUG_MODE',				true);
+	define('DEBUG_MODE',				false);
+
+    /**
+     * Сжатие js и css если DEBUG_MODE=false
+     */
+	define('MINIFY_MODE',			     'js,css');
+	define('GZIP_MODE',			         'js,css');
 	
 	/**
 	 * Сортировка в php грида пользователей
@@ -51,6 +57,7 @@
 	 */
 	define('DOCUMENT_ROOT',				realpath(dirname(__FILE__).'/..').'/');
 	define('MODULES_DIR', 				DOCUMENT_ROOT.'application/modules/');
+	define('CACHE_DIR', 				DOCUMENT_ROOT.'cache/');
 	define('LOGS_DIR', 					DOCUMENT_ROOT.'logs/');
 	define('TMP_DIR', 					DOCUMENT_ROOT.'tmp/');
 	define('WSDL_DIR', 					DOCUMENT_ROOT.'soap/');
