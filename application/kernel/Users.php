@@ -368,7 +368,6 @@ class Users
 		$id = $param['id'];
         if (isset($param['fullname'])){
     		preg_match("/(\S*)\s+(.+)/",$param['fullname'],$aName);
-            Utils::debug($aName);
             if (count($aName)){
                 unset($aName[0]);
                  $param['surname'] = array_shift($aName);

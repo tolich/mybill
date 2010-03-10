@@ -285,7 +285,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 						msg: (record.get(this.id)?'Отключить ':'Включить ')+ this.params.msg+'<b>' + record.get('username') + '?</b>',
 						buttons: Ext.MessageBox.YESNO,
 						icon: Ext.MessageBox.QUESTION,
-						width: '330',
+						width: '350',
 						fn: function(btn){
 							if (btn == 'yes') {
                                 if (App.isAllow('users', 'edit')) {
@@ -1174,7 +1174,7 @@ App.register(Ext.extend(Ext.app.Module, {
 			icon: Ext.MessageBox.QUESTION,
 			prompt: true,
 			value: 'Отключен администратором',
-			width: '330',
+			width: '350',
 			fn: function(btn, text){
 				if (btn == 'yes') {
 					App.request({
@@ -1202,7 +1202,7 @@ App.register(Ext.extend(Ext.app.Module, {
 			icon: Ext.MessageBox.QUESTION,
 			prompt: true,
 			value: 'Включен администратором',
-			width: '330',
+			width: '350',
 			fn: function(btn, text){
 				if (btn == 'yes') {
 					App.request({
@@ -1237,10 +1237,11 @@ App.register(Ext.extend(Ext.app.Module, {
 		
 		Ext.Msg.show({
 			title:'Подтверждение',
-			msg: 'Снять абонплату за '+t+' с пользователя <b>' + this.getContext().username + '</b>?',
+			msg: 'Снять абонплату за '+t+' с пользователя <b>' + this.getContext().username + '</b>?<br>Основание:',
 			buttons: Ext.MessageBox.YESNO,
 			icon: Ext.MessageBox.QUESTION,
-			width: '330',
+			prompt: true,
+			value: 'Абонплата за ',
 			fn: function(btn, text){
 				if (btn == 'yes') {
 					App.request({
@@ -1252,6 +1253,7 @@ App.register(Ext.extend(Ext.app.Module, {
 						},
 						params: { 
 							id: this.getContext().id
+                            ,text:text
 						}
 					});
 				};
@@ -1262,11 +1264,13 @@ App.register(Ext.extend(Ext.app.Module, {
 	,onDebtsOff: function(){
 		Ext.Msg.show({
 			title:'Подтверждение',
-			msg: 'Вы действительно хотите списать задолженность пользователю <b>' + this.getContext().username + '?</b>',
+			msg: 'Вы действительно хотите списать задолженность пользователю <b>' + this.getContext().username + '?</b><br>Основание:',
 			buttons: Ext.MessageBox.YESNO,
 			icon: Ext.MessageBox.QUESTION,
-			width: '300',
-			fn: function(btn){
+			prompt: true,
+			value: 'Списание задолженности',
+			width: '350',
+			fn: function(btn,text){
 				if (btn == 'yes') {
 					App.request({
 						url : '/ajax/users/debtsoff'
@@ -1277,6 +1281,7 @@ App.register(Ext.extend(Ext.app.Module, {
 						},
 						params: {
 							id: this.getContext().id
+                            ,text:text
 						}
 						,scope:this
 					});
@@ -1807,7 +1812,7 @@ App.register(Ext.extend(Ext.app.Module, {
 								'</ul></div>',
 								buttons: Ext.MessageBox.YESNO,
 								icon: Ext.MessageBox.QUESTION,
-								width: '330',
+								width: '350',
 								scope: this,
 								fn: function(btn){
 									if (btn == 'yes') {
@@ -1915,7 +1920,7 @@ App.register(Ext.extend(Ext.app.Module, {
 								'</ul></div>',
 								buttons: Ext.MessageBox.YESNO,
 								icon: Ext.MessageBox.QUESTION,
-								width: '330',
+								width: '350',
 								scope: this,
 								fn: function(btn){
 									if (btn == 'yes') {
@@ -2012,7 +2017,7 @@ App.register(Ext.extend(Ext.app.Module, {
 								'</ul></div>',
 								buttons: Ext.MessageBox.YESNO,
 								icon: Ext.MessageBox.QUESTION,
-								width: '330',
+								width: '350',
 								scope: this,
 								fn: function(btn){
 									if (btn == 'yes') {

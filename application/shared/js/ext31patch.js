@@ -73,23 +73,21 @@ Ext.override(Ext.data.DataProxy,{
         if (Ext.isFunction(this.url)) {
 			return this.url;
 		}
-		else {
-			record = record || null;
-			var url = (this.conn && this.conn.url) ? this.conn.url : (this.api[action]) ? this.api[action].url : this.url;
-			if (!url) {
-				throw new Ext.data.Api.Error('invalid-url', action);
-			}
-			var provides = null;
-			var m = url.match(/(.*)(\.json|\.xml|\.html)$/);
-			if (m) {
-				provides = m[2]; // eg ".json"
-				url = m[1]; // eg: "/users"
-			}
-			if ((this.restful === true || this.prettyUrls === true) && record instanceof Ext.data.Record && !record.phantom) {
-				url += '/' + record.id;
-			}
-			return (provides === null) ? url : url + provides;
+		record = record || null;
+		var url = (this.conn && this.conn.url) ? this.conn.url : (this.api[action]) ? this.api[action].url : this.url;
+		if (!url) {
+			throw new Ext.data.Api.Error('invalid-url', action);
 		}
+		var provides = null;
+		var m = url.match(/(.*)(\.json|\.xml|\.html)$/);
+		if (m) {
+			provides = m[2]; // eg ".json"
+			url = m[1]; // eg: "/users"
+		}
+		if ((this.restful === true || this.prettyUrls === true) && record instanceof Ext.data.Record && !record.phantom) {
+			url += '/' + record.id;
+		}
+		return (provides === null) ? url : url + provides;
     }
 });
 

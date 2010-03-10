@@ -16,7 +16,7 @@
 	/**
 	 * Режим отладки extjs
 	 */
-	define('DEBUG_MODE',				false);
+	define('DEBUG_MODE',				true);
 
     /**
      * Сжатие js и css если DEBUG_MODE=false

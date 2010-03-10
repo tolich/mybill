@@ -454,7 +454,6 @@ class Acl {
 		if ($aContextRight===false) {
 			$oManager = new Manager();
 			$aModulesRights = $oManager->GetAllModulesRight();
-			//Utils::debug($this->right);
 			if (count($this->right)==0){
 				$this->right = $this->_right;
 				foreach ($aModulesRights as $module=>$right){

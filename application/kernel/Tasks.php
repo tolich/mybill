@@ -67,7 +67,6 @@ class Tasks
 		}
 		
 		$aRows = $this->Db->fetchAll($sql);
-		//Utils::debug($sql->__toString());
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
 		{

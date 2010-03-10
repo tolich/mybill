@@ -1,4 +1,14 @@
 <?php
+/**
+ * alert
+ * crit
+ * err
+ * warn
+ * notice
+ * info
+ * debug
+ * user
+ */
 class AppLog 
 {
 	/**

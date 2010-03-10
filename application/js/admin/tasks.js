@@ -632,38 +632,6 @@ App.register(Ext.extend(Ext.app.Module, {
 				,success: function(r, o){
 					var res = Ext.decode(r.responseText);
 					if (res.success) {
-//						var attribute = new Ext.form.ComboBox({
-//							store: new Ext.data.JsonStore({
-//								fields: ['attrname', 'description']
-//								,data: res.tasks
-//							}),
-//							loadMask: true,
-//							valueField: 'attrname',
-//							displayField: 'description',
-//							id: 'attribute',
-//							fieldLabel: 'Задача',
-//							typeAhead: true,
-//							mode: 'local',
-//							triggerAction: 'all',
-//							//valueNotFoundText: 'Не установлена!',
-//							selectOnFocus: true,
-//							allowBlank: false,
-//							editable: false,
-//							value: t.attribute
-//							,listeners:{
-//								select: function(c, r, i){
-//									switch (r.get('attrname')){
-//										case 'Change-tariff':
-//											Ext.getCmp('value').setDisabled(false);
-//										break;
-//										default:
-//											Ext.getCmp('value').setDisabled(true);
-//										break;
-//									}
-//								}
-//							}
-//						});
-			
 						var username = new Ext.form.ComboBox({
 							store: new Ext.data.JsonStore({
 								url: App.proxy('/ajax/users/list')
