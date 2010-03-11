@@ -66,7 +66,6 @@ class Tasks
 				$sql->join('tariffs', 'tasks.value=tariffs.id', array('valueid'=>'id','value'=>'tariffname'));
 			break;
 		}
-		AppLog::debug($sql->__toString());
 		$aRows = $this->Db->fetchAll($sql);
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
