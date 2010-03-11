@@ -143,7 +143,6 @@ class Users
 			}
 			$aRows = $this->Db->fetchAll($sql);
 		}	
-        AppLog::debug($sql->__toString());
 		Utils::encode($aRows);
 	    $sql = $this->Db->select()
                 ->from('tasks', array('username','taskscount'=>new Zend_Db_Expr('COUNT(tasks.id)')))
