@@ -58,8 +58,6 @@ class Users
     		}
     	}
     	$aInfo = $this->Db->fetchRow($select);
-        unset($aInfo['password']);
-        unset($aInfo['wwwpassword']);
    		return $aInfo;
     }
 
@@ -885,7 +883,7 @@ class Users
 	private function _filter(Zend_Db_Select &$sql, array $filter)  
 	{
 		foreach ($filter as $flt){
-			$value = Utils::decode($flt['data']['value']);
+			$value = $flt['data']['value'];
 			
 			switch (strtolower($flt['field'])){
 				case 'surname':

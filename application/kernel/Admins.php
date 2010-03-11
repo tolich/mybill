@@ -68,8 +68,6 @@ class Admins
     		}
     	}
     	$aInfo = $this->Db->fetchRow($select);
-        unset($aInfo['password']);
-        unset($aInfo['wwwpassword']);
    		return $aInfo;
     }
 	
