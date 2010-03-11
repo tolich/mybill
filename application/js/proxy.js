@@ -39,6 +39,20 @@ function AppProxy(url){
 						res.errors = res.errors || {};
 						if (res.id) {
                             switch (res.id) {
+                                case '0':
+                                    Ext.Msg.show({
+                                        title: 'Ошибка!',
+                                        msg: res.errors.msg,
+                                        buttons: Ext.MessageBox.OK,
+                                        icon: Ext.MessageBox.ERROR,
+                                        width: '300',
+                                        fn: function(){
+                                            if (failure) 
+                                                failure.call(this, r, o);
+                                        },
+                                        scope: this
+                                    });
+                                    break;                                
                                 case '-1':
                                     var win = new Ext.app.LoginWin({
                                         title: 'Разблокировать',
