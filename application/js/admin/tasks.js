@@ -184,6 +184,8 @@ Ext.app.Tasks.DateGrid = Ext.extend(Ext.grid.GridPanel, {
 				,new Ext.ux.form.SearchField({
 					store: store
 					,value: this.query
+                    ,hideTrigger1: !this.query
+                    ,hasSearch: this.query
 				})
 			]
 			,bbar: new Ext.PagingToolbar({
@@ -197,7 +199,11 @@ Ext.app.Tasks.DateGrid = Ext.extend(Ext.grid.GridPanel, {
     } // eo function initComponent
 
     ,onRender:function() {
-		this.store.load({params: {start: 0}});
+		this.store.load({
+			params: {
+				query		: this.query
+			}
+		});
         Ext.app.Tasks.Grid.superclass.onRender.apply(this, arguments);
     } // eo function onRender
 //	,listeners:{
@@ -217,6 +223,9 @@ Ext.reg('oldtaskgrid', Ext.app.Tasks.DateGrid);
 //Грид новых задач
 Ext.app.Tasks.Grid = Ext.extend(Ext.grid.GridPanel, {
     initComponent:function() {
+		var context = App.getContext('tasks');
+		var from = Ext.getCmp('from').getValue();
+		var tail = Ext.getCmp('tail').getValue();
 		var store = new Ext.data.JsonStore({
 			url: App.proxy('/ajax/tasks/grid')
 //			,root: 'data'
@@ -229,7 +238,12 @@ Ext.app.Tasks.Grid = Ext.extend(Ext.grid.GridPanel, {
 			}]
 			,remoteSort: true
 			,sortInfo:{field:'opdate', direction:'asc'}
-			,baseParams: {query:''}
+			,baseParams: {
+                query:'',
+				attrname: context.task.attrname,
+				from: Ext.util.Format.date(from, 'Y-m-d'),
+				tail: Ext.util.Format.date(tail, 'Y-m-d')
+            }
 		});
 		
 		var cm = this.getCM();
@@ -273,16 +287,8 @@ Ext.app.Tasks.Grid = Ext.extend(Ext.grid.GridPanel, {
 				,new Ext.ux.form.SearchField({
 					store: store
 					,value: this.query
-					,params: function(){
-						var context = App.getContext('tasks');
-						var from = Ext.getCmp('from').getValue();
-						var tail = Ext.getCmp('tail').getValue();
-						return {
-							attrname: context.task.attrname,
-							from: Ext.util.Format.date(from, 'Y-m-d'),
-							tail: Ext.util.Format.date(tail, 'Y-m-d')
-						}
-					}
+                    ,hideTrigger1: !this.query
+                    ,hasSearch: this.query
 				})
 //				,Ext.app.Tariffs.Edit
 			]
@@ -413,14 +419,14 @@ Ext.app.Tasks.Grid = Ext.extend(Ext.grid.GridPanel, {
 		var context = App.getContext('tasks');
 		var from = Ext.getCmp('from').getValue();
 		var tail = Ext.getCmp('tail').getValue();
-		this.store.reload({
-			params: {
-				attrname	: context.task.attrname
-				,from		: Ext.util.Format.date(from, 'Y-m-d')
-				,tail		: Ext.util.Format.date(tail, 'Y-m-d')
-				//,query		: this.query
-			}
-			,callback: function(){
+        Ext.apply(this.store.baseParams,{
+			attrname	: context.task.attrname
+			,from		: Ext.util.Format.date(from, 'Y-m-d')
+			,tail		: Ext.util.Format.date(tail, 'Y-m-d')
+			,query		: this.query
+		});
+        this.store.load({
+			callback: function(){
 				if (context.task)
 					this.setTitle(String.format('{0} c {1} по {2}', context.task.text, Ext.util.Format.date(from), Ext.util.Format.date(tail)));
 				this.reconfigure(this.store, this.getCM());
@@ -520,14 +526,14 @@ Ext.app.Tasks.Tree = Ext.extend(Ext.tree.TreePanel, {
 		var context = App.getContext('tasks');
 		var from = Ext.getCmp('from').getValue();
 		var tail = Ext.getCmp('tail').getValue();
-		g.store.reload({
-			params: {
+        Ext.apply(g.store.baseParams,{
 				attrname	: context.task.attrname
 				,from		: Ext.util.Format.date(from, 'Y-m-d')
 				,tail		: Ext.util.Format.date(tail, 'Y-m-d')
 				//,query		: context.username
-			}
-			,callback: function(){
+		});
+		g.store.reload({
+			callback: function(){
 				if (context.task)
 					g.setTitle(String.format('{0} c {1} по {2}', context.task.text, Ext.util.Format.date(from), Ext.util.Format.date(tail)));
 				g.reconfigure(g.store, g.getCM());
@@ -968,6 +974,7 @@ App.register(Ext.extend(Ext.app.Module, {
 									xtype: 'datepicker'
 									,cellCls: 'cell-date-tail'
 									,id:'tail'
+                                    ,value: (new Date().add(Date.MONTH, 1))
 									,listeners: {
 										'select': function(){
 											Ext.getCmp('task-tree').reloadTasks();
@@ -992,7 +999,7 @@ App.register(Ext.extend(Ext.app.Module, {
 				}]
 			});
 		}
-		Ext.getCmp('tail').setValue(new Date().add(Date.MONTH, 1));
+		//Ext.getCmp('tail').setValue(new Date().add(Date.MONTH, 1));
 		//Ext.getCmp('task-tree').getNodeById('%').select();
 		//Ext.getCmp('task-tree').fireEvent('click', Ext.getCmp('task-tree').getRootNode());
 		win.show();

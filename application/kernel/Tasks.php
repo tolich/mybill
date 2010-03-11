@@ -44,16 +44,17 @@ class Tasks
 					->from('tasks', array('id','opdate', 'username', 'attribute'))
 					->join('periods', 'tasks.id_period=periods.id', array('periodid'=>'id', 'period'=>'periodname'))
 					->where('execresult = ?', '')
-					->where('attribute LIKE ?',$attrname);
-		if ($sort!=null && $dir!=null)
-			$sql->order(array("$sort $dir"));
+					->where('attribute LIKE ?',$attrname)
+			        ->order(array("$sort $dir"));
 		if ($from!=null && $tail!=null)
 		{
 			$sql->where('opdate >= ?', $from);
 			$sql->where('opdate <= ?', $tail);
 		}
-		if ($query)
-			$sql->where("tasks.username LIKE ?", '%'.Utils::decode(str_replace('*','%',$query)).'%');
+		if ($query){
+		    $query = str_replace('*','%',$query);
+			$sql->where("tasks.username LIKE ?", '%'.Utils::decode($query).'%');
+		}
 
 		switch ($attrname)
 		{
@@ -65,7 +66,7 @@ class Tasks
 				$sql->join('tariffs', 'tasks.value=tariffs.id', array('valueid'=>'id','value'=>'tariffname'));
 			break;
 		}
-		
+		AppLog::debug($sql->__toString());
 		$aRows = $this->Db->fetchAll($sql);
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
@@ -86,17 +87,16 @@ class Tasks
 		$aCount = $this->Db->fetchOne($sql);
 		$sql = $this->Db->select()
 					->from('tasks', array('opdate', 'username', 'execdate', 'execresult'))
+        			->order(array("$sort $dir"))
+        			->limit($limit, $start)
 					->where('execresult != ?', '')
 					->join('taskattribute', 'UPPER(tasks.attribute)=UPPER(taskattribute.attrname)', array('attribute'=>'description'))
 					->joinLeft('tariffs', 'tasks.value=tariffs.id', array('value'=>'tariffname'));
-		if ($query)
-			$sql->where("tasks.username LIKE ?", '%'.Utils::decode(str_replace('*','%',$query)).'%');
-		if ($sort!=null && $dir!=null)
-			$sql->order(array("$sort $dir"));
-		if ($start!=null && $limit!=null )
-			$sql->limit($limit, $start);
+		if ($query){
+		    $query = str_replace('*','%',$query);
+			$sql->where("tasks.username LIKE ?", '%'.Utils::decode($query).'%');
+        }
 		$aRows = $this->Db->fetchAll($sql);
-		//Utils::debug($sql->__toString());
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
 		{
