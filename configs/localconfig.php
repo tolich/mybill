@@ -103,7 +103,7 @@ $aDBConfigs = array (
 		'password' => '1q2w3e', 
 		'host'     => '127.0.0.1',
 		'driver_options' => array(
-			PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARSET ".PROJECT_LOCALE_CODEPAGE
+			PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARSET ".PROJECT_DATABASE_CHARSET
 		)
 	),
 	'export' => array (
@@ -112,7 +112,7 @@ $aDBConfigs = array (
 		'password' => '', 
 		'host'     => '',
 		'driver_options' => array(
-			PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARSET ".PROJECT_LOCALE_CODEPAGE
+			PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARSET ".PROJECT_DATABASE_CHARSET
 		)
 	),
     'log'=>array(

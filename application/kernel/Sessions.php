@@ -57,6 +57,7 @@ class Sessions
       				AppLog::output("{$info['http_code']} not found");
                 break;
 			}
+            $aWhere=array();
             $aWhere[] = "acctsessionid not in ('".implode("','",$aSessionId)."')";
             $aWhere[] = "nasipaddress='{$nas['nasname']}'";
 			$n = $this->Db->delete('sessions', $aWhere);

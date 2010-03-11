@@ -19,6 +19,5 @@ CREATE TABLE log(
   PRIMARY KEY (id),
   KEY username (username),
   KEY level (level)
-  KEY success (success)
 )ENGINE=INNODB;
 
