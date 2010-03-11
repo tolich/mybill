@@ -1,0 +1,1 @@
+alter table zones add action int(11) not null default 1;

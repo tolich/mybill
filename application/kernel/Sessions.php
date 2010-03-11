@@ -210,7 +210,7 @@ class Sessions
 	private function _filter(Zend_Db_Select &$sql, array $filter, array $as=array())  
 	{
 		foreach ($filter as $flt){
-			$value = $flt['data']['value'];
+			$value = Utils::decode($flt['data']['value']);
 			if (array_key_exists($flt['field'],$as))
 				$field=$as[$flt['field']];
 			else

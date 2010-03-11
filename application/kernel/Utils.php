@@ -170,6 +170,7 @@ class Utils
 		} else {
 			$string = iconv($in_charset, $out_charset, $string);
 		}
+        return $string;
 	}
 
 	/**
@@ -186,6 +187,7 @@ class Utils
 		} else {
 			$string = iconv($in_charset, $out_charset, $string);
 		}
+        return $string;
 	}
 
 	/**
