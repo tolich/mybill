@@ -44,8 +44,8 @@ class Logger
             'msg'             => 'message',
             'username'        => 'username',
             'role'            => 'role',
-            'remote_addr'     => 'remote_addr',
-            'http_user_agent' => 'http_user_agent',
+//            'remote_addr'     => 'remote_addr',
+//            'http_user_agent' => 'http_user_agent',
         );
         $writer = new Zend_Log_Writer_Db(Db::factory('log'), 'log', $columnMapping);
         $filter = new Zend_Log_Filter_Priority((int)Settings::Billing('log_priority'));

@@ -108,7 +108,7 @@ class IndexController extends Zend_Controller_Action
 				}
 			} else {
 				$this->view->headScript()
-					->appendFile("/shared/js/TabCloseMenu.js")
+					->appendFile("/extjs/ux/TabCloseMenu.js")
 					->appendFile("/js/app.js")
 					->appendFile("/js/user/layer.js")
 					->appendFile("/js/user/reports.js");
