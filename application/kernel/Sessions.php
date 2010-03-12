@@ -180,7 +180,7 @@ class Sessions
 		foreach ($aRows as &$aRow){
 			if ($aRow['acctsessiontime']!=0){
 				$aRow['rateinput']=ceil((int)$aRow['acctinputoctets']/(int)$aRow['acctsessiontime']);
-				$aRow['rate']=ceil((int)$aRow['acctoutputoctets']/(int)$aRow['acctsessiontime']);
+				$aRow['rateoutput']=ceil((int)$aRow['acctoutputoctets']/(int)$aRow['acctsessiontime']);
 			} else {
 				$aRow['rateinput']=0;
 				$aRow['rateoutput']=0;
