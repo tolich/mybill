@@ -421,7 +421,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 				,{id: 'newuser', hidden: false}			
 				,{id: 'laststatupdate', width: 170,  hidden: true}			
 			]
-			,sortInfo: {field:'surname', directions:'asc'}
+			,sortInfo: {field:'fullname', directions:'asc'}
 			,groupField: ''
 		};
 		Ext.apply(this.settings, App.settings.users['user-grid']);
@@ -562,8 +562,8 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 			Ext.apply(columns[this.settings.cm[i]['id']], this.settings.cm[i]);
 			model.push(columns[this.settings.cm[i]['id']]);	
 		}
+    
 		var cm = new Ext.grid.ColumnModel(model);		
-		cm.defaultSortable = true;
 
 		// create the Data Store
 		var store = new Ext.data.GroupingStore({
@@ -587,7 +587,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
                 writeAllFields: false // write all fields, not just those that changed
             }),
 			remoteSort: true,
-			sortInfo:this.settings.sortInfo, //{field:'surname', directions:'asc'},
+			sortInfo:this.settings.sortInfo, //|| {field:'fullname', directions:'asc'},
 			groupField:this.settings.groupField,
 			baseParams: {limit:pageLimit,access:access},
 			listeners:{

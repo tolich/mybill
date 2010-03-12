@@ -76,6 +76,8 @@ class Users
                             $sort=null, $dir=null, $query=null, 
                             $access='%',$filter=null)
 	{
+	    $as = array('fullname'=>"CONCAT_WS(' ', usergroup.surname, usergroup.name)");
+        if (isset($as[$sort])) $sort=$as[$sort]; 
 		//$now = getdate();
 		$sql = $this->Db->select()
 					->from('usergroup', array('COUNT(*)'))
@@ -885,6 +887,7 @@ class Users
 		foreach ($filter as $flt){
 			$value = Utils::decode($flt['data']['value']);
 			switch (strtolower($flt['field'])){
+			    case 'fullname':
 				case 'surname':
 				case 'name':
 					$field = "CONCAT_WS(' ', usergroup.surname, usergroup.name)";

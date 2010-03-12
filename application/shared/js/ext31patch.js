@@ -1,3 +1,5 @@
+// По-умолчнию включаем сортировку в гриде
+Ext.grid.ColumnModel.prototype.defaultSortable=true;
 // Подравниваем
 Ext.override(Ext.ux.grid.RowEditor, {
     verifyLayout: function(force){
