@@ -98,6 +98,7 @@ class InfoController extends Zend_Controller_Action
 	public function orderAction(){
 		$oUser = new Users();
 	   	$aTitle=$oUser->getUserInfo(array('id'=>$this->_getParam('id')));
+        Utils::encode($aTitle);
     	$aTitle = array_merge($aTitle,
 			array(
 				'mask'=>Settings::Billing('mask'),
