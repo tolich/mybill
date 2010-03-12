@@ -87,6 +87,7 @@ Ext.app.Layer=function(){
 	        //,xtype: 'toolbar'
 			,border: false
 			,margins: '0 0 5 0'
+            ,height:0
 	        ,tbar:['->',{
 	        	text: 'Выход'
 	        	,iconCls: 'exit'
