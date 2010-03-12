@@ -107,8 +107,6 @@ class InfoController extends Zend_Controller_Action
 				'tel'=>Settings::Company('tel'),
 			)
 		);
-//		foreach ($aTitle as &$title)
-//			$title = $title;
     	$this->view->assign($aTitle);
 	}
 

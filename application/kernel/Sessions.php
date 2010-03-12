@@ -163,8 +163,8 @@ class Sessions
 		);
 		$sql = $this->Db->select()
 					->from('sessions', array('COUNT(*)'))
-					->join('radacct','radacct.acctuniqueid = sessions.acctuniqueid',array('acctinputoctets','acctoutputoctets','acctsessiontime'))
-					->join('usergroup','sessions.username = usergroup.username',array('name','surname','address'));
+					->join('radacct','radacct.acctuniqueid = sessions.acctuniqueid')
+					->join('usergroup','sessions.username = usergroup.username');
 		if (is_array($filter)) $this->_filter($sql, $filter, $as);
 		$aCount = $this->Db->fetchOne($sql);
 

@@ -147,6 +147,11 @@ App.register(Ext.extend(Ext.app.Module, {
 Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
+		function username(v, p, r){
+	        p.attr = 'ext:qtip="'+
+				r.get('surname')+' '+r.get('name')+'<br>'+r.get('address')+'"';
+            return v;
+        }
 		
 		// create the Data Store
 		var pageLimit = 50;
@@ -161,7 +166,7 @@ Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
 				[
 					  'acctsessionid','acctuniqueid','username','callingstationid',
 					  'nasipaddress','iface','framedipaddress',{name:'acctstarttime',type:'date',dateFormat:'Y-m-d H:i:s'},
-					  'acctinputoctets','acctoutputoctets','acctsessiontime','rateinput','rateoutput'
+					  'acctinputoctets','acctoutputoctets','acctsessiontime','rateinput','rateoutput','name','surname','address'
 				]
 				,id: 'acctsessionid'
 			})
@@ -202,6 +207,7 @@ Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
 			,header: "Пользователь"
 			,dataIndex: 'username'
 			,width: 150
+            ,renderer: username
 		}, {
 			id: 'callingstationid'
 			,header: "Клиентская станция"
