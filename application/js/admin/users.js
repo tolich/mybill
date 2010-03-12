@@ -796,7 +796,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		var pass = '';
 		for (i=0; i<10;i++)
 			pass+=str.charAt(Math.floor(str.length*Math.random()));
-		var usr = '';//'usr'+Math.ceil(9999*Math.random());
+		var usr;//='usr'+Math.ceil(9999*Math.random());
 		App.request({
 		   url: '/ajax/users/getbyid',
 		   callback: function(){
