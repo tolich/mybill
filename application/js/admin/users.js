@@ -1686,6 +1686,7 @@ App.register(Ext.extend(Ext.app.Module, {
 				buttons: [{
 					text: 'Ok',
 					handler: function(){
+                        win.el.mask('Подождите, пожалуйста...');
 						for (o in post.user) {
 							if (Ext.getCmp(o)) {
 								var val=Ext.getCmp(o).getValue();
@@ -1705,6 +1706,7 @@ App.register(Ext.extend(Ext.app.Module, {
 									Ext.getCmp('user-grid').getStore().reload();
 								},
 								failure: function(){
+                                    win.el.unmask();
 								},
 								params: post.user
 							});

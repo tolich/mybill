@@ -219,7 +219,7 @@ App.register(Ext.extend(Ext.app.Module, {
 								width: '350',
 								fn: function(btn){
 									if (btn == 'yes') {
-										win.el.mask();
+                                        win.el.mask('Подождите, пожалуйста...');
 										App.request({
 											url: url,
 											success: function(r, o){
@@ -229,6 +229,7 @@ App.register(Ext.extend(Ext.app.Module, {
 												if (isReload) Ext.getCmp('user-grid').getStore().reload();
 											},
 											failure: function(){
+                                                win.el.unmask();
 											},
 											params: post
 										});
