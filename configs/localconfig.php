@@ -57,7 +57,7 @@ $aTitle = array(
             ),
             array(
                 'text'    => 'Сетевое радио',
-                'href'    => 'http://svs-tv.lan/stream',
+                'href'    => 'http://svs-tv.lan/stream/index.html',
                 'tpl'    => '<a href="{href}" target="blank">{text}</a>'
             ),
         ),
