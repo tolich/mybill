@@ -179,11 +179,11 @@ class Sessions
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow){
 			if ($aRow['acctsessiontime']!=0){
-				$aRow['rateinput']=ceil((int)$aRow['acctinputoctets']/(int)$aRow['acctsessiontime']);
-				$aRow['rateoutput']=ceil((int)$aRow['acctoutputoctets']/(int)$aRow['acctsessiontime']);
+				$aRow['rateoutput']=ceil((int)$aRow['acctinputoctets']/(int)$aRow['acctsessiontime']);
+				$aRow['rateinput']=ceil((int)$aRow['acctoutputoctets']/(int)$aRow['acctsessiontime']);
 			} else {
-				$aRow['rateinput']=0;
 				$aRow['rateoutput']=0;
+				$aRow['rateinput']=0;
             }
 		}
 		$aData = array( 'totalCount'=>$aCount,
