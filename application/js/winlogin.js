@@ -15,7 +15,6 @@ Ext.app.LoginWin = Ext.extend(Ext.Window,{
                 fieldLabel: 'Имя пользователя',
                 name: 'username',
                 width: 120,
-                disabled: this.lock,
                 value: this.setCookies||this.lock?get_cookie('username'):undefined,
                 allowBlank: false
             }, {
@@ -44,13 +43,17 @@ Ext.app.LoginWin = Ext.extend(Ext.Window,{
         				
         				// get the path
         				var path = window.location.pathname, path = path.substring(0, path.lastIndexOf('/') + 1);
+
         				// set the cookie
-        				// set_cookie('key', a.result.key, '', path, '', '' );
-                        set_cookie('username', a.result.username, 30, path, '', '');
-        				// set_cookie('memberType', a.result.type, '', path, '', '' );
+                        if (a.result.username == get_cookie('username')) {
+                            set_cookie('username', a.result.username, 30, path, '', '');
+                        } else {
+                            set_cookie('username', a.result.username, 30, path, '', '');
+            				window.location = path;
+                        }
         				
         				// redirect the window
-                        if (!this.fn()){
+                        if (!this.fn(a)){
             				window.location = path;
                         }
         			}

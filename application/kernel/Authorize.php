@@ -10,23 +10,24 @@ class Authorize
 		}
 	}
 
-	public function Unlock($strPassword)
+	public function Unlock($strName,$strPassword)
 	{
-		$aResult = array();
+		$aResult = false;
 		if (null!==$this->claim){
-		    $strName = Context::GetUserData('username');
-			$aInfo=$this->claim->GetUserInfo(array('username'=>$strName,'wwwpassword'=>$strPassword));
-			if ($aInfo!==false)
-			{
-				$aResult = array('success'=>true, 'username'=>$strName);
-                AppLog::info('Разблокировка');
-			}
-			else
-			{
-                AppLog::warn('Неудачная разблокировка',$strName);
-				$aResult = array('errors'=>array(array('id'=>'username', 'msg'=>'Пользователь не найден...'),
-												 array('id'=>'password', 'msg'=>'или неверный пароль')));
-			}
+		    if ($strName == Context::GetUserData('username')){
+    			$aInfo=$this->claim->GetUserInfo(array('username'=>$strName,'wwwpassword'=>$strPassword));
+    			if ($aInfo!==false)
+    			{
+    				$aResult = array('success'=>true, 'username'=>$strName);
+                    AppLog::info('Разблокировка');
+    			}
+    			else
+    			{
+                    AppLog::warn('Неудачная разблокировка',$strName);
+    				$aResult = array('success'=>false,'errors'=>array(array('id'=>'username', 'msg'=>'Пользователь не найден...'),
+    												 array('id'=>'password', 'msg'=>'или неверный пароль')));
+    			}
+            }
 		}
 		return $aResult;
 	}
@@ -40,12 +41,12 @@ class Authorize
 	 */
 	public function Login($strName,$strPassword)
 	{
-		$aResult = array();
+		$aResult = array('success'=>false);
 		if (null!==$this->claim){
 	
 			if($strName=='')
 			{
-				$aResult = array('errors'=>array(array('id'=>'username', 'msg'=>'Обязательное поле')));
+				$aResult = array('success'=>false,'errors'=>array(array('id'=>'username', 'msg'=>'Обязательное поле')));
 			}
 			else
 			{
@@ -67,7 +68,7 @@ class Authorize
 				else
 				{
                     AppLog::warn('Неудачная авторизация',$strName);
-					$aResult = array('errors'=>array(array('id'=>'username', 'msg'=>'Пользователь не найден...'),
+					$aResult = array('success'=>false,'errors'=>array(array('id'=>'username', 'msg'=>'Пользователь не найден...'),
 													 array('id'=>'password', 'msg'=>'или неверный пароль')));
 				}
 			}

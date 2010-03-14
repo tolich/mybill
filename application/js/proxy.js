@@ -59,8 +59,7 @@ function AppProxy(url){
                                         modal: true,
                                         lock: true,
                                         url: '/ajax/auth/unlock',
-                                        fn: function(){
-                                            //Ext.Ajax.request(req);
+                                        fn: function(a){
                                             return true;
                                         }
                                     });
