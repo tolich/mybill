@@ -22,49 +22,41 @@ class Sessions
 		$aNas = $oNas->GetList();
 		$total = 0;
 		foreach ($aNas as $nas){
-			$user = $nas['username'];
-			$pass = $nas['password'];
-            $url = "http://{$nas['username']}:{$nas['password']}@{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
+            $url = "http://{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
+            $client = new Zend_Http_Client($url);
+            $client->setAuth($nas['username'],$nas['password']);
+            $response = $client->request();
 			AppLog::output("getting sessions from {$nas['nasname']}:{$nas['ports']}");
 			$aSessions=array();
 			$aSessionId = array();
-            $ch = curl_init();
-            curl_setopt( $ch, CURLOPT_URL, $url );
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            $sessions = curl_exec( $ch );
-            $info = curl_getinfo( $ch );
-            curl_close ( $ch );
-			switch ($info['http_code']){
-			    case '0':
-      				AppLog::output("not response");
-                break;
+            $isClean = false;
+    		AppLog::output($response->getMessage());
+			switch ($response->getStatus()){
 			    case '200':
+                    $sessions = $response->getBody();
     				preg_match_all("/^ng.*$/im",$sessions,$aSessions);
         		    AppLog::output("find ".count($aSessions[0])." sessions");
+                    $isClean = true;
         			foreach ($aSessions[0] as $session){
         				$link = preg_split('/\s+/',$session);
         				$aSessionId[]=$link[6];
         				AppLog::output("{$link[6]}");
         			}
-                break;
-			    case '401':
-      				AppLog::output("{$info['http_code']} unauthorized");
-                break;
-			    case '403':
-      				AppLog::output("{$info['http_code']} forbidden");
-                break;
 			    case '404':
-      				AppLog::output("{$info['http_code']} not found");
+			    case '0':
+                    $isClean = true;
                 break;
 			}
-            $aWhere=array();
-            $aWhere[] = "acctsessionid not in ('".implode("','",$aSessionId)."')";
-            $aWhere[] = "nasipaddress='{$nas['nasname']}'";
-			$n = $this->Db->delete('sessions', $aWhere);
-            $aWhere[] = "acctstoptime='0000-00-00 00:00:00'";
-            $this->Db->update('radacct',array('acctstoptime'=>date('Y-m-d H:i:s')),$aWhere);
-			AppLog::output("clean $n session(s) on {$nas['nasname']}:{$nas['ports']}");
-            $total += $n;
+            if ($isClean){
+                $aWhere=array();
+                $aWhere[] = "acctsessionid not in ('".implode("','",$aSessionId)."')";
+                $aWhere[] = "nasipaddress='{$nas['nasname']}'";
+    			$n = $this->Db->delete('sessions', $aWhere);
+                $aWhere[] = "acctstoptime='0000-00-00 00:00:00'";
+                $this->Db->update('radacct',array('acctstoptime'=>date('Y-m-d H:i:s')),$aWhere);
+    			AppLog::output("clean $n session(s) on {$nas['nasname']}:{$nas['ports']}");
+                $total += $n;
+            }
 		}
 		return $total;
 	}
@@ -81,14 +73,12 @@ class Sessions
 						->where('acctuniqueid=?',$id);
 		$session = $this->Db->fetchRow($sql);
 		if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-            $url = "http://{$session['username']}:{$session['password']}@{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
-            $ch = curl_init();
-            curl_setopt( $ch, CURLOPT_URL, $url );
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            $sessions = curl_exec( $ch );
-            $info = curl_getinfo( $ch );
-            curl_close ( $ch );
-			if ($info['http_code']=='200'){
+            $url = "http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
+            $client = new Zend_Http_Client($url);
+            $client->setAuth($session['username'],$session['password']);
+            $response = $client->request();
+    		AppLog::output($response->getMessage());
+			if ($response->getStatus()=='200'){
 				$aResult = array('success'=>true);
 			} else {
 				$aResult = array('errors'=>array('msg'=>$info['error']));
@@ -124,14 +114,12 @@ class Sessions
 		);
 		foreach ($aSessions as $session){
 			if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-                $url = "http://{$session['username']}:{$session['password']}@{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
-                $ch = curl_init();
-                curl_setopt( $ch, CURLOPT_URL, $url );
-                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-                $sessions = curl_exec( $ch );
-                $info = curl_getinfo( $ch );
-                curl_close ( $ch );
-				if ($info['http_code']=='200'){
+                $url = "http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
+                $client = new Zend_Http_Client($url);
+                $client->setAuth($session['username'],$session['password']);
+                $response = $client->request();
+        		AppLog::output($response->getMessage());
+    			if ($response->getStatus()=='200'){
 					$aResult['success']++;
 				} else{
 					$aResult['failed']++;

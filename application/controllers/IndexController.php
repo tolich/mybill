@@ -37,6 +37,7 @@ class IndexController extends Zend_Controller_Action
         			$this->view->headLink()
         				->appendStylesheet("/shared/themes/$theme/css/xtheme-$theme.css");
         		}
+                setcookie("theme", $theme, time()+2592000); //на 30 дней
 				$this->view->headLink()->appendStylesheet("/css/admin/layer.css");
 
 				//Modules

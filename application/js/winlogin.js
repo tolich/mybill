@@ -36,7 +36,7 @@ Ext.app.LoginWin = Ext.extend(Ext.Window,{
                 url:this.url,
         		waitMsg:'Выполняется проверка пароля...',
         		waitTitle:'Подождите, пожалуйста!',
-        		reset:true,
+        		//reset:true,
         		success: function(f, a){
         			if (a && a.result) {
         				this.close();
