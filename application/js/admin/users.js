@@ -766,7 +766,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		Ext.getCmp('info-tabpanel').items.each(
 			function(i){
 				if (i.xtype) {
-                    //Bug ExtJS 3.1
+                    //Bug ExtJS 3.1.1
                     delete i.initialConfig.ownerCt;
                     items.push(i.initialConfig);
                 }               
@@ -779,6 +779,10 @@ App.register(Ext.extend(Ext.app.Module, {
 				groupField: g.store.getGroupState()
 			}
 			,'view_user': Ext.getCmp('view_user').getValue()
+			,'base-panel': {
+				width: Ext.getCmp('mod-panel').getInnerWidth()
+				,mod_collapsed : Ext.getCmp('mod-panel').collapsed 
+			}
 			,'info-panel': {
 				width: Ext.getCmp('log-panel').getInnerWidth()
 				,height: Ext.getCmp('info-panel').getInnerHeight()

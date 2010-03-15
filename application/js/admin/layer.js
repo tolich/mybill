@@ -5,17 +5,22 @@ Ext.SSL_SECURE_URL="/shared/icons/s.gif";
 Ext.BLANK_IMAGE_URL="/shared/icons/s.gif";
 Ext.ns('Ext.app.Layer');
 Ext.app.Layer=function(){
+	var height = 300;
+	var width_info = 300;
+	var width_base = 300;
+	var info_collapsed = false;
+	var log_collapsed = true;
+	var mod_collapsed = true;
 	if (App.settings.users['info-panel']) {
-		var height = App.settings.users['info-panel'].height || 200;
-		var width = App.settings.users['info-panel'].width || 600;
+		var height = App.settings.users['info-panel'].height || 300;
+		var width_info = App.settings.users['info-panel'].width || 300;
 		var info_collapsed = App.settings.users['info-panel'].info_collapsed || false;
 		var log_collapsed = App.settings.users['info-panel'].log_collapsed || false;
-	} else {
-		var height = 200;
-		var width = 600;
-		var info_collapsed = false;
-		var log_collapsed = false;
-	}
+	};
+    if(App.settings.users['base-panel']){
+		var width_base = App.settings.users['base-panel'].width || 300;
+		var mod_collapsed = App.settings.users['base-panel'].mod_collapsed || false;
+	};
 	var info_tab_items = [{
 		layout: 'column'
 //		,bodyStyle: 'padding:10px'
@@ -163,6 +168,16 @@ Ext.app.Layer=function(){
 				}
 			}]
 		}, {
+			id: 'mod-panel',
+			title: 'Дополнительно',
+			region: 'west',
+			split: true,
+			width: width_base,
+			collapsible: true,
+			border:false,
+			collapsed: mod_collapsed,
+    		items:[App.emptyMod]
+		},{
 			id: 'user-grid',
 			xtype: 'usergrid',
 			region: 'center'
@@ -180,9 +195,9 @@ Ext.app.Layer=function(){
 			[{
 				id: 'log-panel',
 				title: 'События',
-				region: 'east',
+				region: 'west',
 				split: true,
-				width: width,
+				width: width_info,
 				collapsible: true,
 				border:false,
 				collapsed: log_collapsed,
