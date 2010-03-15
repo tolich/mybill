@@ -19,12 +19,12 @@ class Settings {
 				$oModule = new $module();
 				$result = $oModule->DeInstall();
 				if ($result===true){
-					$aResult['success']=true;
+					AppLog::output("$module success");
 				} else {
-					$aResult=AppResponse::failure($result);
+					AppLog::output("$module failed");
 				}
 			} else {
-				$aResult=AppResponse::failure('Модуль поврежден или имеет неправильный формат!');
+    			AppLog::output("$module failed");
 			}
 		}
 	}

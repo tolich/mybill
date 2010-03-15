@@ -268,5 +268,42 @@ class IO {
 		}
 	}
 
+    public function update(){
+		AppLog::output("Update start");
+		AppLog::output("Saving current settings...");
+        $sql = $this->Db->select()
+                    ->from('settings',array('param','value'));
+        $aCurrent = $this->Db->fetchPairs($sql);
+		$oManager = new Manager();
+		$aModules = $oManager->GetAllModules();
+		AppLog::output("Updating...");
+		$oSettings = new Settings();
+		$oSettings->SetDefault();
+		AppLog::output("Restoring settings...");
+        foreach ($aCurrent as $param=>$value){
+            $n=$this->Db->update('settings',array('value'=>$value),"param='$param'");
+            if ($n>0){
+        		AppLog::output("$param => $value");
+            } else {
+        		AppLog::output("$param missing");
+            };
+        }
+		AppLog::output("Installing modules...");
+		foreach ($aModules as $k=>$v){
+			$aResult = array();
+			$module = ucfirst((string)$k);
+			if (class_exists($module)){
+				$oModule = new $module();
+				$result = $oModule->Install();
+				if ($result===true){
+					AppLog::output("$module success");
+				} else {
+					AppLog::output("$module failed");
+				}
+			} else {
+    			AppLog::output("$module failed");
+			}
+		}
+		AppLog::output("Update stop");
+    }
 }
-?>

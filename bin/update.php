@@ -6,4 +6,4 @@
     $acl = new Acl();
     Zend_Registry::set('acl', $acl);
 	$oIO = new IO();
-	$oIO->defsettings();
+	$oIO->update();

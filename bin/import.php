@@ -4,4 +4,3 @@
 	Zend_Registry::set('db', $db);
 	$oIO = new IO();
 	$oIO->import();
-?>

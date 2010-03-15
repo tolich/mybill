@@ -5,4 +5,3 @@
 	Zend_Registry::set('db', $db);
 	$oCron = new Cron();
 	$oCron->daily();
-?>	
