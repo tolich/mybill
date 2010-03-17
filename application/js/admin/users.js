@@ -210,7 +210,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 			return String.format('<table><tr>'+
                     '<td rowspan="2" class="{3}" {4}>&nbsp</td>'+
                     '<td rowspan="2" class="{2}">&nbsp</td>'+
-                    '<td>{0}</td>'+
+                    '<td>{0}&nbsp</td>'+
                     '</tr><tr>'+
                     '<td class="code-num">&nbsp {1}</td>' +
                     '</tr></table>', 
