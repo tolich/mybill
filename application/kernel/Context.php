@@ -154,10 +154,11 @@ class Context {
      */
     public static function GetUserData($key=null)
     {
-    	if ($key)
-   			return self::Get()->_UserData[$key];
+        $aUserData = self::Get()->_UserData;
+    	if ($key&&isset($aUserData[$key]))
+   			return $aUserData[$key];
    		else
-   			return self::Get();
+   			return $aUserData;
     }
     
     /**
@@ -236,10 +237,11 @@ class Context {
 
 	public static function GetAcl($key=null)
 	{
-    	if (null===$key)
-			return self::Get()->_Acl;
+	    $aAcl = self::Get()->_Acl;
+    	if ($key && isset($aAcl[$key]))
+			return $aAcl[$key];
    		else
-   			return self::Get()->_Acl[$key];
+   			return $aAcl;
 	}
 
 	public static function SetSettings($settings,$key=null)
@@ -255,10 +257,11 @@ class Context {
 
 	public static function GetSettings($key=null)
 	{
-    	if (null===$key)
-			return self::Get()->_Settings;
+	    $aSettings = self::Get()->_Settings;
+    	if ($key && $aSettings[$key])
+			return $aSettings[$key];
    		else
-   			return self::Get()->_Settings[$key];
+   			return $aSettings;
 	}
 
 	public static function SetModules($modules,$key=null)
@@ -274,13 +277,10 @@ class Context {
 
 	public static function GetModules($key=null)
 	{
-    	if (null===$key)
-			return self::Get()->_Modules;
+	    $aModules = self::Get()->_Modules;
+    	if ($key && $aModules[$key])
+			return $aModules[$key];
    		else
-   			return self::Get()->_Modules[$key];
+   			return $aModules;
 	}
-
-
 }
-
-?>

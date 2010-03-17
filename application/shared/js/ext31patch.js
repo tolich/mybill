@@ -2,10 +2,46 @@
 Ext.grid.ColumnModel.prototype.defaultSortable=true;
 // Подравниваем
 Ext.override(Ext.ux.grid.RowEditor, {
+    initFields: function(){
+        var cm = this.grid.getColumnModel(), pm = Ext.layout.ContainerLayout.prototype.parseMargins;
+        this.removeAll(false);
+        for(var i = 0, len = cm.getColumnCount(); i < len; i++){
+            var c = cm.getColumnAt(i),
+                ed = c.getEditor();
+            if(!ed){
+                ed = c.displayEditor || new Ext.form.DisplayField({
+                    style:['padding-left:5px',
+                           'padding-right:5px',
+                           'margin-top:3px',
+                           'text-align:'+(cm.config[i].align||'left')
+                          ].join(';')
+                });
+            }else{
+                ed = ed.field;
+            }
+
+            if(i == 0){
+                ed.margins = pm('0 1 2 1');
+            } else if(i == len - 1){
+                ed.margins = pm('0 0 2 1');
+            } else{
+                ed.margins = pm('0 1 2');
+            }
+            ed.setWidth(cm.getColumnWidth(i));
+            ed.column = c;
+            if(ed.ownerCt !== this){
+                ed.on('focus', this.ensureVisible, this);
+                ed.on('specialkey', this.onKey, this);
+            }
+            this.insert(i, ed);
+        }
+        this.initialized = true;
+    },
     verifyLayout: function(force){
         if(this.el && (this.isVisible() || force === true)){
             var row = this.grid.getView().getRow(this.rowIndex);
-            this.setSize(Ext.fly(row).getWidth(), Ext.isIE ? Ext.fly(row).getHeight() + 9 : undefined);
+//            this.setSize(Ext.fly(row).getWidth(), Ext.fly(row).getHeight() + (Ext.isIE ?  9 : 0));
+            this.setSize(Ext.fly(row).getWidth(), Ext.isIE ?  Ext.fly(row).getHeight() + 9 : undefined);
             var cm = this.grid.colModel, fields = this.items.items;
             for(var i = 0, len = cm.getColumnCount(); i < len; i++){
                 if(!cm.isHidden(i)){

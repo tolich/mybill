@@ -332,7 +332,7 @@ Ext.app.Aclmanager.Grid = Ext.extend(Ext.grid.GridPanel, {
 			header: 'Разрешено',
 			dataIndex: 'allow',
 			align: 'center',
-			width: 25,
+			width: 25
 		});
 
 		var deny = new Ext.grid.CheckColumn({

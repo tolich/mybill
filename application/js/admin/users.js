@@ -208,9 +208,11 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
                 ?"ext:qtip='Есть запланированные задачи ("+r.data.taskscount+" шт.)' onclick='Ext.app.Users.TaskShow().execute()'"
                 :"";
 			return String.format('<table><tr>'+
-                    '<td class="{3}" {4}>&nbsp</td>'+
-                    '<td class="{2}">&nbsp</td>'+
-                    '<td>{0}<br><span class="code-num">&nbsp {1}</span></td>' +
+                    '<td rowspan="2" class="{3}" {4}>&nbsp</td>'+
+                    '<td rowspan="2" class="{2}">&nbsp</td>'+
+                    '<td>{0}</td>'+
+                    '</tr><tr>'+
+                    '<td class="code-num">&nbsp {1}</td>' +
                     '</tr></table>', 
 					r.data.fullname, r.data.address, r.data.iconcls, tasksCls, qtip);
 		}
@@ -563,7 +565,12 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 			model.push(columns[this.settings.cm[i]['id']]);	
 		}
     
-		var cm = new Ext.grid.ColumnModel(model);		
+		var cm = new Ext.grid.ColumnModel({
+            columns:model
+            ,defaults:{
+                css:"vertical-align:middle !important;"
+            }
+        });		
 
 		// create the Data Store
 		var store = new Ext.data.GroupingStore({

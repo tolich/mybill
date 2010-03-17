@@ -22,18 +22,37 @@ class Sessions
 		$aNas = $oNas->GetList();
 		$total = 0;
 		foreach ($aNas as $nas){
-            $url = "http://{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
-            $client = new Zend_Http_Client($url);
-            $client->setAuth($nas['username'],$nas['password']);
-            $response = $client->request();
+//		    $response = @file_get_contents("http://{$nas['username']}:{$nas['password']}@{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions");
+//            AppLog::debug($response);
+
+			$user = $nas['username'];
+			$pass = $nas['password'];
+            $url = "http://{$nas['username']}:{$nas['password']}@{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
 			AppLog::output("getting sessions from {$nas['nasname']}:{$nas['ports']}");
 			$aSessions=array();
 			$aSessionId = array();
-            $isClean = false;
-    		AppLog::output($response->getMessage());
-			switch ($response->getStatus()){
+            $ch = curl_init();
+            curl_setopt( $ch, CURLOPT_URL, $url );
+            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+            $sessions = curl_exec( $ch );
+            $info = curl_getinfo( $ch );
+            curl_close ( $ch );
+
+            
+//            $url = "http://{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
+//            $client = new Zend_Http_Client($url);
+//            $client->setAuth($nas['username'],$nas['password']);
+//            $response = $client->request();
+//			AppLog::output("getting sessions from {$nas['nasname']}:{$nas['ports']}");
+//			$aSessions=array();
+//			$aSessionId = array();
+//            $isClean = false;
+//    		AppLog::output($response->getMessage());
+    		AppLog::output($sessions);
+//			switch ($response->getStatus()){
+			switch ($info['http_code']){
 			    case '200':
-                    $sessions = $response->getBody();
+                    //$sessions = $response->getBody();
     				preg_match_all("/^ng.*$/im",$sessions,$aSessions);
         		    AppLog::output("find ".count($aSessions[0])." sessions");
                     $isClean = true;
@@ -73,18 +92,13 @@ class Sessions
 						->where('acctuniqueid=?',$id);
 		$session = $this->Db->fetchRow($sql);
 		if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-            $url = "http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
-            $client = new Zend_Http_Client($url);
-            $client->setAuth($session['username'],$session['password']);
-            $response = $client->request();
-    		AppLog::output($response->getMessage());
-			if ($response->getStatus()=='200'){
+   			if ($this->_closeSession($match[1],$session)){
 				$aResult = array('success'=>true);
 			} else {
-				$aResult = array('errors'=>array('msg'=>$info['error']));
+				$aResult = AppResponse::failure($response->getMessage());
             }
 		} else {
-			$aResult = array('errors'=>array('msg'=>'Link extract failed'));
+			$aResult = AppResponse::failure('Link extract failed');
 		}
 		return $aResult;
 	}
@@ -114,12 +128,7 @@ class Sessions
 		);
 		foreach ($aSessions as $session){
 			if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-                $url = "http://{$session['nasname']}:{$session['ports']}/bincmd?link%20{$match[1]}&close";
-                $client = new Zend_Http_Client($url);
-                $client->setAuth($session['username'],$session['password']);
-                $response = $client->request();
-        		AppLog::output($response->getMessage());
-    			if ($response->getStatus()=='200'){
+    			if ($this->_closeSession($match[1],$session)){
 					$aResult['success']++;
 				} else{
 					$aResult['failed']++;
@@ -233,6 +242,18 @@ class Sessions
 					}
 				break;
 			}
-		}	
+		}
 	}
+        
+    private function _closeSession($id,$params){
+//        $url = "http://{$params['nasname']}:{$params['ports']}/bincmd?link%20{$id}&close";
+//        $client = new Zend_Http_Client($url);
+//        $client->setAuth($params['username'],$params['password']);
+//        $response = $client->request();
+//		AppLog::output($response->getMessage());
+//        return $response->getStatus()=='200';
+        $response = @file_get_contents("http://{$params['username']}:{$params['password']}@{$params['nasname']}:{$params['ports']}/bincmd?link%20{$id}&close");
+        AppLog::debug($response);
+        return true;
+    }	
 }

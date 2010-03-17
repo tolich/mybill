@@ -1,5 +1,6 @@
+
 html, body {
-    font: normal 12px verdana,tahoma,arial,sans-serif;
+    font: normal 11px arial,tahoma,helvetica,sans-serif;
     margin: 0;
     padding: 0;
     border: 0 none;
@@ -7,19 +8,6 @@ html, body {
     height: 100%;
 }
 
-/*
-.x-panel-body p {
-    margin: 5px;
-}
-
-.x-column-layout-ct .x-panel {
-    margin-bottom: 5px;
-}
-
-.x-column-layout-ct .x-panel-dd-spacer {
-    margin-bottom: 5px;
-}
-*/
 .tab-link{
     background-image: url(/shared/icons/mini/list_links.gif) !important;
 }
@@ -431,7 +419,6 @@ html, body {
 .cart{
     background-image: url(/shared/icons/silk/cart.png) !important;
 }
-
 
 .x-grid3-cell-inner {
 	white-space:normal !important; 
