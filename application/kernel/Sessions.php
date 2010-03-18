@@ -18,64 +18,28 @@ class Sessions
 	}
 	
 	public function CheckSessions(){
-		$oNas = new Nas();
-		$aNas = $oNas->GetList();
+		$oNasObj = new Nas();
+		$aNas = $oNasObj->GetList();
 		$total = 0;
 		foreach ($aNas as $nas){
-//		    $response = @file_get_contents("http://{$nas['username']}:{$nas['password']}@{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions");
-//            AppLog::debug($response);
-
-			$user = $nas['username'];
-			$pass = $nas['password'];
-            $url = "http://{$nas['username']}:{$nas['password']}@{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
-			AppLog::output("getting sessions from {$nas['nasname']}:{$nas['ports']}");
-			$aSessions=array();
-			$aSessionId = array();
-            $ch = curl_init();
-            curl_setopt( $ch, CURLOPT_URL, $url );
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-            $sessions = curl_exec( $ch );
-            $info = curl_getinfo( $ch );
-            curl_close ( $ch );
-
-            
-//            $url = "http://{$nas['nasname']}:{$nas['ports']}/bincmd?show%20sessions";
-//            $client = new Zend_Http_Client($url);
-//            $client->setAuth($nas['username'],$nas['password']);
-//            $response = $client->request();
-//			AppLog::output("getting sessions from {$nas['nasname']}:{$nas['ports']}");
-//			$aSessions=array();
-//			$aSessionId = array();
-//            $isClean = false;
-//    		AppLog::output($response->getMessage());
-    		AppLog::output($sessions);
-//			switch ($response->getStatus()){
-			switch ($info['http_code']){
-			    case '200':
-                    //$sessions = $response->getBody();
-    				preg_match_all("/^ng.*$/im",$sessions,$aSessions);
-        		    AppLog::output("find ".count($aSessions[0])." sessions");
-                    $isClean = true;
-        			foreach ($aSessions[0] as $session){
-        				$link = preg_split('/\s+/',$session);
-        				$aSessionId[]=$link[6];
-        				AppLog::output("{$link[6]}");
-        			}
-			    case '404':
-			    case '0':
-                    $isClean = true;
-                break;
+		    $oNas = $oNasObj->getNasByVendor($nas['vendor']);
+            if (false !== $oNas){
+                $oNas->setHost("{$nas['ipaddress']}:{$nas['ports']}")
+                     ->setAuth($nas['username'],$nas['password']);
+                $sessions = $oNas->getSessionsId();
+    			AppLog::output("getting sessions from {$nas['ipaddress']}:{$nas['ports']}");
+                if (false!==$sessions){
+        		    AppLog::output("find ".count($sessions)." sessions");
+                    $aWhere=array();
+                    $aWhere[] = "acctsessionid not in ('".implode("','",$sessions)."')";
+                    $aWhere[] = "nasipaddress='{$nas['ipaddress']}'";
+        			$n = $this->Db->delete('sessions', $aWhere);
+                    $aWhere[] = "acctstoptime='0000-00-00 00:00:00'";
+                    $this->Db->update('radacct',array('acctstoptime'=>date('Y-m-d H:i:s')),$aWhere);
+        			AppLog::output("clean $n session(s) on {$nas['ipaddress']}:{$nas['ports']}");
+                    $total += $n;
+                }
 			}
-            if ($isClean){
-                $aWhere=array();
-                $aWhere[] = "acctsessionid not in ('".implode("','",$aSessionId)."')";
-                $aWhere[] = "nasipaddress='{$nas['nasname']}'";
-    			$n = $this->Db->delete('sessions', $aWhere);
-                $aWhere[] = "acctstoptime='0000-00-00 00:00:00'";
-                $this->Db->update('radacct',array('acctstoptime'=>date('Y-m-d H:i:s')),$aWhere);
-    			AppLog::output("clean $n session(s) on {$nas['nasname']}:{$nas['ports']}");
-                $total += $n;
-            }
 		}
 		return $total;
 	}
@@ -87,19 +51,22 @@ class Sessions
 	public function Close ($id)
 	{
 		$sql = $this->Db->select()
-						->from('sessions',array('acctsessionid'))
-						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
-						->where('acctuniqueid=?',$id);
-		$session = $this->Db->fetchRow($sql);
-		if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-   			if ($this->_closeSession($match[1],$session)){
+				->from('sessions',array('acctsessionid'))
+				->join('nas','sessions.nasipaddress=nas.ipaddress',array('ipaddress','ports','username','password','vendor'))
+				->where('acctuniqueid=?',$id);
+		$nas = $this->Db->fetchRow($sql);
+
+		$oNasObj = new Nas();
+	    $oNas = $oNasObj->getNasByVendor($nas['vendor']);
+        if (false !== $oNas){
+            $oNas->setHost("{$nas['ipaddress']}:{$nas['ports']}")
+                 ->setAuth($nas['username'],$nas['password']);
+   			if (false!==$oNas->closeSession($nas['acctsessionid'])){
 				$aResult = array('success'=>true);
-			} else {
-				$aResult = AppResponse::failure($response->getMessage());
+        	} else {
+        		$aResult = AppResponse::failure("Не удалось удалить сессию $id");
             }
-		} else {
-			$aResult = AppResponse::failure('Link extract failed');
-		}
+        }
 		return $aResult;
 	}
 
@@ -118,24 +85,28 @@ class Sessions
 		$sql = $this->Db->select()
 						->from('sessions',array('acctsessionid'))
 						->join('usergroup','sessions.username=usergroup.username',array())
-						->join('nas','sessions.nasipaddress=nas.nasname',array('nasname','ports','username','password'))
+						->join('nas','sessions.nasipaddress=nas.ipaddress',array('ipaddress','ports','username','password','vendor'))
 						->where("(deposit < mindeposit) and (UNIX_TIMESTAMP(DATE_ADD('{$aRow['datestart']}', INTERVAL dateofcheck DAY)) <= '{$aRow['now']}') or (freebyte + bonus < freemblimit and check_mb=1)")
 						->orWhere('access=0');
-		$aSessions = $this->Db->fetchAll($sql);
+		$aNas = $this->Db->fetchAll($sql);
 		$aResult = array(
 			'success' => 0,
 			'failed'  => 0 
 		);
-		foreach ($aSessions as $session){
-			if (preg_match("/\w+-(\w+-\w+)/",$session['acctsessionid'],$match)){
-    			if ($this->_closeSession($match[1],$session)){
-					$aResult['success']++;
-				} else{
-					$aResult['failed']++;
+		foreach ($aNas as $nas){
+    		$oNasObj = new Nas();
+    	    $oNas = $oNasObj->getNasByVendor($nas['vendor']);
+            if (false !== $oNas){
+                $oNas->setHost("{$nas['ipaddress']}:{$nas['ports']}")
+                     ->setAuth($nas['username'],$nas['password']);
+       			if (false!==$oNas->closeSession($nas['acctsessionid'])){
+    				$aResult['success']++;
+    			} else{
+    				$aResult['failed']++;
                 }
-			} else {
-				$aResult['failed']++;
-			}
+    		} else {
+    			$aResult['failed']++;
+            }
 		}
 		return $aResult;
 	}
@@ -244,16 +215,4 @@ class Sessions
 			}
 		}
 	}
-        
-    private function _closeSession($id,$params){
-//        $url = "http://{$params['nasname']}:{$params['ports']}/bincmd?link%20{$id}&close";
-//        $client = new Zend_Http_Client($url);
-//        $client->setAuth($params['username'],$params['password']);
-//        $response = $client->request();
-//		AppLog::output($response->getMessage());
-//        return $response->getStatus()=='200';
-        $response = @file_get_contents("http://{$params['username']}:{$params['password']}@{$params['nasname']}:{$params['ports']}/bincmd?link%20{$id}&close");
-        AppLog::debug($response);
-        return true;
-    }	
 }

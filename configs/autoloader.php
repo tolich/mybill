@@ -14,6 +14,9 @@
 	foreach (glob(DOCUMENT_ROOT.'application/ajax/*') as $dir) {
 		Utils::AppendToIncludePath($dir);
 	}
+	foreach (glob(DOCUMENT_ROOT.'application/kernel/*') as $dir) {
+		Utils::AppendToIncludePath($dir);
+	}
 	foreach (glob(DOCUMENT_ROOT.'application/modules/*') as $dir) {
 		Utils::AppendToIncludePath($dir);
 	}

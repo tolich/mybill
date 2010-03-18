@@ -27,9 +27,8 @@ class Nas
 	public function GetList($sort=null, $dir=null)
 	{
 		$sql = $this->Db->select()
-					->from('nas', array('id','nasname','shortname','description','ports','username','password'));
-		if ($sort!=null && $dir!=null)
-			$sql->order(array("$sort $dir"));
+					->from('nas');
+        if ($sort) $sql->order(array("$sort $dir"));
 		$aRows = $this->Db->fetchAll($sql);
 		Utils::encode($aRows);
 		return $aRows;
@@ -85,6 +84,20 @@ class Nas
 		return $aResult;
 	}
 
-	
+	public function getNasByVendor($vendor){
+   		$vendor = ucfirst($vendor);
+    	if (class_exists($vendor)){
+    		$oNas = new $vendor();
+            if ($oNas instanceof Vendor){
+                return $oNas;
+			} else {
+				$aResult=AppLog::crit('Модуль NAS имеет неправильный интерфейс');
+    		    return false;
+			}
+		} else {
+			$aResult=AppLog::crit('Неопределенный NAS');
+		    return false;
+		}
+	}
 }
 ?>
