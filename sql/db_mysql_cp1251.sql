@@ -344,7 +344,7 @@ CREATE TABLE payments (
   amountbonus decimal(15,3) NOT NULL default '0.000',
   lastbonus decimal(15,3) NOT NULL default '0.000',
   id_acctperiod int(11),
-  id_repl int(11)
+  id_repl int(11),
   repl_status int(11) NOT NULL default 0,
   PRIMARY KEY (id),
   KEY (iduser),
@@ -485,12 +485,14 @@ CREATE TABLE nas (
   nasname varchar(128) NOT NULL,
   shortname varchar(32),
   nastype varchar(30) DEFAULT 'other',
+  ipaddress varchar(15) NOT NULL,
   ports int(5),
   secret varchar(60) DEFAULT 'secret' NOT NULL,
   community varchar(50),
   username varchar(64) NOT NULL default '',
   password varchar(64) NOT NULL default '',
   description varchar(200) DEFAULT 'RADIUS Client',
+  vendor varchar(32) NOT NULL DEFAULT 'mpd5',
   PRIMARY KEY (id),
   KEY nasname (nasname)
 )ENGINE=INNODB;
