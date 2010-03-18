@@ -10,7 +10,7 @@ CONNECT mybill_log;
 CREATE TABLE log(
   id int(11) NOT NULL auto_increment,
   date_log timestamp,
-  level int NOT NULL default 0,
+  level int(11) NOT NULL default 0,
   username varchar(64) NOT NULL default '',
   role varchar(64) NOT NULL default '',
   msg text,
