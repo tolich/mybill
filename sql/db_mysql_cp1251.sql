@@ -520,6 +520,7 @@ CREATE TABLE role(
   role varchar(32) NOT NULL default '',
   rolename varchar(255)  NOT NULL default '',
   rights text NOT NULL default '',
+  type int NOT NULL default 0,
   PRIMARY KEY (id),
   KEY role (role)
 )ENGINE=INNODB;

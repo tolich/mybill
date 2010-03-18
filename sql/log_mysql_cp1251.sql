@@ -7,7 +7,7 @@ CONNECT mybill_log;
 #    
 # Table structure for table 'userlog'
 #
-CREATE TABLE log(
+CREATE TABLE `log`(
   id int(11) NOT NULL auto_increment,
   date_log timestamp,
   level int(11) NOT NULL default 0,
