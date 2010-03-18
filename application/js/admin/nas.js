@@ -60,9 +60,10 @@ App.register(Ext.extend(Ext.app.Module, {
 	,onAdd:function(){
 		this.setContext({
 			mode 		: 0 // Добавление
-			,nasname 	: 'IP адрес или идентификатор'
+			,nasname 	: ''
 			,shortname	: ''
 			,description: 'RADIUS Client'
+            ,ipaddress  : ''
 			,ports		: '5006'
 			,username	: ''
 			,password	: ''
@@ -141,12 +142,17 @@ App.register(Ext.extend(Ext.app.Module, {
 				,items:
 				[{
 					id: 'nasname'
-					,fieldLabel: 'NAS'
+					,fieldLabel: 'Наименование'
 					,value : z.nasname
 				},{
 					id: 'shortname'
 					,fieldLabel: 'Алиас'
 					,value : z.shortname
+				},{
+					id: 'ipaddress'
+					,fieldLabel: 'IP адрес'
+					,value : z.ipaddress
+                    ,vtype: 'ip'
 				},{
 					id: 'ports'
 					,fieldLabel: 'Порт'
@@ -171,9 +177,9 @@ App.register(Ext.extend(Ext.app.Module, {
 				id: 'win-nas',
 				layout: 'fit',
 				width: 400,
-				height: 250,
+				height: 280,
 				minWidth: 400,
-				minHeight: 250,
+				minHeight: 280,
 				modal: true,
 				items: formPanel,
 				title: z.mode==0?'Новый NAS':'Свойства NAS - ' + z.nasname,
@@ -185,6 +191,7 @@ App.register(Ext.extend(Ext.app.Module, {
 								nasname: ''
 								,shortname	: ''
 								,description: ''
+                                ,ipaddress  : ''
 								,ports		: ''
 								,username	: ''
 								,password	: ''
@@ -223,19 +230,10 @@ App.register(Ext.extend(Ext.app.Module, {
 Ext.app.Nas.Grid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
-//		function renderFullName(value, p, r){
-//			return String.format('<div>{0} {1}</div>', 
-//					r.data.surname, r.data.name);
-//		}
-//
-//		function renderDate(value, p, r){
-//			return Ext.util.Format.date(r.data.datepayment);
-//		}
-		
 		// create the Data Store
 		var store = new Ext.data.JsonStore({
 			url: App.proxy('/ajax/nas/grid')
-			,fields:['id','nasname','shortname','description','ports','username','password']
+			,fields:['id','nasname','shortname','description','ipaddress','ports','username','password']
 			,remoteSort: true
 			,sortInfo:{field:'nasname', direction:'asc'}
 		});
@@ -258,6 +256,16 @@ Ext.app.Nas.Grid = Ext.extend(Ext.grid.GridPanel, {
 			,dataIndex: 'shortname'
 			,width: 150
 		}, {
+			id: 'ipaddress'
+			,header: "IP адрес"
+			,dataIndex: 'ipaddress'
+			,width: 150
+		}, {
+			id: 'ports'
+			,header: "Порт"
+			,dataIndex: 'ports'
+			,width: 150
+		}, {
 			id: 'description'
 			,header: "Описание"
 			,dataIndex: 'description'
@@ -278,6 +286,7 @@ Ext.app.Nas.Grid = Ext.extend(Ext.grid.GridPanel, {
 							,nasname: row.get('nasname')
 							,shortname	: row.get('shortname')
 							,description: row.get('description')
+							,ipaddress	: row.get('ipaddress')
 							,ports		: row.get('ports')
 							,username	: row.get('username')
 							,password	: row.get('password')
@@ -291,19 +300,10 @@ Ext.app.Nas.Grid = Ext.extend(Ext.grid.GridPanel, {
 			,loadMask: true
 			,tbar: [
 				Ext.app.Nas.Add()
-//				,'-'
-//				,Ext.app.Nas.Edit
 			]
 			,autoExpandColumn: 'description'
 			,viewConfig:{
 				enableRowBody: true
-				//,forceFit: true
-//				,getRowClass: function(record, rowIndex, p, store){
-//					if (record.data.del==1) {
-//						return 'del-nas-rows-class';
-//					}
-//					return 'nas-rows-class';
-//				}
 			}
 		});
         Ext.app.Nas.Grid.superclass.initComponent.apply(this, arguments);

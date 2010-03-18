@@ -40,9 +40,9 @@ class Nas
 	 */
 	public function Add ($param)
 	{
-		$aKey = array('nasname','shortname','nastype','description','ports','username','password');
+		$aKey = array('nasname','shortname','nastype','description','ipaddress','ports','username','password');
 		$aInsData = Utils::ClearPostData($param, $aKey);
-		array_walk($aInsData, array('Utils', 'array_decode'));
+		Utils::decode($aInsData);
 		$r = $this->Db->insert('nas', $aInsData);
 		if ($r)
 			$aResult = array('success'=>true);
@@ -57,10 +57,10 @@ class Nas
 	 */
 	public function Edit ($param)
 	{
-		$aKey = array('nasname','shortname','nastype','description','ports','username','password');
+		$aKey = array('nasname','shortname','nastype','description','ipaddress','ports','username','password');
 		$where = $this->Db->quoteInto('id=?',$param['id']);
 		$aUpdateData = Utils::ClearPostData($param, $aKey);
-		array_walk($aUpdateData, array('Utils', 'array_decode'));
+		Utils::decode($aUpdateData);
 		$r = $this->Db->update('nas', $aUpdateData, $where);
 		if ($r)
 			$aResult = array('success'=>true);
