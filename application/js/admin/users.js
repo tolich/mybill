@@ -1729,6 +1729,7 @@ App.register(Ext.extend(Ext.app.Module, {
 							   buttons: Ext.Msg.OK,
 							   icon: Ext.MessageBox.INFO
 							});
+                            win.el.unmask();
 						}
 					}
 				}, {
