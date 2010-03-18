@@ -16,7 +16,7 @@ class AdminController extends Zend_Controller_Action
 		$this->view->headLink()
 			->appendStylesheet("/extjs/resources/css/ext-all.css");
         $theme = $this->_request->getCookie('theme');
-		if ($theme!='default'){
+		if (isset($theme)&&$theme!='default'){
 			$this->view->headLink()
 				->appendStylesheet("/shared/themes/$theme/css/xtheme-$theme.css");
 		}

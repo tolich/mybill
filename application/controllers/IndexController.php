@@ -33,7 +33,7 @@ class IndexController extends Zend_Controller_Action
 		if (Context::IsAuthorize()){
 			if (Context::GetScript()=='admin'){
             	$theme 	= Settings::Main('theme');
-        		if ($theme!='default'){
+        		if (isset($theme)&&$theme!='default'){
         			$this->view->headLink()
         				->appendStylesheet("/shared/themes/$theme/css/xtheme-$theme.css");
         		}
