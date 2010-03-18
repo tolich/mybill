@@ -17,7 +17,9 @@ CREATE TABLE log(
   remote_addr varchar(15),
   http_user_agent text,
   PRIMARY KEY (id),
+  KEY date_log (date_log),
   KEY username (username),
-  KEY level (level)
+  KEY level (level),
+  KEY remote_addr (remote_addr)
 )ENGINE=INNODB;
 
