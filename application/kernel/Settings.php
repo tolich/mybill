@@ -328,7 +328,7 @@ class Settings {
 					'filter',
 					'grid',
 					'intariff',
-					'list',
+//					'list',
 					'tree',
 					'wintariff',
 					'winintariff'
