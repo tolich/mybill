@@ -118,7 +118,11 @@ class Admins
 	 */
 	public function Edit ($param)
 	{
-		$aKey = array('username', 'wwwpassword', 'role');
+	    if ($param['wwwpassword']){
+    		$aKey = array('username', 'wwwpassword', 'role');
+	    } else {
+    		$aKey = array('username', 'role');
+	    }
 		$where = $this->Db->quoteInto('id=?',$param['id']);
 		$aUpdateData = Utils::ClearPostData($param, $aKey);
 		Utils::decode($aUpdateData);
