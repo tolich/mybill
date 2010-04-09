@@ -273,6 +273,11 @@ class Settings {
 	public function SetDefRightaction(){
 		AppLog::output("Rightaction ...");
 		$aData = array(
+            'all' =>array(
+				'tariffs'=>array(
+					'list',
+                )
+            ),
 			'view'=>array(
 				'admin'=>array(
 					'filter',
@@ -328,7 +333,6 @@ class Settings {
 					'filter',
 					'grid',
 					'intariff',
-//					'list',
 					'tree',
 					'wintariff',
 					'winintariff'
