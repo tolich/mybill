@@ -424,7 +424,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 				,{id: 'laststatupdate', width: 170,  hidden: true}			
 			]
 			,sortInfo: {field:'fullname', directions:'asc'}
-			,groupField: ''
+			,groupField: undefined
 		};
 		Ext.apply(this.settings, App.settings.users['user-grid']);
 		var columns = {
