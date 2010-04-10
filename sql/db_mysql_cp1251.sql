@@ -301,7 +301,6 @@ CREATE TABLE zones (
   src varchar(253) NOT NULL default '',
   prio int(11) NOT NULL default 0,
   del int(1) NOT NULL default 0,
-  action int NOT NULL default '1',
   PRIMARY KEY (id),
   KEY (zonename)
 )ENGINE=INNODB;
@@ -320,6 +319,7 @@ CREATE TABLE intariffs (
   weightmb decimal(4,3) NOT NULL default '1',
   in_pipe int(11) NOT NULL default '0',
   out_pipe int(11) NOT NULL default '0',
+  action int NOT NULL default '1',
   flag varchar(5) NOT NULL default '0', #in or other freeByte
   PRIMARY KEY (id),
   KEY (idtariff),
