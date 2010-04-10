@@ -111,7 +111,9 @@ class Zend_View_Helper_minifyHeadLink extends Zend_View_Helper_Abstract
         $path = $this->_params['cacheDir'] . $filename . ($this->_params['compress']? '_compressed' : '') . ($this->_params['encode']? '.css.gz' : '.css');
         if (!file_exists($path)) {
             if (!is_dir(dirname($path))){
-                mkdir(dirname($path), 0777, true);
+                mkdir(dirname($path), 0755, true);
+            } else {
+                chmod(dirname($path), 0755);
             }
             $cssContent = '';
             foreach ($this->_cache as $k=>$css) {
@@ -132,6 +134,7 @@ class Zend_View_Helper_minifyHeadLink extends Zend_View_Helper_Abstract
                 $cssContent = gzencode($cssContent);
             }
             file_put_contents($path, $cssContent);
+            chmod(dirname($path), 0555);
         } else {
             foreach ($this->_cache as $k=>$js) {
                 unset($this->view->headLink()->$k);
