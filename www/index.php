@@ -3,7 +3,6 @@
     try {
         $db = Db::factory();
     	Zend_Registry::set('db', $db);
-    
         $acl = new Acl();
         Zend_Registry::set('acl', $acl);
     	$frontController = Zend_Controller_Front::getInstance()
