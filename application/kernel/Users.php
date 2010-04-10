@@ -585,8 +585,8 @@ class Users
 		$aTariff = $this->Db->fetchRow($sql);
 
 		$sql = $this->Db->select()
-						->from('intariffs', array('idzone', 'in_pipe', 'out_pipe'))
-						->join('zones', 'intariffs.idzone=zones.id', array('src','action'))
+						->from('intariffs', array('idzone', 'in_pipe', 'out_pipe','action'))
+						->join('zones', 'intariffs.idzone=zones.id', array('src'))
 						->order('zones.prio')
 						->where('intariffs.idtariff=?', $attr['id_tariff']);
 						
