@@ -77,32 +77,27 @@ class Sessions
 	public function CloseCredits ()
 	{
 		$sql = $this->Db->select()
-					->from('acctperiod',array(
-						'datestart','now' => new Zend_Db_Expr("UNIX_TIMESTAMP(CURDATE())")))
-					->where('status=0');
-		$aRow=$this->Db->fetchRow($sql);
-
-		$sql = $this->Db->select()
 						->from('sessions',array('acctsessionid'))
-						->join('usergroup','sessions.username=usergroup.username',array())
-						->join('nas','sessions.nasipaddress=nas.ipaddress',array('ipaddress','ports','username','password','vendor'))
-						->where("(deposit < mindeposit) and (UNIX_TIMESTAMP(DATE_ADD('{$aRow['datestart']}', INTERVAL dateofcheck DAY)) <= '{$aRow['now']}') or (freebyte + bonus < freemblimit and check_mb=1)")
-						->orWhere('access=0');
-		$aNas = $this->Db->fetchAll($sql);
+						->join('usergroup','sessions.username=usergroup.username',array('id'))
+						->join('nas','sessions.nasipaddress=nas.ipaddress',array('ipaddress','ports','username','password','vendor'));
+		$aSessions = $this->Db->fetchAll($sql);
 		$aResult = array(
 			'success' => 0,
 			'failed'  => 0 
 		);
-		foreach ($aNas as $nas){
+		foreach ($aSessions as $session){
+    		$oUser = new Users();
     		$oNasObj = new Nas();
-    	    $oNas = $oNasObj->getNasByVendor($nas['vendor']);
+    	    $oNas = $oNasObj->getNasByVendor($session['vendor']);
             if (false !== $oNas){
-                $oNas->setHost("{$nas['ipaddress']}:{$nas['ports']}")
-                     ->setAuth($nas['username'],$nas['password']);
-       			if (false!==$oNas->closeSession($nas['acctsessionid'])){
-    				$aResult['success']++;
-    			} else{
-    				$aResult['failed']++;
+                if (false === $oUser->IsValid($session['id'])) {
+                    $oNas->setHost("{$session['ipaddress']}:{$session['ports']}")
+                         ->setAuth($session['username'],$session['password']);
+           			if (false!==$oNas->closeSession($session['acctsessionid'])){
+        				$aResult['success']++;
+        			} else{
+        				$aResult['failed']++;
+                    }
                 }
     		} else {
     			$aResult['failed']++;

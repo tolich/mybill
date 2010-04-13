@@ -759,6 +759,16 @@ class Users
 		return $aData;
 	}
 
+    /**
+     * Возвращает разрешен доступ клиенту с $id или нет
+     * @return 
+     * @param object $id[optional]
+     */
+    public function IsValid($id=null)
+    {
+        return $this->_getStatus($id)==1;    
+    }
+    
 	/**
 	 * Возвращает статус пользователя 
 	 * @return int код статуса 
@@ -789,10 +799,11 @@ class Users
 		} else {
 			if ((($aRow['deposit']<$aRow['mindeposit'])&&
 				($this->_acctperiod['datestart']+$aRow['dateofcheck']*86400<=$this->_acctperiod['now']))||
-				(($aRow['freebyte']+$aRow['bonus']<=$aRow['freemblimit']) && ($aRow['check_mb']==1)))
+				(($aRow['freebyte']+$aRow['bonus']<=$aRow['freemblimit']) && ($aRow['check_mb']==1))){
 					$status = 3;
-			else
+			} else {
 				$status = 1;
+            }
 		}
 		return $status;
 	}
