@@ -58,6 +58,7 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
     ,billsettings: {}
 	,mainsettings: {}
 	,rights: {allow:[],deny:null}
+    ,locked: false
     ,emptyMod:{
         html: 'Модуль не установлен'
         ,style: 'color:gray;padding:5px;font:10px verdana,tahoma,arial,sans-serif'

@@ -54,16 +54,20 @@ function AppProxy(url){
                                     });
                                     break;                                
                                 case '-1':
-                                    var win = new Ext.app.LoginWin({
-                                        title: 'Разблокировать',
-                                        modal: true,
-                                        lock: true,
-                                        url: '/ajax/auth/unlock',
-                                        fn: function(a){
-                                            return true;
-                                        }
-                                    });
-                                    win.show();
+                                    if (App.locked === false) {
+                                        App.locked = true;    
+                                        var win = new Ext.app.LoginWin({
+                                            title: 'Разблокировать',
+                                            modal: true,
+                                            lock: true,
+                                            url: '/ajax/auth/unlock',
+                                            fn: function(a){
+                                                App.locked = false;    
+                                                return true;
+                                            }
+                                        });
+                                        win.show();
+                                    }
                                     break;
                             }
                         }
