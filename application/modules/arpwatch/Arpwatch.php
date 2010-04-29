@@ -12,7 +12,7 @@ class Arpwatch extends Modules {
 				'allow' => array(
 					'arpwatch' => array( 
 						'view',
-//						'add',
+						'all',
 //						'edit',
 //						'delete',
 //						'submit'
@@ -34,11 +34,11 @@ class Arpwatch extends Modules {
 					'getlist'
 				),
 			),
-//			'add'=>array(
-//				'arpwatch'=>array(
-//					'addcard',
-//				),
-//			),
+			'all'=>array(
+				'arpwatch'=>array(
+					'getevents',
+				),
+			),
 //			'edit'=>array(
 //				'arpwatch'=>array(
 //					'hold',
@@ -67,9 +67,9 @@ class Arpwatch extends Modules {
 		'view'=>array(
 			'arpwatch'=>'Просмотр списка изменений',
 		),
-//		'add'=>array(
-//			'arpwatch'=>'Добавление карты',
-//		),
+		'all'=>array(
+			'arpwatch'=>'Вспомагательные функции для других модулей',
+		),
 //		'edit'=>array(
 //			'arpwatch'=>'Аннулирование, восстановление, продажа карты',
 //		),
@@ -80,7 +80,21 @@ class Arpwatch extends Modules {
 //			'arpwatch'=>'Активация карты, перевод депозита в Мб',
 //		)
 	);
-    
+
+    private $_event = array(
+        'new activity'            => 'Ethernet/IP был использован впервые за 6 месяцев',
+        'new station'             => 'Ethernet/IP был использована впервые',
+        'flip flop'               => 'Замена адреса с одного на другой (оба были в списке)',
+        'changed ethernet address'=> 'Замена на новый MAC адрес Ethernet',
+        'ethernet broadcast'      => 'MAC-адрес хоста является широковещательным', 
+        'ip broadcast'            => 'IP-адрес хоста является широковещательным', 
+        'bogon'                   => 'Адрес отправителя IP-пакета не входит в непосредственно подключённую сеть (directly connected network) для заданного интерфейса',
+        'ethernet broadcast'      => 'MAC-адрес отправителя состоит из одних нулей или одних единиц',
+        'ethernet mismatch'       => 'MAC-адрес отправителя пакета не соответствует MAC-адресу указанному внутри ARP-запроса', 
+        'reused old ethernet address'=> 'Ethernet-адрес изменился с известного адреса на адрес, который был замечен ранее, но не только что',
+        'suppressed DECnet flip flop'=> 'Сообщение "flip flop" подавлено в связи с тем что как минимум один из двух адресов является адресом DECnet'
+    );
+        
     public function Init(){
 		$this->DbLog = Db::factory('log');;
     }
@@ -101,8 +115,23 @@ class Arpwatch extends Modules {
 		if (is_array($arg['filter']))
 			$this->_filter($sql,$arg['filter']);
 		$aRows = $this->DbLog->fetchAll($sql);
+        foreach ($aRows as &$aRow){
+            $aRow['event'] = isset($this->_event[$aRow['event']])?$this->_event[$aRow['event']]:$aRow['event'];
+        }
+        unset($aRow); 
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
 		return $aData;
 	}
+    
+    public function GetEvents(){
+        $aResult = array();
+        foreach ($this->_event as $k=>$v){
+            $aResult[] = array(
+                'id'   => $k,
+                'text' => $v
+            );
+        } 
+        return $aResult;
+    }
 }

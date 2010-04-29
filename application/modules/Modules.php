@@ -170,6 +170,43 @@ abstract class Modules {
 		return AppResponse::failure('Метод не найден!');
 	}
 
+	protected function _filter(Zend_Db_Select &$sql, array $filter)  
+	{
+		foreach ($filter as $flt){
+			$value = Utils::decode($flt['data']['value']);
+			$field=$flt['field'];
+			switch($flt['data']['type']){
+				case 'string' : 
+					$sql->where("$field LIKE ?", "%".str_replace('*','%',$value)."%"); 
+				break;
+				case 'list' : 
+					if (strstr($value,',')){
+						$sql->where("$field IN (?)", explode(',',$value)); 
+					}else{
+						$sql->where("$field = ?", $value); 
+					}
+				break;
+				case 'boolean' : 
+					$sql->where("$field = ?", $value=='true'?'1':'0'); 
+				break;
+				case 'numeric' : 
+					switch ($flt['data']['comparison']) {
+						case 'eq' : $sql->where("$field = ?", $value); break;
+						case 'lt' : $sql->where("$field < ?", $value);  break;
+						case 'gt' : $sql->where("$field > ?", $value);  break;
+					}
+				break;
+				case 'date' : 
+					switch ($flt['data']['comparison']) {
+						case 'eq' : $sql->where("$field = ?", date('Y-m-d',strtotime($value))); break;
+						case 'lt' : $sql->where("$field < ?", date('Y-m-d',strtotime($value))); break;
+						case 'gt' : $sql->where("$field > ?", date('Y-m-d',strtotime($value))); break;
+					}
+				break;
+			}
+		}
+	}
+
 	protected function _getAllParams(){
 		return $this->params;
 	}

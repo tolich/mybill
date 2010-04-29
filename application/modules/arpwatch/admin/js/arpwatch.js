@@ -1,4 +1,5 @@
 Ext.namespace('Ext.app.Arpwatch');
+
 Ext.app.Arpwatch.Show = function(config){
 	return new Ext.Action(Ext.apply({
 		text: 'Мониторинг IP/MAC на основе arpwatch',
@@ -198,7 +199,17 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 		    {type: 'string',  	dataIndex: 'id'},
 		    {type: 'string',  	dataIndex: 'datelog'},
 		    {type: 'string',  	dataIndex: 'source'},
-		    {type: 'string', 	dataIndex: 'event'},
+		    {
+		      type: 'list',  
+              dataIndex: 'event',
+		      //options: [],
+			  store: new Ext.data.JsonStore({
+			  	url: App.proxy('/ajax/modules/arpwatch/act/getevents')
+			  	,fields: ['id', 'text']
+				,id:'id'
+			  }),
+		      phpMode: true
+            },
 		    {type: 'string', 	dataIndex: 'ip'},
 		    {type: 'string', 	dataIndex: 'newmac'},
 		    {type: 'string', 	dataIndex: 'oldmac'},
@@ -247,6 +258,9 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 			id: 'ip'
 			,header: "IP Адрес"
 			,dataIndex: 'ip'
+            ,renderer: function(v){
+                return String.format("<div id='ip'>{0}</div>",v);
+            }
 		}, {
 			id: 'newmac'
 			,header: "Новый MAC"
@@ -340,3 +354,13 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 	}
 });
 Ext.reg('arpwatchgrid', Ext.app.Arpwatch.Grid);
+Ext.onReady(function(){
+    new Ext.ToolTip({        
+        width: 200,
+        autoLoad: {url: 'ajax-tip.html'},
+        dismissDelay: 15000 ,// auto hide after 15 seconds
+        target: 'ip',
+        closable: true
+    });
+    Ext.QuickTips.init();
+});

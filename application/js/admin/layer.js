@@ -35,7 +35,9 @@ Ext.app.Layer=function(){
 	if (App.settings.users['info-panel-items']) {
 		for (var i = 0; i < App.settings.users['info-panel-items'].length; i++) {
 			var p = App.settings.users['info-panel-items'][i];
-			info_tab_items.push(p);
+            if (p.xtype&&Ext.ComponentMgr.isRegistered(p.xtype)){
+    			info_tab_items.push(p);
+            }
 		}
 	}
 	return new Ext.Viewport({
