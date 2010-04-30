@@ -482,7 +482,7 @@ class Paycard extends Modules {
 	/**
 	 * Добавляет в Zend_Db_Select условие из массива фильтров
 	 */
-	private function _filter(Zend_Db_Select &$sql, array $filter)  
+	protected function _filter(Zend_Db_Select &$sql, array $filter)  
 	{
 		foreach ($filter as $flt){
 			$value = Utils::decode($flt['data']['value']);

@@ -155,7 +155,7 @@ class Context {
     public static function GetUserData($key=null)
     {
         $aUserData = self::Get()->_UserData;
-    	if ($key&&isset($aUserData[$key]))
+    	if (null!==$key && array_key_exists($key, $aUserData))
    			return $aUserData[$key];
    		else
    			return $aUserData;
@@ -238,7 +238,7 @@ class Context {
 	public static function GetAcl($key=null)
 	{
 	    $aAcl = self::Get()->_Acl;
-    	if ($key && isset($aAcl[$key]))
+    	if (null!==$key && array_key_exists($key, $aAcl))
 			return $aAcl[$key];
    		else
    			return $aAcl;
@@ -258,7 +258,7 @@ class Context {
 	public static function GetSettings($key=null)
 	{
 	    $aSettings = self::Get()->_Settings;
-    	if ($key && $aSettings[$key])
+    	if (null!==$key && array_key_exists($key, $aSettings))
 			return $aSettings[$key];
    		else
    			return $aSettings;
@@ -278,7 +278,7 @@ class Context {
 	public static function GetModules($key=null)
 	{
 	    $aModules = self::Get()->_Modules;
-    	if ($key && $aModules[$key])
+    	if (null!==$key && array_key_exists($key, $aModules))
 			return $aModules[$key];
    		else
    			return $aModules;

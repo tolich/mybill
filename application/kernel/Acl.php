@@ -343,7 +343,15 @@ class Acl {
 	 */
 	public function getRightsList($module){
 		$aResult = array();
-		foreach($this->rn as $k=>$aVal){
+		$aResult = array();
+		$oManager = new Manager();
+		$aModules = $oManager->GetModules();
+		$rn = $this->rn;
+		foreach ($aModules as $mod=>$allow){
+			$oModule = new $mod();
+			$rn = array_merge_recursive($rn, $oModule->rn);
+		}
+		foreach($rn as $k=>$aVal){
 			if (in_array($module,array_keys($aVal))) {
 				$aResult[] = $k;
 			};

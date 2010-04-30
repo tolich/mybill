@@ -165,6 +165,7 @@ App.register(Ext.extend(Ext.app.Module, {
 Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
+        this.uid = Ext.id();
 //		function username(v, p, r){
 //	        p.attr = 'ext:qtip="'+
 //				r.get('surname')+' '+r.get('name')+'<br>'+r.get('address')+'"';
@@ -224,8 +225,33 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 					return false;
 				};
 			});
-			Ext.getCmp('arpwatch-clear-filter').setDisabled(!filtered);
+			Ext.getCmp(this.uid+'arpwatch-clear-filter').setDisabled(!filtered);
 		});
+
+        var cellTips = new Ext.ux.plugins.grid.CellToolTips({
+            ajaxTips:{
+                field: 'ip'
+                ,tpl: [
+                    '<table>',
+                    '<tr><td>Логин:</td><td><b>{username}</b></td></tr>',
+                    '<tr><td>Имя, фамилия:</td><td><b>{name}</b></td></tr>',
+                    '<tr><td>Адрес:</td><td><b>{address}</b></td></tr>',
+                    '<tr><td>IP:</td><td><b>{ip}</b></td></tr>',
+                    '<tr><td>MAC:</td><td><b>{mac}</b></td></tr>',
+                    '<tr><td>Последнее подключение к интернет:</td><td><b>{inet}</b></td></tr>',
+                    '<tr><td>Подключался с:</td><td><b>{station}</b></td></tr>',
+                    '</table>'
+                ]
+                ,url: '/ajax/modules/arpwatch/act/gettips'
+            }
+            ,tipConfig: {
+                title: 'Информация о владельце IP',
+                anchor: 'left',
+                autoHide: false,
+                closable: true,
+                width: 400
+            }
+        });
 
 		var cm = new Ext.grid.ColumnModel([arrower
 		,{
@@ -258,9 +284,6 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 			id: 'ip'
 			,header: "IP Адрес"
 			,dataIndex: 'ip'
-            ,renderer: function(v){
-                return String.format("<div id='ip'>{0}</div>",v);
-            }
 		}, {
 			id: 'newmac'
 			,header: "Новый MAC"
@@ -296,13 +319,13 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 				groupTextTpl: '{text} ({[values.rs.length]} {["сессий"]})',
  				onLoad: Ext.emptyFn
 			})
-			,plugins:[arrower,filters]
+			,plugins:[arrower,filters,cellTips]
 			,trackMouseOver: true
 			,autoScroll :true
 			,loadMask: true
 			,tbar:[{
 				text: 'Очистить фильтр'
-				,id: 'arpwatch-clear-filter'
+				,id: this.uid+'arpwatch-clear-filter'
 				,handler: function(){
 					filters.clearFilters();
 				}
@@ -354,13 +377,3 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 	}
 });
 Ext.reg('arpwatchgrid', Ext.app.Arpwatch.Grid);
-Ext.onReady(function(){
-    new Ext.ToolTip({        
-        width: 200,
-        autoLoad: {url: 'ajax-tip.html'},
-        dismissDelay: 15000 ,// auto hide after 15 seconds
-        target: 'ip',
-        closable: true
-    });
-    Ext.QuickTips.init();
-});

@@ -37,6 +37,7 @@ class Arpwatch extends Modules {
 			'all'=>array(
 				'arpwatch'=>array(
 					'getevents',
+                    'gettips'
 				),
 			),
 //			'edit'=>array(
@@ -83,7 +84,7 @@ class Arpwatch extends Modules {
 
     private $_event = array(
         'new activity'            => 'Ethernet/IP был использован впервые за 6 месяцев',
-        'new station'             => 'Ethernet/IP был использована впервые',
+        'new station'             => 'Ethernet/IP был использован впервые',
         'flip flop'               => 'Замена адреса с одного на другой (оба были в списке)',
         'changed ethernet address'=> 'Замена на новый MAC адрес Ethernet',
         'ethernet broadcast'      => 'MAC-адрес хоста является широковещательным', 
@@ -132,6 +133,42 @@ class Arpwatch extends Modules {
                 'text' => $v
             );
         } 
+        return $aResult;
+    }
+    
+    public function GetTips(){
+        $oUser = new Users();
+        $aUser = $oUser->GetUserInfo(array(
+            'in_ip'=>$this->_getParam('ip')
+        ));
+        if (false !== $aUser){
+            $sql = $this->Db->select()
+                            ->from('radacct', array('callingstationid','acctstarttime'))
+                            ->where('username=?',$aUser['username'])
+                            ->order('acctstarttime desc')
+                            ->limit('1');
+            $aInet = $this->Db->fetchRow($sql);
+            $sql = $this->Db->select()
+                            ->distinct()
+                            ->from('radacct', array('callingstationid'))
+                            ->where('username=?',$aUser['username'])
+                            ->order('acctstarttime desc');
+            $aStationId = $this->Db->fetchRow($sql);
+            Utils::encode($aUser);
+            $aResult = array(
+                'username' => $aUser['username'],
+                'name'     => "{$aUser['name']} {$aUser['surname']}",
+                'address'  => $aUser['address'],
+                'ip'       => $aUser['in_ip'],
+                'mac'      => preg_replace('/\s*\|\s*/', ', ', $aUser['mac']),
+                'inet'     => implode(', ', $aInet),
+                'station'  => implode(', ', $aStationId)
+            );
+        } else {
+            $aResult = array(
+                'username' => 'Не найден!'
+            );
+        }
         return $aResult;
     }
 }
