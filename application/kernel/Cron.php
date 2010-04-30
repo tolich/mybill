@@ -23,10 +23,10 @@ class Cron {
 	public function daily(){
 		AppLog::output("\tdaily");
 		$this->ChangeTariff();
-		$this->DailyFee();
-		$this->MonthlyFee();
 		$this->Deactivate();
 		$this->Activate();
+		$this->DailyFee();
+		$this->MonthlyFee();
 		$this->ChangeAcctPeriod();
 		$this->CloseCreditSessions();
 	}
