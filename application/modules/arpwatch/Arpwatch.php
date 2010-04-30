@@ -179,20 +179,26 @@ class Arpwatch extends Modules {
     }
 
     public function GetNewMacTips(){
-        $sql = $this->Db->select()
-                        ->distinct()
-                        ->from('usergroup', array('username'))
-                        ->where('mac like ?',"%{$this->_getParam('newmac')}%")
-                        ->limit('5');
-        $aUsers = $this->Db->fetchCol($sql);
-        if(false === $aUsers) $aUsers = array();
-        $sql = $this->Db->select()
-                        ->distinct()
-                        ->from('radacct', array('username'))
-                        ->where('callingstationid like ?',"%{$this->_getParam('newmac')}%")
-                        ->order('acctstarttime desc');
-        $aInet = $this->Db->fetchCol($sql);
-        if(false === $aInet) $aInet = array();
+        $mac = $this->_getParam('newmac');
+        if ($mac){
+            $sql = $this->Db->select()
+                            ->distinct()
+                            ->from('usergroup', array('username'))
+                            ->where('mac like ?',"%{$mac}%")
+                            ->limit('5');
+            $aUsers = $this->Db->fetchCol($sql);
+            if(false === $aUsers) $aUsers = array();
+            $sql = $this->Db->select()
+                            ->distinct()
+                            ->from('radacct', array('username'))
+                            ->where('callingstationid like ?',"%{$mac}%")
+                            ->order('acctstarttime desc');
+            $aInet = $this->Db->fetchCol($sql);
+            if(false === $aInet) $aInet = array();
+        } else {
+            $aUsers = array();
+            $aInet = array();
+        }
         $aResult = array(
             'username' => implode(', ', $aUsers),
             'inet'     => implode(', ', $aInet)
@@ -201,20 +207,26 @@ class Arpwatch extends Modules {
     }
 
     public function GetOldMacTips(){
-        $sql = $this->Db->select()
-                        ->distinct()
-                        ->from('usergroup', array('username'))
-                        ->where('mac like ?',"%{$this->_getParam('oldmac')}%")
-                        ->limit('5');
-        $aUsers = $this->Db->fetchCol($sql);
-        if(false === $aUsers) $aUsers = array();
-        $sql = $this->Db->select()
-                        ->distinct()
-                        ->from('radacct', array('username'))
-                        ->where('callingstationid like ?',"%{$this->_getParam('oldmac')}%")
-                        ->order('acctstarttime desc');
-        $aInet = $this->Db->fetchCol($sql);
-        if(false === $aInet) $aInet = array();
+        $mac = $this->_getParam('oldmac');
+        if ($mac){
+            $sql = $this->Db->select()
+                            ->distinct()
+                            ->from('usergroup', array('username'))
+                            ->where('mac like ?',"%{$mac}%")
+                            ->limit('5');
+            $aUsers = $this->Db->fetchCol($sql);
+            if(false === $aUsers) $aUsers = array();
+            $sql = $this->Db->select()
+                            ->distinct()
+                            ->from('radacct', array('username'))
+                            ->where('callingstationid like ?',"%{$mac}%")
+                            ->order('acctstarttime desc');
+            $aInet = $this->Db->fetchCol($sql);
+            if(false === $aInet) $aInet = array();
+        } else {
+            $aUsers = array();
+            $aInet = array();
+        }
         $aResult = array(
             'username' => implode(', ', $aUsers),
             'inet'     => implode(', ', $aInet)
