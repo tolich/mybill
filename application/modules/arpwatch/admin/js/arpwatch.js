@@ -229,23 +229,35 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
 		});
 
         var cellTips = new Ext.ux.plugins.grid.CellToolTips({
-            ajaxTips:{
-                field: 'ip'
-                ,tpl: [
-                    '<table>',
-                    '<tr><td>Логин:</td><td><b>{username}</b></td></tr>',
-                    '<tr><td>Имя, фамилия:</td><td><b>{name}</b></td></tr>',
-                    '<tr><td>Адрес:</td><td><b>{address}</b></td></tr>',
-                    '<tr><td>IP:</td><td><b>{ip}</b></td></tr>',
-                    '<tr><td>MAC:</td><td><b>{mac}</b></td></tr>',
-                    '<tr><td>Последнее подключение к интернет:</td><td><b>{inet}</b></td></tr>',
-                    '<tr><td>Подключался с:</td><td><b>{station}</b></td></tr>',
-                    '</table>'
-                ]
-                ,url: '/ajax/modules/arpwatch/act/gettips'
-            }
+            ajaxTips:[{
+                field: 'ip',
+                tpl: ['<table>', 
+                      '<tr><td>Логин:</td><td><b>{username}</b></td></tr>', 
+                      '<tr><td>Имя, фамилия:</td><td><b>{name}</b></td></tr>', 
+                      '<tr><td>Адрес:</td><td><b>{address}</b></td></tr>', 
+                      '<tr><td>IP:</td><td><b>{ip}</b></td></tr>', 
+                      '<tr><td>MAC:</td><td><b>{mac}</b></td></tr>', 
+                      '<tr><td>Последнее подключение:</td><td><b>{inet}</b></td></tr>', 
+                      '<tr><td>Подключался с:</td><td><b>{station}</b></td></tr>', 
+                      '</table>'],
+                url: '/ajax/modules/arpwatch/act/getiptips'
+            },{
+                field: 'newmac',
+                tpl: ['<table>', 
+                      '<tr><td>Закреплен за пользователями:</td><td><b>{username}</b></td></tr>', 
+                      '<tr><td>Подключались пользователи:</td><td><b>{inet}</b></td></tr>', 
+                      '</table>'],
+                url: '/ajax/modules/arpwatch/act/getnewmactips'
+            },{
+                field: 'oldmac',
+                tpl: ['<table>', 
+                      '<tr><td>Закреплен за пользователями:</td><td><b>{username}</b></td></tr>', 
+                      '<tr><td>Подключались пользователи:</td><td><b>{inet}</b></td></tr>', 
+                      '</table>'],
+                url: '/ajax/modules/arpwatch/act/getoldmactips'
+            }]
             ,tipConfig: {
-                title: 'Информация о владельце IP',
+                title: 'Дополнительная информация',
                 anchor: 'left',
                 autoHide: false,
                 closable: true,

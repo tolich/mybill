@@ -37,7 +37,8 @@ class Arpwatch extends Modules {
 			'all'=>array(
 				'arpwatch'=>array(
 					'getevents',
-                    'gettips'
+                    'getiptips',
+                    'getmactips'
 				),
 			),
 //			'edit'=>array(
@@ -136,7 +137,7 @@ class Arpwatch extends Modules {
         return $aResult;
     }
     
-    public function GetTips(){
+    public function GetIpTips(){
         $oUser = new Users();
         $aUser = $oUser->GetUserInfo(array(
             'in_ip'=>$this->_getParam('ip')
@@ -148,6 +149,7 @@ class Arpwatch extends Modules {
                             ->order('acctstarttime desc')
                             ->limit('1');
             $aInet = $this->Db->fetchRow($sql);
+            if(false === $aInet) $aInet = array();
             $sql = $this->Db->select()
                             ->distinct()
                             ->from('radacct', array('callingstationid'))
@@ -155,6 +157,7 @@ class Arpwatch extends Modules {
                             ->order('acctstarttime desc')
                             ->limit('5');
             $aStationId = $this->Db->fetchCol($sql);
+            if(false === $aStationId) $aStationId = array();
             Utils::encode($aUser);
             $aResult = array(
                 'username' => $aUser['username'],
@@ -172,4 +175,49 @@ class Arpwatch extends Modules {
         }
         return $aResult;
     }
+
+    public function GetNewMacTips(){
+        $sql = $this->Db->select()
+                        ->distinct()
+                        ->from('usergroup', array('username'))
+                        ->where('mac like ?',"%{$this->_getParam('newmac')}%")
+                        ->limit('5');
+        $aUsers = $this->Db->fetchCol($sql);
+        if(false === $aUsers) $aUsers = array();
+        $sql = $this->Db->select()
+                        ->distinct()
+                        ->from('radacct', array('username'))
+                        ->where('callingstationid like ?',"%{$this->_getParam('newmac')}%")
+                        ->order('acctstarttime desc');
+        $aInet = $this->Db->fetchRow($sql);
+        if(false === $aInet) $aInet = array();
+        $aResult = array(
+            'username' => implode(', ', $aUsers),
+            'inet'     => implode(', ', $aInet)
+        );
+        return $aResult;
+    }
+
+    public function GetOldMacTips(){
+        $sql = $this->Db->select()
+                        ->distinct()
+                        ->from('usergroup', array('username'))
+                        ->where('mac like ?',"%{$this->_getParam('oldmac')}%")
+                        ->limit('5');
+        $aUsers = $this->Db->fetchCol($sql);
+        if(false === $aUsers) $aUsers = array();
+        $sql = $this->Db->select()
+                        ->distinct()
+                        ->from('radacct', array('username'))
+                        ->where('callingstationid like ?',"%{$this->_getParam('oldmac')}%")
+                        ->order('acctstarttime desc');
+        $aInet = $this->Db->fetchRow($sql);
+        if(false === $aInet) $aInet = array();
+        $aResult = array(
+            'username' => implode(', ', $aUsers),
+            'inet'     => implode(', ', $aInet)
+        );
+        return $aResult;
+    }
+
 }
