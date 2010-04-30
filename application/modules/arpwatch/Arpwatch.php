@@ -224,10 +224,14 @@ class Arpwatch extends Modules {
 
     private function _mac($mac){
         $aMac = split(':',$mac);
-        foreach ($aMac as &$v){
-            $v = sprintf('%02s',$v);
+        if (count($aMac)==6){
+            foreach ($aMac as &$v){
+                $v = sprintf('%02s',$v);
+            }
+            unset($v);
+            return implode(':',$aMac);
+        } else {
+            return $mac;
         }
-        unset($v);
-        return implode(':',$aMac);
     }
 }
