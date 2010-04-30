@@ -153,7 +153,7 @@ class Arpwatch extends Modules {
                             ->from('radacct', array('callingstationid'))
                             ->where('username=?',$aUser['username'])
                             ->order('acctstarttime desc');
-            $aStationId = $this->Db->fetchRow($sql);
+            $aStationId = $this->Db->fetchCol($sql);
             Utils::encode($aUser);
             $aResult = array(
                 'username' => $aUser['username'],
