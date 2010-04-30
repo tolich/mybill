@@ -119,6 +119,8 @@ class Arpwatch extends Modules {
 		$aRows = $this->DbLog->fetchAll($sql);
         foreach ($aRows as &$aRow){
             $aRow['event'] = isset($this->_event[$aRow['event']])?$this->_event[$aRow['event']]:$aRow['event'];
+            $aRow['newmac'] = $this->_mac($aRow['newmac']);
+            $aRow['oldmac'] = $this->_mac($aRow['oldmac']);
         }
         unset($aRow); 
 		$aData = array( 'totalCount'=>$aCount,
@@ -220,4 +222,12 @@ class Arpwatch extends Modules {
         return $aResult;
     }
 
+    private function _mac($mac){
+        $aMac = split(':',$mac);
+        foreach ($aMac as &$v){
+            $v = sprintf('%02s',$v);
+        }
+        unset($v);
+        return implode(':',$aMac);
+    }
 }
