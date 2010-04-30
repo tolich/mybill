@@ -200,6 +200,7 @@ class Arpwatch extends Modules {
             $aInet = array();
         }
         $aResult = array(
+            'newmac'   => $mac, 
             'username' => implode(', ', $aUsers),
             'inet'     => implode(', ', $aInet)
         );
@@ -228,6 +229,7 @@ class Arpwatch extends Modules {
             $aInet = array();
         }
         $aResult = array(
+            'oldmac'   => $mac, 
             'username' => implode(', ', $aUsers),
             'inet'     => implode(', ', $aInet)
         );

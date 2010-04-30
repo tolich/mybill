@@ -232,10 +232,10 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
             ajaxTips:[{
                 field: 'ip',
                 tpl: ['<table>', 
+                      '<tr valign="top"><td>IP:</td><td><b>{ip}</b></td></tr>', 
                       '<tr valign="top"><td>Логин:</td><td><b>{username}</b></td></tr>', 
                       '<tr valign="top"><td>Имя, фамилия:</td><td><b>{name}</b></td></tr>', 
                       '<tr valign="top"><td>Адрес:</td><td><b>{address}</b></td></tr>', 
-                      '<tr valign="top"><td>IP:</td><td><b>{ip}</b></td></tr>', 
                       '<tr valign="top"><td>MAC:</td><td><b>{mac}</b></td></tr>', 
                       '<tr valign="top"><td>Последнее подключение:</td><td><b>{inet}</b></td></tr>', 
                       '<tr valign="top"><td>Подключался с:</td><td><b>{station}</b></td></tr>', 
@@ -244,6 +244,7 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
             },{
                 field: 'newmac',
                 tpl: ['<table>', 
+                      '<tr valign="top"><td>MAC:</td><td><b>{newmac}</b></td></tr>', 
                       '<tr valign="top"><td>Закреплен за пользователями:</td><td><b>{username}</b></td></tr>', 
                       '<tr valign="top"><td>Подключались пользователи:</td><td><b>{inet}</b></td></tr>', 
                       '</table>'],
@@ -251,6 +252,7 @@ Ext.app.Arpwatch.Grid = Ext.extend(Ext.grid.GridPanel, {
             },{
                 field: 'oldmac',
                 tpl: ['<table>', 
+                      '<tr valign="top"><td>MAC:</td><td><b>{oldmac}</b></td></tr>', 
                       '<tr valign="top"><td>Закреплен за пользователями:</td><td><b>{username}</b></td></tr>', 
                       '<tr valign="top"><td>Подключались пользователи:</td><td><b>{inet}</b></td></tr>', 
                       '</table>'],
