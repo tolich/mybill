@@ -423,7 +423,7 @@ Ext.extend( Ext.ux.plugins.grid.CellToolTips, Ext.util.Observable, {
         Ext.apply(this.tipConfig, {
             target:      grid.getView().mainBody,
             delegate:    '.x-grid3-cell-inner',
-            trackMouse:  true,
+            //trackMouse:  true,
             renderTo:    document.body,
             finished:	 false
         });
@@ -460,7 +460,7 @@ Ext.extend( Ext.ux.plugins.grid.CellToolTips, Ext.util.Observable, {
         		return false;
         	} else {
 			tip.body.dom.innerHTML = ctt.tipTpls[tipId].apply( cellRec.data );
-		}       		
+		    }       		
         } else {
         	tip.body.dom.innerHTML = tip.ctt.tipTpls[tipId].apply( tip.tipdata );
         }
@@ -474,6 +474,7 @@ Ext.extend( Ext.ux.plugins.grid.CellToolTips, Ext.util.Observable, {
      */
     ,hideTip: function(tip) {
     	tip.finished = false;
+        tip.loading = false;
     }
     
     /**
@@ -487,16 +488,22 @@ Ext.extend( Ext.ux.plugins.grid.CellToolTips, Ext.util.Observable, {
      * @param {String} tipid Id of the tooltip (= field name)
      */
     ,loadDetails: function(data, tip, grid, ctt, tipid) {
-    	Ext.Ajax.request({
-    		url:	ctt.tipUrls[tipid],
-    		params:	data,
-    		method: 'POST',
-    		success:	function(resp, opt) {
-    			tip.finished = true;
-    			tip.tipdata  = Ext.decode(resp.responseText);
-    			tip.show();
-    		}
-    	});
+        if (!tip.loading) {
+            tip.loading = true;
+            Ext.Ajax.request({
+                url: ctt.tipUrls[tipid],
+                params: data,
+                method: 'POST',
+                callback: function(){
+                    tip.loading = false;
+                },
+                success: function(resp, opt){
+                    tip.finished = true;
+                    tip.tipdata = Ext.decode(resp.responseText);
+                    tip.show();
+                }
+            });
+        }
     }
 
 }); // End of extend
