@@ -189,7 +189,7 @@ class Arpwatch extends Modules {
                         ->from('radacct', array('username'))
                         ->where('callingstationid like ?',"%{$this->_getParam('newmac')}%")
                         ->order('acctstarttime desc');
-        $aInet = $this->Db->fetchRow($sql);
+        $aInet = $this->Db->fetchCol($sql);
         if(false === $aInet) $aInet = array();
         $aResult = array(
             'username' => implode(', ', $aUsers),
@@ -211,7 +211,7 @@ class Arpwatch extends Modules {
                         ->from('radacct', array('username'))
                         ->where('callingstationid like ?',"%{$this->_getParam('oldmac')}%")
                         ->order('acctstarttime desc');
-        $aInet = $this->Db->fetchRow($sql);
+        $aInet = $this->Db->fetchCol($sql);
         if(false === $aInet) $aInet = array();
         $aResult = array(
             'username' => implode(', ', $aUsers),
