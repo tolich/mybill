@@ -348,6 +348,7 @@ class Acl {
 		$aModules = $oManager->GetModules();
 		$rn = $this->rn;
 		foreach ($aModules as $mod=>$allow){
+		    $mod = ucfirst($mod);
 			$oModule = new $mod();
 			$rn = array_merge_recursive($rn, $oModule->rn);
 		}
@@ -371,6 +372,7 @@ class Acl {
 		$aModules = $oManager->GetModules();
 		$rn = $this->rn;
 		foreach ($aModules as $mod=>$allow){
+		    $mod = ucfirst($mod);
 			$oModule = new $mod();
 			$rn = array_merge_recursive($rn, $oModule->rn);
 		}
