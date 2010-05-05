@@ -1,6 +1,7 @@
 function AppProxy(url){
 	return {
 		url: function(req){
+            if (App.locked===false) return false;
 			if (req) {
 				var callback = req.callback;
 				var success = req.success;
