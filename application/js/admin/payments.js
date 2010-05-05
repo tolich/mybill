@@ -431,7 +431,7 @@ Ext.app.Payments.Grid = Ext.extend(Ext.grid.GridPanel, {
 					'select':function(c){
 						status = c.getValue();
 						store.baseParams.status = status;
-						store.reload();
+						store.load();
 					}
 				}
 			})]
