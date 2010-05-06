@@ -58,6 +58,7 @@
 	define('DOCUMENT_ROOT',				realpath(dirname(__FILE__).'/..').'/');
 	define('MODULES_DIR', 				DOCUMENT_ROOT.'application/modules/');
 	define('CACHE_DIR', 				DOCUMENT_ROOT.'cache/');
+	define('UX_DIR', 				    DOCUMENT_ROOT.'application/shared/js/ux/');
 	define('LOGS_DIR', 					DOCUMENT_ROOT.'logs/');
 	define('TMP_DIR', 					DOCUMENT_ROOT.'tmp/');
 	define('WSDL_DIR', 					DOCUMENT_ROOT.'soap/');

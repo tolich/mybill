@@ -26,7 +26,6 @@
 	    $zend ='zend_';	
 		if (substr(strtolower($name), 0, strlen($zend)) == $zend)
 			Zend_Loader::loadClass($name);
-		else
-	        if (Zend_Loader::isReadable($name.'.php'))
-	        	require_once ($name.'.php');
+		else if (Zend_Loader::isReadable($name.'.php'))
+	        require_once ($name.'.php');
 	}
