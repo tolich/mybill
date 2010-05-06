@@ -11,6 +11,10 @@ Ext.ns('Ext.app');
 Ext.app.Module = function(cfg){
     Ext.apply(this, cfg);
     Ext.app.Module.superclass.constructor.call(this);
+    this.depends = this.depends || [];
+    if (false === Ext.isArray(this.depends)){
+        this.depends = [this.depends];
+    }
     this.init();
 }
 
@@ -43,6 +47,37 @@ Ext.extend(Ext.app.Module, Ext.util.Observable, {
 		this.context.containsKey(this.moduleId);
 	}
 	,setSettings: Ext.emptyFn
+    ,loadDepends: function(callback){
+        var callback = (typeof callback == 'function' ? callback : Ext.emptyFn);
+        var js = [];
+        Ext.each(this.depends, function(i){
+            if (this.app.depends.indexOf(i) === -1) {
+                js.push(i);
+            }
+        },this);
+        if (js.length) {
+            this.app.request({
+                url: 'ajax/modules/load',
+                mask: 'Загрузка зависимостей...',
+                params: {
+                    js: Ext.encode(js)
+                },
+                success: function(r, o, res){
+                    if (res.length == js.length) {
+                        Ext.each(res, function(i){
+                            this.app.addScript(i['content']);
+                            this.app.depends.push(i['filename']);
+                        },this);
+                        callback();
+                    }
+                },
+                scope: this
+            })
+        }
+        else {
+            callback();
+        }
+    }
 });
 
 Ext.app.App = function(cfg){
@@ -59,6 +94,7 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 	,mainsettings: {}
 	,rights: {allow:[],deny:null}
     ,locked: false
+    ,depends: []
     ,emptyMod:{
         html: 'Модуль не установлен'
         ,style: 'color:gray;padding:5px;font:10px verdana,tahoma,arial,sans-serif'
@@ -104,16 +140,22 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 	,setRights: function(rights){
 		this.rights=rights;
 	}
-	,addModuleMenuItem: function(item){
-		this.moduleItems.add(item);
+	,addModuleMenuItem: function(id, item){
+		this.moduleItems.add(id, item);
 	}
 	,getModuleMenu: function(){
 		var items = [Ext.app.Modules.List()];
 		if (this.moduleItems.getCount()){
 			items.unshift('-');
-			this.moduleItems.each(function(item){
-				items.unshift(item());
-			});
+			this.moduleItems.eachKey(function(id, item){
+                var action = item();
+                var handler = action.initialConfig.handler;
+                action.setHandler(function(){
+                    var module = this.getModule(id);
+                    module.loadDepends(handler);
+                }.createDelegate(this));
+				items.unshift(action);
+			},this);
 		}
 		return items;
 	}
@@ -178,8 +220,7 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 		Ext.Ajax.request({
 			url : App.proxy(config.url)
 			,callback: function(o,s,r){
-				if (mask)
-					mask.hide();
+				if (mask) mask.hide();
 				config.callback.call(this,o,s,r);
 			}
 			,success: function(r, o){
@@ -194,6 +235,22 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 			,scope: config.scope
 		});
 	}
+//    ,getHtmlHead: function() {
+//        return document.getElementsByTagName("head")[0] || document.documentElement;
+//    }
+    ,addScript: function(data) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        if (Ext.isIE) {
+            script.text = data;
+        }
+        else {
+            script.appendChild(document.createTextNode(data));
+        }
+
+        var head = document.getElementsByTagName("head")[0] || document.documentElement;
+        head.appendChild(script);
+    }
 	,initApp: function(){
 		var mask = new Ext.LoadMask(Ext.getBody(), {msg:"Настройка окружения пользователя...", removeMask: true});
 		mask.show();

@@ -61,6 +61,14 @@ class Ajax_ModulesController extends Zend_Controller_Action
 		//array_walk($aResult, array('Utils', 'array_encode'));
  		$this->_helper->json($aResult);
 	}
+
+ 	public function loadAction()
+	{
+	    $oLoader = new Loader();
+        $scripts = Zend_Json::decode($this->_getParam('js'));
+		$result = $oLoader->Load($scripts);
+		$this->_helper->json($result);
+	}
 	
 	public function __call($method, $args)
 	{

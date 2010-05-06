@@ -16,7 +16,7 @@ App.register(Ext.extend(Ext.app.Module, {
 	,rightDefValues: []
 	,onInit: function(){
 		this.uid = Ext.id();
-		App.addModuleMenuItem(Ext.app.Aclmanager.Show);
+		App.addModuleMenuItem(this.moduleId, Ext.app.Aclmanager.Show);
 	}
 	,onShow: function(){
 		this.winList();

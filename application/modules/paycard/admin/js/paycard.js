@@ -37,7 +37,7 @@ App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'paycard'
 	,onInit: function(){
 		this.uid = Ext.id();
-		App.addModuleMenuItem(Ext.app.Paycard.List);
+		App.addModuleMenuItem(this.moduleId, Ext.app.Paycard.List);
 	}
 //	,onRefresh: function(){
 //		Ext.getCmp('ayment-grid').getStore().reload();

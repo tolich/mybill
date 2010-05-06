@@ -68,9 +68,9 @@ Ext.app.Arpwatch.Tab = function(){
 
 App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'arpwatch'
-	,onInit: function(){
+    ,onInit: function(){
 		this.uid = Ext.id();
-		App.addModuleMenuItem(Ext.app.Arpwatch.Show);
+		App.addModuleMenuItem(this.moduleId, Ext.app.Arpwatch.Show);
 	}
 	,onShow: function(){
 		this.winList();
