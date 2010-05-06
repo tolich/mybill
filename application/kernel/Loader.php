@@ -7,7 +7,7 @@ class Loader
             if (file_exists(UX_DIR.$filename)){
                 $aResult[] = array(
                     'filename' => $filename,
-                    'content'  => JSMin::minify(file_get_contents(UX_DIR.$filename))
+                    'content'  => file_get_contents(UX_DIR.$filename)
                 );                
             }
         }
