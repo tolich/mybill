@@ -14,13 +14,16 @@ class Snmp
 	}
 
     public function Walk(){
-        $inoctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.10.3");
-        $outoctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.16.3");
+        $inOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.10.3");
+        $aInOctets = split(' ',$inOctets);
+        $outOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.16.3");
+        $aOutOctets = split(' ',$outOctets);
         $aData = array(
-            'inoctets' => $inoctets,
-            'outoctets'=> $outoctets,
+            'inoctets' => $aInOctets[1],
+            'outoctets'=> $aOutOctets[1],
             'iface'    => 3
         );
+        AppLog::debug($aData);
         $this->Db->insert('rate',$aData);
     }
 }

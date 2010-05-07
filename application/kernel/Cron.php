@@ -43,7 +43,7 @@ class Cron {
      */
     
     public function snmpwalk(){
-        $this->obj['users']->Walk();
+        $this->obj['snmp']->Walk();
     }
 	
 	/**
