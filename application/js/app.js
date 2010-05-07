@@ -25,6 +25,7 @@ Ext.extend(Ext.app.Module, Ext.util.Observable, {
 	}
 	,onInit: Ext.emptyFn
 	,onRender: Ext.emptyFn
+    ,onLoadDepends: Ext.emptyFn
 	,tpl: new Ext.Template()
 	,tplAppend: {}
 	,render: function(){
@@ -68,6 +69,7 @@ Ext.extend(Ext.app.Module, Ext.util.Observable, {
                             this.app.addScript(i['content']);
                             this.app.depends.push(i['filename']);
                         },this);
+                        this.onLoadDepends();
                         callback();
                     }
                 },

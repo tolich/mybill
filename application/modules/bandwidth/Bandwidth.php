@@ -10,10 +10,6 @@ class Bandwidth extends Modules
 				'allow' => array(
 					'bandwidth' => array( 
 						'view',
-						'all',
-//						'edit',
-//						'delete',
-//						'submit'
 					)
 				),
 				'deny' => array(
@@ -32,10 +28,12 @@ class Bandwidth extends Modules
 					'getdata'
 				),
 			),
-//			'all'=>array(
-//				'bandwidth'=>array(
-//				),
-//			),
+			'edit'=>array(
+				'bandwidth'=>array(
+                    'getsettings',
+                    'setsettings'
+				),
+			),
 		),
 	);
 
@@ -43,8 +41,8 @@ class Bandwidth extends Modules
 		'view'=>array(
 			'bandwidth'=>'Просмотр графика',
 		),
-		'all'=>array(
-			'bandwidth'=>'Вспомагательные функции для других модулей',
+		'edit'=>array(
+			'bandwidth'=>'Настройка параметров модуля',
 		),
 	);
 
@@ -53,14 +51,19 @@ class Bandwidth extends Modules
     }
     
     public function getData(){
+        $offset = 6; //часов
+        $iface = 4; 
+
+        $time = time() - $offset*3600;
         $aData = array(
             'indata' => array(),
             'outdata'=> array()
         );
         $aPrev = array();
         $sql = $this->DbLog->select()
-                    ->from('rate', array('datecreate','inoctets','outoctets'))
-                    ->where('datecreate > adddate(now(), interval -6 hour)');
+                    ->from('bandwidth_rate', array('datecreate','inoctets','outoctets'))
+                    ->where('datecreate > ?',$time)
+                    ->where('iface = ?',$iface);
         $aAllData =  $this->DbLog->fetchAll($sql);
         foreach ($aAllData as $v){
             if (count($aPrev)){
@@ -75,12 +78,14 @@ class Bandwidth extends Modules
                     $outd = 0;
                 }
                 $inrate = ((float)$v['inoctets'] - (float)$aPrev['inoctets'] + $ind)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
+                $inrate = sprintf('%0.2f',$inrate*8/1024/1024);
                 $outrate = ((float)$v['outoctets'] - (float)$aPrev['outoctets'] + $outd)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
-                $aData['indata'][] = array((float)$v['datecreate'],$inrate/1024/1024);
-                $aData['outdata'][] = array((float)$v['datecreate'],$outrate/1024/1024);
+                $outrate = sprintf('%0.2f',$outrate*8/1024/1024);
+                $aData['indata'][] = array((float)$v['datecreate']*1000,(float)$inrate);
+                $aData['outdata'][] = array((float)$v['datecreate']*1000,(float)$outrate);
             }
             $aPrev = array(
-                'date' => (float)$v['datecreate'],
+                'datecreate' => (float)$v['datecreate'],
                 'inoctets' => (float)$v['inoctets'],
                 'outoctets' => (float)$v['outoctets'],
             );

@@ -17,33 +17,59 @@ App.register(Ext.extend(Ext.app.Module, {
         'highchart/extjs-adapter.js',
         'highchart/highcharts.src.js',
         'highchart/Ext.ux.HighchartPanel.js'
-////        'highchart/Ext.ux.HighChart.js'
     ]
 	,onInit: function(){
 		this.uid = Ext.id();
 		App.addModuleMenuItem(this.moduleId, Ext.app.Bandwidth.Show);
 	}
+    ,onLoadDepends: function(){
+        Highcharts.setOptions({
+           global: {
+              useUTC: false
+           }
+        });
+    }
 	,onShow: function(){
-		this.winList();
+		this.winChart();
 	}
-	,onList: function(){
-		this.winList();
-	}
-//	,onRefresh:function(){
-//		if (Ext.getCmp('bandwidth-grid'))
-//			Ext.getCmp('bandwidth-grid').getStore().reload();
-//		if (Ext.getCmp('bandwidth-grid-tab'))
-//			Ext.getCmp('bandwidth-grid-tab').getStore().reload();
-//	}
-	,winList : function(){ //winList
+    ,redraw: function(c){
+        App.request({
+            url: '/ajax/modules/bandwidth/act/getdata'
+            ,success: function(r,o,res){
+                var series = c.chart.series;
+                series[0].setData(res.indata, true);
+                series[1].setData(res.outdata, true);
+                c.chart.updatePosition();
+            }
+        })
+    }
+    ,winSettings: function(){
+        if (App.isAllow('bandwidth', 'edit')){
+    		var win = Ext.getCmp('win_bandwidth_settings');
+    		if (win == undefined) {
+    			var win = new Ext.Window({
+    				title: 'График загрузки внешнего канала',
+    				id: 'win_bandwidth_settings',
+    				width: 400,
+    				height: 250,
+    				minWidth: 400,
+    				minHeight: 250,
+    				layout: 'fit',
+    				plain: true	
+    				,modal: true
+    			});
+    		}
+    		win.show();
+        }
+    }
+	,winChart : function(){ //winChart
 	    var chart = new Ext.ux.HighchartPanel({
-                            title: 'График',
-        titleCollapse: true,
-        layout:'fit',
-        border: true,
-        chartConfig: {
+            title: 'График',
+            layout:'fit',
+            border: false,
+            chartConfig: {
 				chart: {
-					defaultSeriesType: 'spline'
+					defaultSeriesType: 'spline',
 				},
 				title: {
 					text: 'Загрузка канала'
@@ -53,11 +79,13 @@ App.register(Ext.extend(Ext.app.Module, {
 				},
 				xAxis: {
                     type: 'datetime',
+                    gridLineWidth: 1,
 					title: {
 						text: 'Время'
 					}
 				},
 				yAxis: {
+                    gridLineWidth: 1,
 					title: {
 						text: 'МБит за секунду'
 					}
@@ -67,8 +95,7 @@ App.register(Ext.extend(Ext.app.Module, {
 				},
 				tooltip: {
 					formatter: function() {
-			                return '<b>'+ this.series.name +'</b><br/>'+
-							this.x +': '+ this.y +'ТАC';
+		                return String.format('<b>{0}</b><br>Скорость: {2} МБит<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), this.y);
 					}
 				},
 				plotOptions: {
@@ -80,57 +107,45 @@ App.register(Ext.extend(Ext.app.Module, {
                         lineWidth: 1,
                         marker: {
                             enabled: false,
+                            symbol: 'triangle-down',
+                            radius: 2,
                             states: {
-                                hover: {
-                                    enabled: true,
-                                    radius: 10
-                                }
+                               hover: {
+                                  enabled: true
+                               }
                             }
                         },
-                        shadow: false,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        }
+                        shadow: false
                     }
 					,spline: {
-						cursor: 'pointer',
-						point: {
-							events: {
-								click: function() {
-									alert ('this.x: '+ this.x +'\nthis.y: '+ this.y);
-								}
-							}
-						}
+                        marker: {
+                            enabled: false,
+                            symbol: 'triangle',
+                            radius: 2,
+                            states: {
+                               hover: {
+                                  enabled: true
+                               }
+                            }
+                        },
 					}
 				},
 				series: [{
                     type:'areaspline',
 					name: 'Входящий трафик',
                     data: []
-					//dataURL: '/ajax/modules/bandwidth/act/getindata'
 				},{
 					name: 'Исходящий трафик',
                     data: []
-					//dataURL: '/ajax/modules/bandwidth/act/getoutdata'
                 }]
-
-        }
-                ,bbar: [{
-                    text: 'Обновить'
-                    ,handler: function(){
-                        App.request({
-                            url: '/ajax/modules/bandwidth/act/getdata'
-                            ,success: function(r,o,res){
-                                var series = chart.chart.series;
-                                series[0].setData(res.indata, true);
-                                series[1].setData(res.outdata, true);
-                            }
-                        })
-                    }
-                    ,scope: this
-                }]
+            }
+            ,bbar: [{
+                text: 'Обновить'
+                ,handler: function(){
+                    this.redraw(chart);
+                }
+                ,scope: this
+            }]
         });
 
 		var win = Ext.getCmp('win_bandwidth');
@@ -151,15 +166,23 @@ App.register(Ext.extend(Ext.app.Module, {
 						win.close();
 						Ext.app.Bandwidth.Tab();
 					}
-				}]
+				},{
+					id:'gear'
+            		,disabled: App.isDeny('bandwidth', 'edit')
+					,handler:function(){
+						this.winSettings();
+					}
+                    ,scope: this
+                }]
 				,items: new Ext.TabPanel({
                     activeTab: 0,
+                    border: false,
                     items: [
                         chart
                     ]
                 })
 			});
 		}
-		win.show();
-	}//end winList
+		win.show(this.redraw(chart));
+	}//end winChart
 }));

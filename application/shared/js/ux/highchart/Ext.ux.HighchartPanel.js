@@ -188,3 +188,5 @@ Highcharts.Chart.prototype.remove = function () {
     // remove the HTML
     container.innerHTML = '';
 };
+
+Ext.reg('highchartpanel', Ext.ux.HighchartPanel);

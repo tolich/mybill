@@ -5,7 +5,7 @@
 #
 # Table structure for table 'rate'
 #
-CREATE TABLE rate(
+CREATE TABLE bandwidth_rate(
   id int(11) NOT NULL auto_increment,
   datecreate bigint(20),
   inoctets bigint(20), 
@@ -15,3 +15,20 @@ CREATE TABLE rate(
   KEY datecreate (datecreate),
   KEY iface (iface)
 )ENGINE=INNODB;
+
+CREATE TABLE bandwidth_settings(
+  id int(11) NOT NULL auto_increment,
+  name varchar(64),
+  ifacename varchar(10),
+  iface int(11),
+  ip varchar(15),
+  secret varchar(128),
+  invert int(11),
+  inmib varchar(255),
+  outmib varchar(255),
+  PRIMARY KEY id (id),
+  KEY ifacename (ifacename),
+  KEY iface (iface)
+)ENGINE=INNODB;
+
+

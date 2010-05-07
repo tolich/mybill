@@ -26,6 +26,6 @@ class Snmp
             'outoctets'    => $aOutOctets[1],
             'iface'        => $iface
         );
-        $this->Db->insert('rate',$aData);
+        $this->Db->insert('bandwidth_rate',$aData);
     }
 }
