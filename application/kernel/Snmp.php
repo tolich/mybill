@@ -14,9 +14,9 @@ class Snmp
 	}
 
     public function Walk(){
-        $inOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.10.3");
+        $inOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.10.4");
         $aInOctets = split(' ',$inOctets);
-        $outOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.16.3");
+        $outOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.16.4");
         $aOutOctets = split(' ',$outOctets);
         $aData = array(
             'inoctets' => $aInOctets[1],
