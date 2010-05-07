@@ -23,7 +23,6 @@ class Snmp
             'outoctets'=> $aOutOctets[1],
             'iface'    => 3
         );
-        AppLog::debug($aData);
         $this->Db->insert('rate',$aData);
     }
 }
