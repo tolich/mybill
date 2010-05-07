@@ -258,6 +258,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 			,enableCaching: false
 			,lazyRender: false
             ,expandOnDblClick: false
+            ,css:"vertical-align:top !important;"
 		});
 	
 		Ext.grid.CheckColumn = function(config){

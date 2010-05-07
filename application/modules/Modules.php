@@ -214,4 +214,11 @@ abstract class Modules {
 	protected function _getParam($key){
 		return array_key_exists($key,$this->params)?$this->params[$key]:null;
 	}
+
+	protected function _unsetParam($key){
+	    $param = array_key_exists($key,$this->params)?$this->params[$key]:null;
+        unset($this->params[$key]);
+		return $param;
+	}
+    
 }

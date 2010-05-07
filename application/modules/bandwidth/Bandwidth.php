@@ -30,8 +30,7 @@ class Bandwidth extends Modules
 			),
 			'edit'=>array(
 				'bandwidth'=>array(
-                    'getsettings',
-                    'setsettings'
+                    'settings'
 				),
 			),
 		),
@@ -49,8 +48,8 @@ class Bandwidth extends Modules
     public function Init(){
 		$this->DbLog = Db::factory('log');
     }
-    
-    public function getData(){
+
+    public function GetData(){
         $offset = 6; //часов
         $iface = 4; 
 
@@ -93,4 +92,90 @@ class Bandwidth extends Modules
         return $aData;
     }
 
+    public function Settings()
+    {
+        switch ($this->_getParam('xaction')){
+            case 'destroy':
+         		$result = $this->_destroy();
+            break;
+            case 'update':
+         		$result = $this->_update();
+            break;
+            case 'read':
+         		$result = $this->_read();
+            break;    
+            case 'create':
+         		$result = $this->_create();
+            break;    
+        }
+        return $result;
+    }
+
+    private function _prepare(){
+        try {
+            $aData = Zend_Json::decode($this->_getParam('data'));
+            $ifDescr = @snmpwalk($aData['ip'], $aData['secret'], ".iso.3.6.1.2.1.2.2.1.2");  
+            if (false===$ifDescr){
+                throw new Exception("Не удалось соединиться с хостом {$aData['ip']}!");
+            }
+            $key = array_search('"'.$aData['ifacename'].'"',$ifDescr);
+            if (false===$key){
+                throw new Exception("Неизвестный интерфейс {$aData['ifacename']}!");
+            }
+            $ifIndex = @snmpwalk($aData['ip'], $aData['secret'], ".iso.3.6.1.2.1.2.2.1.1");        
+            if (false===$ifIndex){
+                throw new Exception("Не удалось соединиться с хостом {$aData['ip']}!");
+            }
+            $index = $ifIndex[$key];
+            if (!$index){
+                throw new Exception("Индекс интерфейса {$aData['ifacename']} не найден!");
+            }
+            $aData = array_merge($aData, array(
+                    'iface' => $index,
+                    'inmib' => ".iso.3.6.1.2.1.2.2.1.10.$index",
+                    'outmib'=> ".iso.3.6.1.2.1.2.2.1.16.$index"
+                )
+            );
+            return $aData;
+        } catch (Exception $e) {
+            return $e->getMessage();
+        }
+    }
+    
+    private function _destroy(){
+        $id = Zend_Json::decode($this->_getParam('data'));
+        $where = $this->DbLog->quoteInto('id=?', $id);
+        $this->DbLog->delete('bandwidth_settings',$where);
+        return array('success'=>true);
+    }
+
+    private function _update(){
+        $aData = $this->_prepare();
+        if (is_array($aData)){
+            $where = $this->DbLog->quoteInto('id=?', $aData['id']);
+            $this->DbLog->update('bandwidth_settings',$aData,$where);
+            return array('success'=>true);
+        } else {
+            return AppResponse::failure($aData);
+        }
+    }
+
+    private function _create(){
+        $aData = $this->_prepare();
+        if (is_array($aData)){
+            $this->DbLog->insert('bandwidth_settings',$aData);
+            return array('success'=>true);
+        } else {
+            return AppResponse::failure($aData);
+        }
+    }
+    
+    private function _read(){
+        $sql = $this->DbLog->select()
+                    ->from('bandwidth_settings',array('id','name','ifacename','ip','secret','invert'));
+        $aData = array(
+            'data' => $this->DbLog->fetchAll($sql)
+        );
+        return $aData;
+    }
 }
