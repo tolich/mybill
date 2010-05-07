@@ -105,10 +105,10 @@ class Zend_View_Helper_minifyHeadScript extends Zend_View_Helper_Abstract
         $filename = md5(serialize($this->_cache));
         $path = $this->_params['cacheDir'] . $filename . ($this->_params['compress']? '_compressed' : '') . ($this->_params['encode']? '.js.gz' : '.js');
         if (!file_exists($path)) {
-            if (!is_dir(dirname($path))){
-                mkdir(dirname($path), 0755, true);
-            } else {
+            if (is_dir(dirname($path))){
                 chmod(dirname($path), 0755);
+            } else {
+                mkdir(dirname($path), 0755, true);
             }
             $jsContent = '';
             foreach ($this->_cache as $k=>$js) {

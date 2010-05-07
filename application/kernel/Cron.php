@@ -11,7 +11,8 @@ class Cron {
 		$this->obj = array(
 			'users'		=>new Users(),
 			'tasks'		=>new Tasks(),
-			'sessions'	=>new Sessions()
+			'sessions'	=>new Sessions(),
+            'snmp'      =>new Snmp()
 		);
 		$this->Db = Zend_Registry::get('db');
 	}
@@ -36,6 +37,14 @@ class Cron {
 		$r = $this->obj['sessions']->CheckSessions();
 		AppLog::output("\ttotal clean $r session(s)");
 	}
+
+    /**
+     * Загрузка внешних каналов
+     */
+    
+    public function snmpwalk(){
+        $this->obj['users']->Walk();
+    }
 	
 	/**
 	 * Смена тарифа
@@ -202,5 +211,5 @@ class Cron {
 		AppLog::output("\tsuccess close {$r['success']} session(s)");
 		AppLog::output("\tfailed close {$r['failed']} session(s)");
 	}
+    
 }
-?>
