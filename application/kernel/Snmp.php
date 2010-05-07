@@ -19,7 +19,6 @@ class Snmp
         $outOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.16.4");
         $aOutOctets = split(' ',$outOctets);
         $aData = array(
-            'datecreate'   => time(),
             'inoctets'     => $aInOctets[1],
             'outoctets'    => $aOutOctets[1],
             'iface'        => 3
