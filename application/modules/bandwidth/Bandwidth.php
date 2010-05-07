@@ -53,10 +53,39 @@ class Bandwidth extends Modules
     }
     
     public function getData(){
-        $dataX = array(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6);
-        $dataY = array(7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6);
-        shuffle($dataX);
-        shuffle($dataY);
-        return $dataX;
+        $aData = array(
+            'indata' => array(),
+            'outdata'=> array()
+        );
+        $aPrev = array();
+        $sql = $this->DbLog->select()
+                    ->from('rate', array('datecreate','inoctets','outoctets'))
+                    ->where('datecreate > adddate(now(), interval -6 hour)');
+        $aAllData =  $this->DbLog->fetchAll($sql);
+        foreach ($aAllData as $v){
+            if (count($aPrev)){
+                if ((float)$v['inoctets'] < (float)$aPrev['inoctets']){
+                    $ind = 4294967295;
+                } else {
+                    $ind = 0;
+                }
+                if ((float)$v['outoctets'] < (float)$aPrev['outoctets']){
+                    $outd = 4294967295;
+                } else {
+                    $outd = 0;
+                }
+                $inrate = ((float)$v['inoctets'] - (float)$aPrev['inoctets'] + $ind)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
+                $outrate = ((float)$v['outoctets'] - (float)$aPrev['outoctets'] + $outd)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
+                $aData['indata'][] = array((float)$v['datecreate'],$inrate/1024/1024);
+                $aData['outdata'][] = array((float)$v['datecreate'],$outrate/1024/1024);
+            }
+            $aPrev = array(
+                'date' => (float)$v['datecreate'],
+                'inoctets' => (float)$v['inoctets'],
+                'outoctets' => (float)$v['outoctets'],
+            );
+        }
+        return $aData;
     }
+
 }

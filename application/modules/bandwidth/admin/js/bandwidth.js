@@ -52,15 +52,14 @@ App.register(Ext.extend(Ext.app.Module, {
 					text: 'Период 6 часов'
 				},
 				xAxis: {
-//					categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-//						'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    type: 'datetime',
 					title: {
 						text: 'Время'
 					}
 				},
 				yAxis: {
 					title: {
-						text: 'Бит за секунду'
+						text: 'МБит за секунду'
 					}
 				},
 				legend: {
@@ -109,10 +108,12 @@ App.register(Ext.extend(Ext.app.Module, {
 				series: [{
                     type:'areaspline',
 					name: 'Входящий трафик',
-					dataURL: '/ajax/modules/bandwidth/act/getdata'
+                    data: []
+					//dataURL: '/ajax/modules/bandwidth/act/getindata'
 				},{
 					name: 'Исходящий трафик',
-					dataURL: '/ajax/modules/bandwidth/act/getdata'
+                    data: []
+					//dataURL: '/ajax/modules/bandwidth/act/getoutdata'
                 }]
 
         }
@@ -123,7 +124,8 @@ App.register(Ext.extend(Ext.app.Module, {
                             url: '/ajax/modules/bandwidth/act/getdata'
                             ,success: function(r,o,res){
                                 var series = chart.chart.series;
-                                series[0].setData(res, true);
+                                series[0].setData(res.indata, true);
+                                series[1].setData(res.outdata, true);
                             }
                         })
                     }
