@@ -15,7 +15,7 @@ class Snmp
 
     public function Walk(){
         $iface = 4;
-        $time = time();
+        $time = time() + timezone_offset_get(date_default_timezone_get());
         $inOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.10.$iface");
         $aInOctets = split(' ',$inOctets);
         $outOctets = snmpget("192.168.168.11", "public", ".iso.3.6.1.2.1.2.2.1.16.$iface");
