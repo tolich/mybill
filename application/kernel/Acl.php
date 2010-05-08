@@ -534,18 +534,21 @@ class Acl {
 	 */
 	private function _initAcl(){
 		$this->acl = new Zend_Acl();
-		foreach($this->role as $role=>$aParent)
-			$this->acl->addRole(new Zend_Acl_Role($role),$aParent);
-		foreach($this->resource as $resource=>$aParent)	
-			$this->acl->add(new Zend_Acl_Resource($resource),$aParent);
-		foreach($this->right as $role=>$aRight)
-			foreach($aRight as $right=>$aResources)
-				if (is_array($aResources))
-					foreach($aResources as $resource=>$aPrivilege){
-						$this->acl->$right($role,$resource,$aPrivilege);
-					}
-				else
-					$this->acl->$right($role);
+        try {
+    		foreach($this->role as $role=>$aParent)
+    			$this->acl->addRole(new Zend_Acl_Role($role),$aParent);
+    		foreach($this->resource as $resource=>$aParent)	
+    			$this->acl->add(new Zend_Acl_Resource($resource),$aParent);
+    		foreach($this->right as $role=>$aRight)
+    			foreach($aRight as $right=>$aResources)
+    				if (is_array($aResources))
+    					foreach($aResources as $resource=>$aPrivilege){
+    						$this->acl->$right($role,$resource,$aPrivilege);
+    					}
+    				else
+    					$this->acl->$right($role);
+        } catch (Zend_Acl_Exception $e) {     
+        }
 	}
 
 	private function _init($force=false){
