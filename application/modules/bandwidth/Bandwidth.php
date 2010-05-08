@@ -172,14 +172,11 @@ class Bandwidth extends Modules
     }
     
     private function _destroy(){
-        AppLog::debug($this->_getParam('data'));    
-        $id = Zend_Json::decode($this->_getParam('data'));
-        AppLog::debug($id);    
+//        $id = Zend_Json::decode($this->_getParam('data'));
+        $id = trim($this->_getParam('data'),'"');
         $where = $this->DbLog->quoteInto('id=?', $id);
-        AppLog::debug($where);    
         $this->DbLog->delete('bandwidth_settings',$where);
         $where = $this->DbLog->quoteInto('iface=?', $id);
-        AppLog::debug($where);    
         $this->DbLog->delete('bandwidth_rate',$where);
         return array('success'=>true);
     }
