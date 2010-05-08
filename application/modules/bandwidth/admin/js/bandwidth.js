@@ -294,7 +294,7 @@ App.register(Ext.extend(Ext.app.Module, {
             				},
             				tooltip: {
             					formatter: function() {
-            		                return String.format('<b>{0}</b><br>Скорость: {2} МБит<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), this.y);
+            		                return String.format('<b>{0}</b><br>Скорость: {2}<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), Ext.util.Format.rateSpeed(this.y*1024*1024/8));
             					}
             				},
             				plotOptions: {
