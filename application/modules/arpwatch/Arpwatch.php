@@ -38,7 +38,8 @@ class Arpwatch extends Modules {
 				'arpwatch'=>array(
 					'getevents',
                     'getiptips',
-                    'getmactips'
+                    'getnewmactips',
+                    'getoldmactips'
 				),
 			),
 //			'edit'=>array(
