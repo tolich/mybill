@@ -134,7 +134,11 @@ class Bandwidth extends Modules
                 if (false===$ifDescr){
                     throw new Exception("Не удалось соединиться с хостом {$aData['ip']}!");
                 }
-                $key = array_search('"'.$aData['ifacename'].'"',$ifDescr);
+                if (strtoupper(substr(php_uname(), 0, 3)) === 'WIN'){
+                    $key = array_search('"'.$aData['ifacename'].'"',$ifDescr);
+                } else {
+                    $key = array_search("STRING: {$aData['ifacename']}",$ifDescr);
+                }
                 if (false===$key){
                     throw new Exception("Неизвестный интерфейс {$aData['ifacename']}!");
                 }
