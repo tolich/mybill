@@ -146,7 +146,15 @@ class Bandwidth extends Modules
                 if (false===$ifIndex){
                     throw new Exception("Не удалось соединиться с хостом {$aData['ip']}!");
                 }
-                $index = $ifIndex[$key];
+                if (strtoupper(substr(php_uname(), 0, 3)) === 'WIN'){
+                    $index = $ifIndex[$key];
+                } else {
+                    $aIndex = split(' ', $ifIndex[$key]);
+                    if (!isset($aIndex[1])){
+                        throw new Exception("Получен неверный ответ {$ifIndex[$key]}!");
+                    }
+                    $index = $aIndex[1];                        
+                }
                 if (!$index){
                     throw new Exception("Индекс интерфейса {$aData['ifacename']} не найден!");
                 }
