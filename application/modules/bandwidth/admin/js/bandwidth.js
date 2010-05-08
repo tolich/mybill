@@ -372,13 +372,13 @@ App.register(Ext.extend(Ext.app.Module, {
         				plain: true	
         				,modal: true
         				,tools:[{
-        					id:'down'
-        					,handler:function(){
-        						this.close();
-        						Ext.app.Bandwidth.Tab();
-        					}
-                            ,scope: this
-        				},{
+//        					id:'down'
+//        					,handler:function(){
+//        						this.close();
+//        						Ext.app.Bandwidth.Tab();
+//        					}
+//                            ,scope: this
+//        				},{
         					id:'gear'
                     		,disabled: App.isDeny('bandwidth', 'edit')
         					,handler:function(){
