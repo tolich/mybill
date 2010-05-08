@@ -81,9 +81,9 @@ class Bandwidth extends Modules
                     $outd = 0;
                 }
                 $inrate = ((float)$v['inoctets'] - (float)$aPrev['inoctets'] + $ind)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
-                $inrate = sprintf('%0.2f',$inrate*8/1024/1024);
+                $inrate = sprintf('%0.6f',$inrate*8/1024/1024);
                 $outrate = ((float)$v['outoctets'] - (float)$aPrev['outoctets'] + $outd)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
-                $outrate = sprintf('%0.2f',$outrate*8/1024/1024);
+                $outrate = sprintf('%0.6f',$outrate*8/1024/1024);
                 if ($invert){
                     $aData['outdata'][] = array((float)$v['datecreate']*1000,(float)$inrate);
                     $aData['indata'][] = array((float)$v['datecreate']*1000,(float)$outrate);
