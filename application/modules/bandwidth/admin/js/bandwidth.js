@@ -238,7 +238,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                             },
                             chartConfig: {
                 				chart: {
-                					defaultSeriesType: 'spline',
+                					defaultSeriesType: 'spline'
                 				},
                 				title: {
                 					text: 'Загрузка канала ' + cfg.name
