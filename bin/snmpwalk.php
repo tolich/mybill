@@ -11,16 +11,16 @@ $sql = $db->select()
           ->from('bandwidth_settings');
 $aSettings = $db->fetchAll($sql);
 foreach ($aSettings as $aSetting){
-    $iface = $aSetting['iface'];
+    $iface = $aSetting['id'];
     $time = time();
-    $inOctets = snmpget($aSetting['ip'], $aSetting['secret'], $aSetting['inmib']);
+    $inOctets = @snmpget($aSetting['ip'], $aSetting['secret'], $aSetting['inmib']);
     $aInOctets = split(' ',$inOctets);
-    $outOctets = snmpget($aSetting['ip'], $aSetting['secret'], $aSetting['outmib']);
+    $outOctets = @snmpget($aSetting['ip'], $aSetting['secret'], $aSetting['outmib']);
     $aOutOctets = split(' ',$outOctets);
     $aData = array(
         'datecreate'   => $time,
-        'inoctets'     => $aInOctets[1],
-        'outoctets'    => $aOutOctets[1],
+        'inoctets'     => isset($aInOctets[1])?$aInOctets[1]:0,
+        'outoctets'    => isset($aOutOctets[1])?$aOutOctets[1]:0,
         'iface'        => $iface
     );
     $db->insert('bandwidth_rate',$aData);
