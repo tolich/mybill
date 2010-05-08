@@ -50,7 +50,8 @@ Ext.app.Layer=function(){
 	} else {
     	base_tab_items.push({
             id: 'user-grid',
-            xtype: 'usergrid'
+            xtype: 'usergrid',
+            iconCls: 'group'
     	});
     }
 	return new Ext.Viewport({

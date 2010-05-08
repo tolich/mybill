@@ -46,6 +46,10 @@ html, body {
     background-image: url(/shared/icons/silk/arrow_right.png) !important;
 }
 
+.group{
+    background-image: url(/shared/icons/silk/group.png) !important;
+}
+
 .user-del {
     padding-left:20px;
     background:transparent url(/shared/icons/silk/user_gray.png) no-repeat;
