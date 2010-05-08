@@ -172,7 +172,8 @@ class Bandwidth extends Modules
     }
     
     private function _destroy(){
-        $id = $this->_getParam('data');
+        $id = Zend_Json::decode($this->_getParam('data'));
+        AppLog::debug($id);    
         $where = $this->DbLog->quoteInto('id=?', $id);
         AppLog::debug($where);    
         $this->DbLog->delete('bandwidth_settings',$where);
