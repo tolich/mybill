@@ -826,6 +826,17 @@ class Users
 		$aData = array('access'=>0);
 		$where = $this->Db->quoteInto('id = ? or username like ?', $id);
 		$this->Db->update('usergroup', $aData, $where);
+        $sql = $this->Db->select()
+    				->from('sessions',array('acctuniqueid'))
+                    ->join('usergroup','usergroup.username=sessions.username')
+                    ->where('usergroup.id = ?', $id);
+        $aSessions = $this->Db->fetchCol($sql);
+        if (count($aSessions)){
+            $oSessions = new Sessions();
+            foreach ($aSessions as $uid){
+                $oSessions->Close($uid);
+            }
+        }
 		return array('success'=>true);
 	}
 
