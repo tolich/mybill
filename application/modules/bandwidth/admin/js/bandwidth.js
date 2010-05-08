@@ -297,7 +297,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                                                   enabled: true
                                                }
                                             }
-                                        },
+                                        }
                 					}
                 				},
                 				series: [{
