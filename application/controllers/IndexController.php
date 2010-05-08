@@ -70,6 +70,13 @@ class IndexController extends Zend_Controller_Action
 									 ->appendFile("/extjs/ext-all.js")
 									 ->appendFile("/extjs/ux/ux-all.js");
 		}
+
+		$this->view->headScript()
+			->appendFile("/shared/js/ux/highchart/extjs-adapter.js")
+			->appendFile("/shared/js/ux/highchart/excanvas.js")
+			->appendFile("/shared/js/ux/highchart/highcharts.src.js")
+			->appendFile("/shared/js/ux/highchart/Ext.ux.HighchartPanel.js");
+
 			
 		$this->view->headScript()
 			->appendFile("/shared/js/ext31patch.js")

@@ -354,11 +354,18 @@ Ext.reg('bandwidthchart', Ext.app.Bandwidth.Chart);
 
 App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'bandwidth'
-    ,depends: [
-        'highchart/extjs-adapter.js',
-        'highchart/highcharts.src.js',
-        'highchart/Ext.ux.HighchartPanel.js'
-    ]
+//    ,depends: Ext.isIE?
+//    [
+//        'highchart/extjs-adapter.js',
+//        'highchart/excanvas.js',
+//        'highchart/highcharts.src.js',
+//        'highchart/Ext.ux.HighchartPanel.js'
+//    ]:[
+//        'highchart/extjs-adapter.js',
+//        'highchart/highcharts.src.js',
+//        'highchart/Ext.ux.HighchartPanel.js'
+//    ]
+    
 	,onInit: function(){
 		this.uid = Ext.id();
 		App.addModuleMenuItem(this.moduleId, Ext.app.Bandwidth.Show);
