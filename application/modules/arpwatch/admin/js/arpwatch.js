@@ -22,28 +22,6 @@ Ext.app.Arpwatch.Refresh = function(config){
 	}, config));
 }
 
-//Ext.app.Arpwatch.Delete = function(config){
-//	return new Ext.Action(Ext.apply({
-//		text: 'Удалить зависшую сессию',
-//	    iconCls: 'session-delete',
-//		disabled: App.isDeny('arpwatch', 'delete'),
-//		handler: function(){
-//			App.getModule('arpwatch').onDelete();
-//		}
-//	},config));
-//}
-//
-//Ext.app.Arpwatch.Close = function(config){
-//	return new Ext.Action(Ext.apply({
-//		text: 'Отключить пользователя',
-//	    iconCls: 'session-close',
-//		disabled: App.isDeny('arpwatch', 'submit'),
-//		handler: function(){
-//			App.getModule('arpwatch').onClose();
-//		}
-//	},config));
-//}
-
 Ext.app.Arpwatch.List = function(config){
 	return new Ext.Action(Ext.apply({
 		text: 'Мониторинг IP/MAC'

@@ -608,7 +608,7 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 		});
 
         Ext.apply(this, {
-			region: 'center',
+			//region: 'center',
 			margins: '0 5 5 0',
 			title: 'Пользователи',
 			store: store,
@@ -617,7 +617,8 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 			autoScroll :true,
 			plugins:plugins,
 			loadMask: true,
-			collapsible: true,
+			//collapsible: true,
+            closable: false,
 			sm: new Ext.grid.RowSelectionModel({
 				singleSelect: true
 				,listeners: {
@@ -770,13 +771,23 @@ App.register(Ext.extend(Ext.app.Module, {
 					hidden: cm.isHidden(i)
 				});
 		}
-		var items = [];
+		var info_panel_items = [];
 		Ext.getCmp('info-tabpanel').items.each(
 			function(i){
 				if (i.xtype) {
                     //Bug ExtJS 3.1.1
                     delete i.initialConfig.ownerCt;
-                    items.push(i.initialConfig);
+                    info_panel_items.push(i.initialConfig);
+                }               
+			}
+		);
+		var base_panel_items = [];
+		Ext.getCmp('base-panel').items.each(
+			function(i){
+				if (i.xtype) {
+                    //Bug ExtJS 3.1.1
+                    delete i.initialConfig.ownerCt;
+                    base_panel_items.push(i.initialConfig);
                 }               
 			}
 		);
@@ -791,13 +802,15 @@ App.register(Ext.extend(Ext.app.Module, {
 				width: Ext.getCmp('mod-panel').getInnerWidth()
 				,mod_collapsed : Ext.getCmp('mod-panel').collapsed 
 			}
+			,'base-panel-items': base_panel_items
+			,'base-panel-active-tab':Ext.getCmp('base-panel').items.indexOf(Ext.getCmp('base-panel').getActiveTab()) 
 			,'info-panel': {
 				width: Ext.getCmp('log-panel').getInnerWidth()
 				,height: Ext.getCmp('info-panel').getInnerHeight()
 				,info_collapsed : Ext.getCmp('info-panel').collapsed
 				,log_collapsed : Ext.getCmp('log-panel').collapsed 
 			}
-			,'info-panel-items': items
+			,'info-panel-items': info_panel_items
 			,'info-panel-active-tab':Ext.getCmp('info-tabpanel').items.indexOf(Ext.getCmp('info-tabpanel').getActiveTab()) 
 		});
 	}

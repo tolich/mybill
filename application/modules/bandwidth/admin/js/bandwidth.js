@@ -2,7 +2,7 @@ Ext.namespace('Ext.app.Bandwidth');
 
 Ext.app.Bandwidth.Show = function(config){
 	return new Ext.Action(Ext.apply({
-		text: 'График загрузки внешнего канала',
+		text: 'Графики загрузки сетевых интерфейсов',
 		iconCls: 'bandwidth',
 		disabled: App.isDeny('bandwidth', 'view'),
 		handler: function(){
@@ -10,6 +10,30 @@ Ext.app.Bandwidth.Show = function(config){
 		}
 	}, config));
 }
+
+Ext.app.Bandwidth.Tab = function(){
+	Ext.getCmp('info-tabpanel').add({
+		id:'bandwidth-charts-tab'
+		,title: 'Графики загрузки'
+		,closable:true
+		,iconCls:'bandwidth'
+		,xtype: 'bandwidthchart'
+        ,tabPosition: 'bottom'
+	});
+	Ext.getCmp('info-tabpanel').setActiveTab('bandwidth-charts-tab');
+};
+
+Ext.app.Bandwidth.BaseTab = function(){
+	Ext.getCmp('base-panel').add({
+		id:'bandwidth-charts-tab'
+		,title: 'Графики загрузки'
+		,closable:true
+		,iconCls:'bandwidth'
+		,xtype: 'bandwidthchart'
+        ,tabPosition: 'bottom'
+	});
+	Ext.getCmp('base-panel').setActiveTab('bandwidth-charts-tab');
+};
 
 // Грид настроек
 Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
@@ -195,6 +219,139 @@ Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
 });
 Ext.reg('bandwidthgrid', Ext.app.Bandwidth.Grid);
 
+Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
+    border: false
+    ,initComponent: function(){
+        App.getModule('bandwidth').loadDepends(function(){
+            var items = [];
+    	    App.request({
+                url: '/ajax/modules/bandwidth/act/charts'
+                ,success: function(r,o,res){
+                    for (var i=0,l=res.length; i<l;i++){
+                        var cfg = res[i];
+                	    items.push(new Ext.ux.HighchartPanel({
+                            title: cfg.name || 'График',
+                            layout:'fit',
+                            border: false,
+                            params:{
+                                iface: cfg.id    
+                            },
+                            chartConfig: {
+                				chart: {
+                					defaultSeriesType: 'spline',
+                				},
+                				title: {
+                					text: 'Загрузка канала ' + cfg.name
+                				},
+                				subtitle: {
+                					text: String.format('Хост: {1}, интерфейс: {0}',cfg.ifacename,cfg.ip)
+                				},
+                				xAxis: {
+                                    type: 'datetime',
+                                    gridLineWidth: 1,
+                					title: {
+                						text: 'Время'
+                					}
+                				},
+                				yAxis: {
+                                    min: 0,
+                                    gridLineWidth: 1,
+                					title: {
+                						text: 'МБит за секунду'
+                					}
+                				},
+                				legend: {
+                					enabled: true
+                				},
+                				tooltip: {
+                					formatter: function() {
+                		                return String.format('<b>{0}</b><br>Скорость: {2}<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), Ext.util.Format.rateSpeed(this.y*1024*1024/8));
+                					}
+                				},
+                				plotOptions: {
+                					areaspline: {
+                                        fillColor: {
+                                            linearGradient: [0, 0, 0, 350],
+                                            stops: [[0, '#4572A7'], [1, 'rgba(0,0,0,0)']]
+                                        },
+                                        lineWidth: 1,
+                                        marker: {
+                                            enabled: false,
+                                            symbol: 'triangle-down',
+                                            radius: 2,
+                                            states: {
+                                               hover: {
+                                                  enabled: true
+                                               }
+                                            }
+                                        },
+                                        shadow: false
+                                    }
+                					,spline: {
+                                        marker: {
+                                            enabled: false,
+                                            symbol: 'triangle',
+                                            radius: 2,
+                                            states: {
+                                               hover: {
+                                                  enabled: true
+                                               }
+                                            }
+                                        },
+                					}
+                				},
+                				series: [{
+                                    type:'areaspline',
+                					name: 'Входящий трафик',
+                                    data: []
+                				},{
+                					name: 'Исходящий трафик',
+                                    data: []
+                                }]
+                            }
+                            ,bbar: ['->',{
+                                iconCls: 'refresh'
+                                ,handler: function(item){
+                                      return function(){
+                                         this.redraw(items[item])
+                                     };
+                                }(i)
+                                ,scope: this
+                            }]
+                            ,listeners: {
+                                'render': function(c){
+                                    c.renderChart();
+                                }
+                                ,'activate': function(c){
+                                    this.redraw(c)    
+                                }
+                                ,scope: this
+                            }
+                        }));
+                    }
+                    this.add(items);
+                    this.setActiveTab(0);
+                }
+                ,scope: this
+            });
+        }, this);
+        Ext.app.Bandwidth.Chart.superclass.initComponent.apply(this, arguments);
+    }
+    ,redraw: function(c){
+        App.request({
+            url: '/ajax/modules/bandwidth/act/getdata'
+            ,params: c.params
+            ,success: function(r,o,res){
+                var series = c.chart.series;
+                series[0].setData(res.indata, true);
+                series[1].setData(res.outdata, true);
+                c.chart.updatePosition();
+            }
+        })
+    }
+});
+Ext.reg('bandwidthchart', Ext.app.Bandwidth.Chart);
+
 App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'bandwidth'
     ,depends: [
@@ -216,18 +373,6 @@ App.register(Ext.extend(Ext.app.Module, {
 	,onShow: function(){
 		this.winChart();
 	}
-    ,redraw: function(c){
-        App.request({
-            url: '/ajax/modules/bandwidth/act/getdata'
-            ,params: c.params
-            ,success: function(r,o,res){
-                var series = c.chart.series;
-                series[0].setData(res.indata, true);
-                series[1].setData(res.outdata, true);
-                c.chart.updatePosition();
-            }
-        })
-    }
     ,winSettings: function(){
         if (App.isAllow('bandwidth', 'edit')){
     		var win = Ext.getCmp('win_bandwidth_settings');
@@ -252,154 +397,43 @@ App.register(Ext.extend(Ext.app.Module, {
     }
 	,winChart : function(){ //winChart
         if (App.isDeny('bandwidth', 'view')) return;
-        var items = [];
-	    App.request({
-            url: '/ajax/modules/bandwidth/act/charts'
-            ,success: function(r,o,res){
-                for (var i=0,l=res.length; i<l;i++){
-                    var cfg = res[i];
-            	    items.push(new Ext.ux.HighchartPanel({
-                        title: cfg.name || 'График',
-                        layout:'fit',
-                        border: false,
-                        params:{
-                            iface: cfg.id    
-                        },
-                        chartConfig: {
-            				chart: {
-            					defaultSeriesType: 'spline',
-            				},
-            				title: {
-            					text: 'Загрузка канала ' + cfg.name
-            				},
-            				subtitle: {
-            					text: String.format('Хост: {1}, интерфейс: {0}',cfg.ifacename,cfg.ip)
-            				},
-            				xAxis: {
-                                type: 'datetime',
-                                gridLineWidth: 1,
-            					title: {
-            						text: 'Время'
-            					}
-            				},
-            				yAxis: {
-                                min: 0,
-                                gridLineWidth: 1,
-            					title: {
-            						text: 'МБит за секунду'
-            					}
-            				},
-            				legend: {
-            					enabled: true
-            				},
-            				tooltip: {
-            					formatter: function() {
-            		                return String.format('<b>{0}</b><br>Скорость: {2}<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), Ext.util.Format.rateSpeed(this.y*1024*1024/8));
-            					}
-            				},
-            				plotOptions: {
-            					areaspline: {
-                                    fillColor: {
-                                        linearGradient: [0, 0, 0, 350],
-                                        stops: [[0, '#4572A7'], [1, 'rgba(0,0,0,0)']]
-                                    },
-                                    lineWidth: 1,
-                                    marker: {
-                                        enabled: false,
-                                        symbol: 'triangle-down',
-                                        radius: 2,
-                                        states: {
-                                           hover: {
-                                              enabled: true
-                                           }
-                                        }
-                                    },
-                                    shadow: false
-                                }
-            					,spline: {
-                                    marker: {
-                                        enabled: false,
-                                        symbol: 'triangle',
-                                        radius: 2,
-                                        states: {
-                                           hover: {
-                                              enabled: true
-                                           }
-                                        }
-                                    },
-            					}
-            				},
-            				series: [{
-                                type:'areaspline',
-            					name: 'Входящий трафик',
-                                data: []
-            				},{
-            					name: 'Исходящий трафик',
-                                data: []
-                            }]
-                        }
-                        ,bbar: ['->',{
-                            iconCls: 'refresh'
-                            ,handler: function(item){
-                                  return function(){
-                                     this.redraw(items[item])
-                                 };
-                            }(i)
-                            ,scope: this
-                        }]
-                        ,listeners: {
-                            'render': function(c){
-                                c.renderChart();
-                            }
-                            ,'activate': function(c){
-                                this.redraw(c)    
-                            }
-                            ,scope: this
-                        }
-                    }));
-                }
-            
-        		var win = Ext.getCmp('win_bandwidth');
-        		if (win == undefined) {
-        			var win = new Ext.Window({
-        				title: 'График загрузки внешнего канала',
-        				id: 'win_bandwidth',
-        				width: 800,
-        				height: 500,
-        				minWidth: 380,
-        				minHeight: 280,
-        				layout: 'fit',
-        				plain: true	
-        				,modal: true
-        				,tools:[{
-//        					id:'down'
-//        					,handler:function(){
-//        						this.close();
-//        						Ext.app.Bandwidth.Tab();
-//        					}
-//                            ,scope: this
-//        				},{
-        					id:'gear'
-                    		,disabled: App.isDeny('bandwidth', 'edit')
-        					,handler:function(){
-        						this.winSettings();
-        					}
-                            ,scope: this
-                        }]
-        				,items: new Ext.TabPanel({
-                            id: 'bandwidth-charts-tab',
-                            activeTab: 0,
-                            border: false,
-                            items: items
-                        })
-        			});
-        		}
-        		win.show();
-            }
-            ,scope: this
-        })
-    
-    
-    
+		var win = Ext.getCmp('win_bandwidth');
+		if (win == undefined) {
+			var win = new Ext.Window({
+				title: 'Графики загрузки сетевых интерфейсов',
+				id: 'win_bandwidth',
+				width: 800,
+				height: 500,
+				minWidth: 380,
+				minHeight: 280,
+				layout: 'fit',
+				plain: true	
+				,modal: true
+				,tools:[{
+					id:'down'
+					,handler:function(){
+						win.close();
+						Ext.app.Bandwidth.Tab();
+					}
+				},{
+					id:'up'
+					,handler:function(){
+						win.close();
+						Ext.app.Bandwidth.BaseTab();
+					}
+				},{
+					id:'gear'
+            		,hidden: App.isDeny('bandwidth', 'edit')
+					,handler:function(){
+						this.winSettings();
+					}
+                    ,scope: this
+                }]
+				,items: [{
+                    xtype: 'bandwidthchart'
+                }]
+			});
+		}
+		win.show();
 	}//end winChart
 }));

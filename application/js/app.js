@@ -48,8 +48,9 @@ Ext.extend(Ext.app.Module, Ext.util.Observable, {
 		this.context.containsKey(this.moduleId);
 	}
 	,setSettings: Ext.emptyFn
-    ,loadDepends: function(callback){
+    ,loadDepends: function(callback,scope){
         var callback = (typeof callback == 'function' ? callback : Ext.emptyFn);
+        var scope = scope || this;
         var js = [];
         Ext.each(this.depends, function(i){
             if (this.app.depends.indexOf(i) === -1) {
@@ -70,14 +71,14 @@ Ext.extend(Ext.app.Module, Ext.util.Observable, {
                             this.app.depends.push(i['filename']);
                         },this);
                         this.onLoadDepends();
-                        callback();
+                        callback.call(scope);
                     }
                 },
                 scope: this
             })
         }
         else {
-            callback();
+            callback.call(scope);
         }
     }
 });

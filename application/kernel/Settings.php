@@ -276,6 +276,9 @@ class Settings {
             'all' =>array(
 				'tariffs'=>array(
 					'list',
+                ),
+                'modules'=>array(
+                    'load'
                 )
             ),
 			'view'=>array(

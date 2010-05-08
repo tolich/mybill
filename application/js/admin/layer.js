@@ -17,21 +17,7 @@ Ext.app.Layer=function(){
 		var info_collapsed = App.settings.users['info-panel'].info_collapsed || false;
 		var log_collapsed = App.settings.users['info-panel'].log_collapsed || false;
 	};
-    if(App.settings.users['base-panel']){
-		var width_base = App.settings.users['base-panel'].width || 300;
-		var mod_collapsed = App.settings.users['base-panel'].mod_collapsed || false;
-	};
-	var info_tab_items = [{
-		layout: 'column'
-//		,bodyStyle: 'padding:10px'
-		,iconCls:'tab-note'
-//		,defaults:{
-//			bodyStyle: 'padding:5px;font:10px verdana,tahoma,arial,sans-serif'
-//		}
-		,title: 'Заметки'
-		,autoScroll: true
-		,items:[App.emptyMod]
-	}];
+  	var info_tab_items = [];
 	if (App.settings.users['info-panel-items']) {
 		for (var i = 0; i < App.settings.users['info-panel-items'].length; i++) {
 			var p = App.settings.users['info-panel-items'][i];
@@ -39,7 +25,34 @@ Ext.app.Layer=function(){
     			info_tab_items.push(p);
             }
 		}
-	}
+	} else {
+    	info_tab_items.push({
+    		layout: 'column'
+            ,xtype: 'panel'
+    		,iconCls:'tab-note'
+    		,title: 'Заметки'
+    		,autoScroll: true
+    		,items:[App.emptyMod]
+    	});
+    }
+    if(App.settings.users['base-panel']){
+		var width_mod = App.settings.users['base-panel'].width || 300;
+		var mod_collapsed = App.settings.users['base-panel'].mod_collapsed || false;
+	};
+   	var base_tab_items = [];
+	if (App.settings.users['base-panel-items']) {
+		for (var i = 0; i < App.settings.users['base-panel-items'].length; i++) {
+			var p = App.settings.users['base-panel-items'][i];
+            if (p.xtype&&Ext.ComponentMgr.isRegistered(p.xtype)){
+    			base_tab_items.push(p);
+            }
+		}
+	} else {
+    	base_tab_items.push({
+            id: 'user-grid',
+            xtype: 'usergrid'
+    	});
+    }
 	return new Ext.Viewport({
 		layout: 'border',
 		items: [{
@@ -174,15 +187,22 @@ Ext.app.Layer=function(){
 			title: 'Дополнительно',
 			region: 'west',
 			split: true,
-			width: width_base,
+			width: width_mod,
 			collapsible: true,
 			border:false,
 			collapsed: mod_collapsed,
     		items:[App.emptyMod]
 		},{
-			id: 'user-grid',
-			xtype: 'usergrid',
-			region: 'center'
+			id: 'base-panel',
+			xtype: 'tabpanel',
+			activeTab: App.settings.users['base-panel-active-tab']||0,
+			layoutConfig: {
+				animate: true
+			},
+			plugins: new Ext.ux.TabCloseMenu(),
+			border:false,
+			region: 'center',
+            items: base_tab_items
 		}, {
 			id: 'info-panel',
 			title:'Инфо',

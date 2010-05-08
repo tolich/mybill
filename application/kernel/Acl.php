@@ -153,6 +153,9 @@ class Acl {
 					'view',				// Открытие 
 					'submit',			// Вход и выход из системы
 				),
+                'modules'   => array(   // Загружать зависимости
+                    'all'
+                ), 
 				'redirect'	=> null
 			),
 			'deny'			=> array(
