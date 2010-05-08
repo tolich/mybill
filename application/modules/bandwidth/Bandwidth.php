@@ -44,6 +44,9 @@ class Bandwidth extends Modules
 		'edit'=>array(
 			'bandwidth'=>'Настройка параметров модуля',
 		),
+		'all'=>array(
+			'bandwidth'=>'Вспомагательные функции для других модулей',
+		),
 	);
 
     public function Init(){
