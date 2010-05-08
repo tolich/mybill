@@ -172,6 +172,7 @@ class Bandwidth extends Modules
     }
     
     private function _destroy(){
+        AppLog::debug($this->_getParam('data'));    
         $id = Zend_Json::decode($this->_getParam('data'));
         AppLog::debug($id);    
         $where = $this->DbLog->quoteInto('id=?', $id);
