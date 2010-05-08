@@ -37,10 +37,21 @@ Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
         },{
             name: 'invert',
             type: 'bool'
+        },{
+            name: 'disabled',
+            type: 'bool'
         }]);
         var invert = new Ext.grid.CheckColumn({
            header: 'Инверт',
            dataIndex: 'invert',
+           width: 55,
+           editor: {
+               xtype: 'checkbox'
+           }
+        });
+        var disabled = new Ext.grid.CheckColumn({
+           header: 'Откл',
+           dataIndex: 'disabled',
            width: 55,
            editor: {
                xtype: 'checkbox'
@@ -81,14 +92,14 @@ Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
                 xtype: 'textfield'
                 ,allowBlank: false
             }
-        },invert]);		
+        },invert,disabled]);		
         
 		// create the Data Store
     	var store = new Ext.data.JsonStore({
 			url: App.proxy('/ajax/modules/bandwidth/act/settings')
             ,autoDestroy: true  
             ,root: 'data'
-			,fields: Setting //['id','name','ifacename','ip','secret','invert']
+			,fields: Setting //['id','name','ifacename','ip','secret','invert','disabled']
 			,id: 'id'
             ,writer: new Ext.data.JsonWriter({
                 encode: true,
@@ -120,6 +131,7 @@ Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
             },
             tbar: [{
                 text: 'Добавить'
+                ,iconCls: 'bandwidth_add'
                 ,handler: function(){
                     var e = new Setting({
                         name: '',
@@ -141,8 +153,9 @@ Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
                     },this,{single: true});
                 }
                 ,scope: this
-            },{
+            },'-',{
                 text: 'Удалить'
+                ,iconCls: 'bandwidth_delete'
                 ,handler: function(){
                     var r;
                     if (r = this.getSelectionModel().getSelected()){
@@ -206,6 +219,7 @@ App.register(Ext.extend(Ext.app.Module, {
     ,redraw: function(c){
         App.request({
             url: '/ajax/modules/bandwidth/act/getdata'
+            ,params: c.params
             ,success: function(r,o,res){
                 var series = c.chart.series;
                 series[0].setData(res.indata, true);
@@ -221,7 +235,7 @@ App.register(Ext.extend(Ext.app.Module, {
     			var win = new Ext.Window({
     				title: 'Настройки',
     				id: 'win_bandwidth_settings',
-    				width: 400,
+    				width: 500,
     				height: 250,
     				minWidth: 400,
     				minHeight: 250,
@@ -237,127 +251,155 @@ App.register(Ext.extend(Ext.app.Module, {
         }
     }
 	,winChart : function(){ //winChart
-	    var chart = new Ext.ux.HighchartPanel({
-            title: 'График',
-            layout:'fit',
-            border: false,
-            chartConfig: {
-				chart: {
-					defaultSeriesType: 'spline',
-				},
-				title: {
-					text: 'Загрузка канала'
-				},
-				subtitle: {
-					text: 'Период 6 часов'
-				},
-				xAxis: {
-                    type: 'datetime',
-                    gridLineWidth: 1,
-					title: {
-						text: 'Время'
-					}
-				},
-				yAxis: {
-                    min: 0,
-                    gridLineWidth: 1,
-					title: {
-						text: 'МБит за секунду'
-					}
-				},
-				legend: {
-					enabled: true
-				},
-				tooltip: {
-					formatter: function() {
-		                return String.format('<b>{0}</b><br>Скорость: {2} МБит<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), this.y);
-					}
-				},
-				plotOptions: {
-					areaspline: {
-                        fillColor: {
-                            linearGradient: [0, 0, 0, 350],
-                            stops: [[0, '#4572A7'], [1, 'rgba(0,0,0,0)']]
+        if (App.isDeny('bandwidth', 'view')) return;
+        var items = [];
+	    App.request({
+            url: '/ajax/modules/bandwidth/act/charts'
+            ,success: function(r,o,res){
+                for (var i=0,l=res.length; i<l;i++){
+                    var cfg = res[i];
+            	    items.push(new Ext.ux.HighchartPanel({
+                        title: cfg.name || 'График',
+                        layout:'fit',
+                        border: false,
+                        params:{
+                            iface: cfg.id    
                         },
-                        lineWidth: 1,
-                        marker: {
-                            enabled: false,
-                            symbol: 'triangle-down',
-                            radius: 2,
-                            states: {
-                               hover: {
-                                  enabled: true
-                               }
+                        chartConfig: {
+            				chart: {
+            					defaultSeriesType: 'spline',
+            				},
+            				title: {
+            					text: 'Загрузка канала ' + cfg.name
+            				},
+            				subtitle: {
+            					text: String.format('Хост: {1}, интерфейс: {0}',cfg.ifacename,cfg.ip)
+            				},
+            				xAxis: {
+                                type: 'datetime',
+                                gridLineWidth: 1,
+            					title: {
+            						text: 'Время'
+            					}
+            				},
+            				yAxis: {
+                                min: 0,
+                                gridLineWidth: 1,
+            					title: {
+            						text: 'МБит за секунду'
+            					}
+            				},
+            				legend: {
+            					enabled: true
+            				},
+            				tooltip: {
+            					formatter: function() {
+            		                return String.format('<b>{0}</b><br>Скорость: {2} МБит<br>Дата: {1}', this.series.name, Highcharts.dateFormat('%d.%m.%Y %H:%M', this.x), this.y);
+            					}
+            				},
+            				plotOptions: {
+            					areaspline: {
+                                    fillColor: {
+                                        linearGradient: [0, 0, 0, 350],
+                                        stops: [[0, '#4572A7'], [1, 'rgba(0,0,0,0)']]
+                                    },
+                                    lineWidth: 1,
+                                    marker: {
+                                        enabled: false,
+                                        symbol: 'triangle-down',
+                                        radius: 2,
+                                        states: {
+                                           hover: {
+                                              enabled: true
+                                           }
+                                        }
+                                    },
+                                    shadow: false
+                                }
+            					,spline: {
+                                    marker: {
+                                        enabled: false,
+                                        symbol: 'triangle',
+                                        radius: 2,
+                                        states: {
+                                           hover: {
+                                              enabled: true
+                                           }
+                                        }
+                                    },
+            					}
+            				},
+            				series: [{
+                                type:'areaspline',
+            					name: 'Входящий трафик',
+                                data: []
+            				},{
+            					name: 'Исходящий трафик',
+                                data: []
+                            }]
+                        }
+                        ,bbar: ['->',{
+                            iconCls: 'refresh'
+                            ,handler: function(item){
+                                  return function(){
+                                     this.redraw(items[item])
+                                 };
+                            }(i)
+                            ,scope: this
+                        }]
+                        ,listeners: {
+                            'render': function(c){
+                                c.renderChart();
                             }
-                        },
-                        shadow: false
-                    }
-					,spline: {
-                        marker: {
-                            enabled: false,
-                            symbol: 'triangle',
-                            radius: 2,
-                            states: {
-                               hover: {
-                                  enabled: true
-                               }
+                            ,'activate': function(c){
+                                this.redraw(c)    
                             }
-                        },
-					}
-				},
-				series: [{
-                    type:'areaspline',
-					name: 'Входящий трафик',
-                    data: []
-				},{
-					name: 'Исходящий трафик',
-                    data: []
-                }]
-            }
-            ,bbar: [{
-                text: 'Обновить'
-                ,handler: function(){
-                    this.redraw(chart);
+                            ,scope: this
+                        }
+                    }));
                 }
-                ,scope: this
-            }]
-        });
-
-		var win = Ext.getCmp('win_bandwidth');
-		if (win == undefined) {
-			var win = new Ext.Window({
-				title: 'График загрузки внешнего канала',
-				id: 'win_bandwidth',
-				width: 800,
-				height: 500,
-				minWidth: 380,
-				minHeight: 280,
-				layout: 'fit',
-				plain: true	
-				,modal: true
-				,tools:[{
-					id:'down'
-					,handler:function(){
-						win.close();
-						Ext.app.Bandwidth.Tab();
-					}
-				},{
-					id:'gear'
-            		,disabled: App.isDeny('bandwidth', 'edit')
-					,handler:function(){
-						this.winSettings();
-					}
-                    ,scope: this
-                }]
-				,items: new Ext.TabPanel({
-                    activeTab: 0,
-                    border: false,
-                    items: [
-                        chart
-                    ]
-                })
-			});
-		}
-		win.show(this.redraw(chart));
+            
+        		var win = Ext.getCmp('win_bandwidth');
+        		if (win == undefined) {
+        			var win = new Ext.Window({
+        				title: 'График загрузки внешнего канала',
+        				id: 'win_bandwidth',
+        				width: 800,
+        				height: 500,
+        				minWidth: 380,
+        				minHeight: 280,
+        				layout: 'fit',
+        				plain: true	
+        				,modal: true
+        				,tools:[{
+        					id:'down'
+        					,handler:function(){
+        						this.close();
+        						Ext.app.Bandwidth.Tab();
+        					}
+                            ,scope: this
+        				},{
+        					id:'gear'
+                    		,disabled: App.isDeny('bandwidth', 'edit')
+        					,handler:function(){
+        						this.winSettings();
+        					}
+                            ,scope: this
+                        }]
+        				,items: new Ext.TabPanel({
+                            id: 'bandwidth-charts-tab',
+                            activeTab: 0,
+                            border: false,
+                            items: items
+                        })
+        			});
+        		}
+        		win.show();
+            }
+            ,scope: this
+        })
+    
+    
+    
 	}//end winChart
 }));

@@ -1,3 +1,9 @@
 .bandwidth{
     background-image: url(/shared/icons/silk/chart_line.png) !important;
 }
+.bandwidth_add{
+    background-image: url(/shared/icons/silk/chart_line_add.png) !important;
+}
+.bandwidth_delete{
+    background-image: url(/shared/icons/silk/chart_line_delete.png) !important;
+}

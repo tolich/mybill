@@ -26,9 +26,11 @@ CREATE TABLE bandwidth_settings(
   invert int(11),
   inmib varchar(255),
   outmib varchar(255),
+  disabled int(11) NOT NULL default 0,
   PRIMARY KEY id (id),
   KEY ifacename (ifacename),
-  KEY iface (iface)
+  KEY iface (iface),
+  KEY disabled (disabled)
 )ENGINE=INNODB;
 
 

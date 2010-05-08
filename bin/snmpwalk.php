@@ -8,7 +8,8 @@
 require_once realpath(dirname(__FILE__).'/../configs/config.php');
 $db = Db::factory('log');
 $sql = $db->select()
-          ->from('bandwidth_settings');
+          ->from('bandwidth_settings')
+          ->where('disabled=0');
 $aSettings = $db->fetchAll($sql);
 foreach ($aSettings as $aSetting){
     $iface = $aSetting['id'];
