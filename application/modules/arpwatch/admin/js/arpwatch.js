@@ -44,6 +44,17 @@ Ext.app.Arpwatch.Tab = function(){
 	Ext.getCmp('info-tabpanel').setActiveTab('arpwatch-grid-tab');
 };
 
+Ext.app.Arpwatch.BaseTab = function(){
+	Ext.getCmp('base-panel').add({
+		id:'arpwatch-grid-basetab'
+		,title: 'Мониторинг IP/MAC'
+		,closable:true
+		,iconCls:'arpwatch'
+		,xtype: 'arpwatchgrid'
+	});
+	Ext.getCmp('base-panel').setActiveTab('arpwatch-grid-basetab');
+};
+
 App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'arpwatch'
     ,onInit: function(){
@@ -122,11 +133,18 @@ App.register(Ext.extend(Ext.app.Module, {
 				layout: 'fit',
 				plain: true	
 				,modal: true
-				,tools:[{
+				,tools:[
+                {
 					id:'down'
 					,handler:function(){
 						win.close();
 						Ext.app.Arpwatch.Tab();
+					}
+				},{
+					id:'up'
+					,handler:function(){
+						win.close();
+						Ext.app.Arpwatch.BaseTab();
 					}
 				}]
 				,items: [{

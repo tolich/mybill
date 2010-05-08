@@ -25,14 +25,14 @@ Ext.app.Bandwidth.Tab = function(){
 
 Ext.app.Bandwidth.BaseTab = function(){
 	Ext.getCmp('base-panel').add({
-		id:'bandwidth-charts-tab'
+		id:'bandwidth-charts-basetab'
 		,title: 'Графики загрузки'
 		,closable:true
 		,iconCls:'bandwidth'
 		,xtype: 'bandwidthchart'
         ,tabPosition: 'bottom'
 	});
-	Ext.getCmp('base-panel').setActiveTab('bandwidth-charts-tab');
+	Ext.getCmp('base-panel').setActiveTab('bandwidth-charts-basetab');
 };
 
 // Грид настроек

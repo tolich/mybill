@@ -55,6 +55,17 @@ Ext.app.Sessions.Tab = function(){
 	Ext.getCmp('info-tabpanel').setActiveTab('session-grid-tab');
 };
 
+Ext.app.Sessions.BaseTab = function(){
+	Ext.getCmp('base-panel').add({
+		id:'session-grid-basetab'
+		,title: 'Активные сессии'
+		,closable:true
+		,iconCls:'tab-link'
+		,xtype: 'sessionsgrid'
+	});
+	Ext.getCmp('base-panel').setActiveTab('session-grid-basetab');
+};
+
 App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'sessions'
 	,onList: function(){
@@ -131,6 +142,12 @@ App.register(Ext.extend(Ext.app.Module, {
 					,handler:function(){
 						win.close();
 						Ext.app.Sessions.Tab();
+					}
+				},{
+					id:'up'
+					,handler:function(){
+						win.close();
+						Ext.app.Sessions.BaseTab();
 					}
 				}]
 				,items: [{
