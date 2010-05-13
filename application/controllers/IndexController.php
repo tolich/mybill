@@ -80,7 +80,7 @@ class IndexController extends Zend_Controller_Action
 
 			
 		$this->view->headScript()
-			->appendFile("/shared/js/ext31patch.js")
+			->appendFile("/shared/js/ext321patch.js")
 			->appendFile("/shared/js/ext-lang-ru.js")
 			->appendFile("/shared/js/ext-lang-ru-ux.js")
     		->appendFile("/shared/js/cookies.js")

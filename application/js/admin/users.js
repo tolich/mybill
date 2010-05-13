@@ -323,12 +323,13 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 		var checkMb = new Ext.grid.CheckColumn({
 			header: 'Мб>min',
 			dataIndex: 'check_mb',
-			align: 'center',
+//			align: 'center',
 			params: {
 				msg: 'контроль за остатком Мб  для пользователя '
 			},
             editor: App.isAllow('users','edit')?{
                 xtype: 'checkbox'
+			    ,cls: 'x-grid3-check-col'
             }:undefined,
 			width: 90
 		});
@@ -336,12 +337,13 @@ Ext.app.Users.Grid = Ext.extend(Ext.grid.GridPanel, {
 		var newUser = new Ext.grid.CheckColumn({
 			header: 'Новый',
 			dataIndex: 'newuser',
-			align: 'center',
+//			align: 'center',
 			params: {
 				msg: ' перенаправление на страницу приветствия пользователя '
 			},
             editor: App.isAllow('users','submit')?{
                 xtype: 'checkbox'
+			    ,cls: 'x-grid3-check-col'
             }:undefined,
 			width: 90
 		});

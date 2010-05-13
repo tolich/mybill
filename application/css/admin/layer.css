@@ -563,3 +563,6 @@ html, body {
 .settings-main{
     background-image: url(/shared/icons/silk/group_gear.png) !important;
 }
+.row-etitor-class{
+    vertical-align:middle !important;
+}

@@ -16,16 +16,18 @@ Ext.override(Ext.ux.grid.RowEditor, {
                            'text-align:'+(cm.config[i].align||'left')
                           ].join(';')
                 });
-            }else{
-                ed = ed.field;
             }
-
             if(i == 0){
                 ed.margins = pm('0 1 2 1');
             } else if(i == len - 1){
                 ed.margins = pm('0 0 2 1');
             } else{
-                ed.margins = pm('0 1 2');
+                if (Ext.isIE) {
+                    ed.margins = pm('0 0 2 0');
+                }
+                else {
+                    ed.margins = pm('0 1 2 0');
+                }
             }
             ed.setWidth(cm.getColumnWidth(i));
             ed.column = c;
@@ -36,41 +38,17 @@ Ext.override(Ext.ux.grid.RowEditor, {
             this.insert(i, ed);
         }
         this.initialized = true;
-    },
-    verifyLayout: function(force){
-        if(this.el && (this.isVisible() || force === true)){
-            var row = this.grid.getView().getRow(this.rowIndex);
-//            this.setSize(Ext.fly(row).getWidth(), Ext.fly(row).getHeight() + (Ext.isIE ?  9 : 0));
-            this.setSize(Ext.fly(row).getWidth(), Ext.isIE ?  Ext.fly(row).getHeight() + 9 : undefined);
-            var cm = this.grid.colModel, fields = this.items.items;
-            for(var i = 0, len = cm.getColumnCount(); i < len; i++){
-                if(!cm.isHidden(i)){
-                    var adjust = 1; //<---
-                    if(i === (len - 1)){
-                        adjust += 3; // outer padding
-                    } else{
-                        adjust += 1;
-                    }
-                    fields[i].show();
-                    fields[i].setWidth(cm.getColumnWidth(i) - adjust);
-                } else{
-                    fields[i].hide();
-                }
-            }
-            this.doLayout();
-            this.positionButtons();
-        }
     }
 });
 
-Ext.override(Ext.grid.ColumnModel, {
-    destroy : function(){
-        for(var i = 0, len = this.config.length; i < len; i++){
-            Ext.destroy(this.config[i]);
-        }
-        this.purgeListeners();
-    }
-});
+//Ext.override(Ext.grid.ColumnModel, {
+//    destroy : function(){
+//        for(var i = 0, len = this.config.length; i < len; i++){
+//            Ext.destroy(this.config[i]);
+//        }
+//        this.purgeListeners();
+//    }
+//});
 
 /**
  * qtip
