@@ -125,7 +125,8 @@ class Bandwidth extends Modules
 
     public function Charts(){
         $sql = $this->DbLog->select()
-                  ->from('bandwidth_settings');
+                  ->from('bandwidth_settings')
+                  ->where('disabled=0');
         return $this->DbLog->fetchAll($sql);
     }
 
