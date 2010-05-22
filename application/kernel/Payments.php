@@ -159,17 +159,17 @@ class Payments
 	public function GetList($start=null, $limit=null, $sort=null, $dir=null, $query=null, $status='%')
 	{
 	    $query = Utils::decode($query);
-		$sql = $this->Db->select()
-					->from('payments', array('COUNT(*)'))
-					->join('usergroup','payments.iduser=usergroup.id', array())
-					->where('payments.status LIKE ?', $status);
-		if ($query){
-			$sql-> where("username LIKE ?", '%'.$query.'%')
-				-> orWhere("name LIKE ?", '%'.$query.'%')
-				-> orWhere("surname LIKE ?", '%'.$query.'%')
-				-> orWhere("address LIKE ?", '%'.$query.'%');
-		}
-		$aCount = $this->Db->fetchOne($sql);
+//		$sql = $this->Db->select()
+//					->from('payments', array('COUNT(*)'))
+//					->join('usergroup','payments.iduser=usergroup.id', array())
+//					->where('payments.status LIKE ?', $status);
+//		if ($query){
+//			$sql-> where("username LIKE ?", '%'.$query.'%')
+//				-> orWhere("name LIKE ?", '%'.$query.'%')
+//				-> orWhere("surname LIKE ?", '%'.$query.'%')
+//				-> orWhere("address LIKE ?", '%'.$query.'%');
+//		}
+//		$aCount = $this->Db->fetchOne($sql);
 					
 		$sql = $this->Db->select()
 					->from('payments', array('id', 'datepayment', 'amount', 'amountdeposit', 'amountfreebyte',
@@ -185,7 +185,9 @@ class Payments
 				-> orWhere("surname LIKE ?", '%'.$query.'%')
 				-> orWhere("address LIKE ?", '%'.$query.'%');
 		}
+        $sql = Db::prepare($sql);
 		$aRows = $this->Db->fetchAll($sql);
+        $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
@@ -208,12 +210,12 @@ class Payments
 	 */
 	public function GetListByDay($start=null, $limit=null, $sort=null, $dir=null)
 	{
-		$sql = $this->Db->select()
-						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT DATE(datepayment), paymentgroup.name)")))
-    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
-						->group('paymentname')
-						->where('status=1');
-		$aCount = $this->Db->fetchOne($sql);
+//		$sql = $this->Db->select()
+//						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT DATE(datepayment), paymentgroup.name)")))
+//    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
+//						->group('paymentname')
+//						->where('status=1');
+//		$aCount = $this->Db->fetchOne($sql);
 		$sql = $this->Db->select()
 						->from('payments', array('rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)')))
 						->where('status=1')
@@ -222,7 +224,9 @@ class Payments
 						->group('paymentname')
 						->limit($limit, $start)
 						->order("$sort $dir");
+        $sql = Db::prepare($sql);
 		$aRows = $this->Db->fetchAll($sql);
+        $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
         Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
 		{
@@ -239,12 +243,12 @@ class Payments
 	 */
 	public function GetListByMonth($start=null, $limit=null, $sort=null, $dir=null)
 	{
-		$sql = $this->Db->select()
-						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT date_format(datepayment, '%Y-%m-01')), paymentgroup.name")))
-    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
-						->group('paymentname')
-						->where('status=1');
-		$aCount = $this->Db->fetchOne($sql);
+//		$sql = $this->Db->select()
+//						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT date_format(datepayment, '%Y-%m-01')), paymentgroup.name")))
+//    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
+//						->group('paymentname')
+//						->where('status=1');
+//		$aCount = $this->Db->fetchOne($sql);
 
 		$sql = $this->Db->select()
 						->from('payments', array('rdate'=>new Zend_Db_Expr("date_format(datepayment, '%Y-%m-01')"), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
@@ -254,9 +258,9 @@ class Payments
 						->group('paymentname')
 						->limit($limit, $start)
 						->order("$sort $dir");
+        $sql = Db::prepare($sql);
 		$aRows = $this->Db->fetchAll($sql);
-
-		$aRows = $this->Db->fetchAll($sql);
+        $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
         Utils::encode($aRows);
 		
 		foreach ($aRows as &$aRow)

@@ -8,4 +8,9 @@ class Db {
             throw new AppException('Db config not found!');
         }
     }
+    
+    public static function prepare($sql){
+        $sql = $sql->__toString();
+        return str_replace('SELECT ', 'SELECT SQL_CALC_FOUND_ROWS ', $sql);
+    }
 }
