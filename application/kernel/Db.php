@@ -9,7 +9,7 @@ class Db {
         }
     }
     
-    public static function prepare($sql){
+    public static function sql_calc_found_rows($sql){
         $sql = $sql->__toString();
         return str_replace('SELECT ', 'SELECT SQL_CALC_FOUND_ROWS ', $sql);
     }

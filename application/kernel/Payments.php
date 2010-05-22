@@ -185,7 +185,7 @@ class Payments
 				-> orWhere("surname LIKE ?", '%'.$query.'%')
 				-> orWhere("address LIKE ?", '%'.$query.'%');
 		}
-        $sql = Db::prepare($sql);
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
         $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 
@@ -224,7 +224,7 @@ class Payments
 						->group('paymentname')
 						->limit($limit, $start)
 						->order("$sort $dir");
-        $sql = Db::prepare($sql);
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
         $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
         Utils::encode($aRows);
@@ -258,7 +258,7 @@ class Payments
 						->group('paymentname')
 						->limit($limit, $start)
 						->order("$sort $dir");
-        $sql = Db::prepare($sql);
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
         $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
         Utils::encode($aRows);

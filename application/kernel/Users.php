@@ -79,19 +79,19 @@ class Users
 	    $as = array('fullname'=>"CONCAT_WS(' ', usergroup.surname, usergroup.name)");
         if (isset($as[$sort])) $sort=$as[$sort]; 
 		//$now = getdate();
-		$sql = $this->Db->select()
-					->from('usergroup', array('COUNT(*)'))
-					->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname'))
-					->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
-					->where('usergroup.groupname != ?', 'admin')
-					->where('usergroup.access like ?', $access);
-
-		if (is_array($filter)) $this->_filter($sql, $filter);
-		if ($query) $query=str_replace('*','%',Utils::decode($query));
-		if ($query){
-			$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
-		}
-		$aCount = $this->Db->fetchOne($sql);
+//		$sql = $this->Db->select()
+//					->from('usergroup', array('COUNT(*)'))
+//					->joinLeft('tariffs', 'usergroup.id_tariff=tariffs.id', array('tariffname'))
+//					->joinLeft('sluice', 'usergroup.id_sluice=sluice.id', array('sluicename'))
+//					->where('usergroup.groupname != ?', 'admin')
+//					->where('usergroup.access like ?', $access);
+//
+//		if (is_array($filter)) $this->_filter($sql, $filter);
+//		if ($query) $query=str_replace('*','%',Utils::decode($query));
+//		if ($query){
+//			$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
+//		}
+//		$aCount = $this->Db->fetchOne($sql);
 
 		if (PHP_SORT){
 			$sql = $this->Db->select()
@@ -111,7 +111,10 @@ class Users
 				$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
 			}
 			
-			$aRows = $this->Db->fetchAssoc($sql);
+            $sql = Db::sql_calc_found_rows($sql);
+    		$aRows = $this->Db->fetchAll($sql);
+            $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
+
 			if (strtolower($dir)=='asc')
 			{
 				ksort($aRows);
@@ -143,7 +146,11 @@ class Users
 			if ($query){
 				$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
 			}
-			$aRows = $this->Db->fetchAll($sql);
+
+            $sql = Db::sql_calc_found_rows($sql);
+    		$aRows = $this->Db->fetchAll($sql);
+            $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
+
 		}	
 		Utils::encode($aRows);
 	    $sql = $this->Db->select()
