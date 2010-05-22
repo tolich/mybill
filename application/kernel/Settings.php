@@ -279,6 +279,9 @@ class Settings {
                 ),
                 'modules'=>array(
                     'load'
+                ),
+                'payments'=>array(
+                    'getgroup'
                 )
             ),
 			'view'=>array(
@@ -495,6 +498,12 @@ class Settings {
 					'close'
 				)
 			),
+            'settings'=>array(
+                'payments'=>array(
+                    'settings',
+                    'getuser'
+                )
+            )
 		);
 		$this->Db->delete('rightaction');
 		foreach ($aData as $right=>$aResource){

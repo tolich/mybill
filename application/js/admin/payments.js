@@ -55,8 +55,22 @@ Ext.app.Payments.List = function(config){
 	}, config));
 }
 
+Ext.app.Payments.GroupList = function(config){
+	return new Ext.Action(Ext.apply({
+		text: 'Типы платежей',
+		iconCls: 'payment',
+		disabled: App.isDeny('payments', 'settings'),
+		handler: function(){
+			App.getModule('payments').onGroupList();
+		}
+	}, config));
+}
+
 App.register(Ext.extend(Ext.app.Module, {
 	moduleId: 'payments'
+    ,onGroupList: function(){
+        this.winGroupList();
+    }
 	,onList: function(){
 		this.winList();	
 	}
@@ -122,7 +136,7 @@ App.register(Ext.extend(Ext.app.Module, {
 	}
 	,winPayment: function(is){ // winPayment
 		var datePay = new Date();
-		var p = App.getContext('payments');
+		var p = this.getContext();
 		datePay.setDate(datePay.getDate()+20);
 			
 	    var formPanel = new Ext.FormPanel({
@@ -132,8 +146,36 @@ App.register(Ext.extend(Ext.app.Module, {
 			frame: false,
 	        bodyStyle:'padding:10px;',
 	        defaultType: 'textfield',
-	
 	        items: [{
+	            fieldLabel: 'Тип платежа',
+	            id: 'id_paymentgroup',
+                xtype: 'combo',
+				store: new Ext.data.JsonStore({
+                    url: App.proxy('/ajax/payments/getgroup'),
+                    autoDestroy: true,
+					fields: ['id', 'name'],
+                    data: p.lastpaygroup?[p.lastpaygroup]:[]  
+				}),
+				valueField: 'id',
+				displayField: 'name',
+				typeAhead: true,
+				triggerAction: 'all',
+				valueNotFoundText: '',
+				selectOnFocus: true,
+				allowBlank: false,
+				width: 127,
+                value: p.id_paymentgroup || p.lastpaygroup?p.lastpaygroup.id:undefined,
+				listeners: {
+					'select':function(cmb,record,index){
+                        App.getModule('payments').applyContext({
+                            'lastpaygroup': {
+                                id: record.id,
+                                name: record.get('name')
+                            }
+                        });
+					}
+				}
+	        },{
 	            fieldLabel: 'Сумма платежа',
 	            id: 'amount',
 				vtype: 'money',
@@ -179,9 +221,9 @@ App.register(Ext.extend(Ext.app.Module, {
 		        title: ' ',
 				id: 'win-payment',
 		        width: 380,
-		        height:280,
+		        height:310,
 		        minWidth: 380,
-		        minHeight: 280,
+		        minHeight: 310,
 		        layout: 'fit',
 		        plain:true,
 				modal: true,
@@ -290,6 +332,34 @@ App.register(Ext.extend(Ext.app.Module, {
 		}
 		win.show();
 	}//end winList
+	,winGroupList : function(){ //winGroupList
+		var win = Ext.getCmp('win-list');
+		if (win == undefined) {
+			var win = new Ext.Window({
+				id: 'win-list',
+				title: 'Типы платежей',
+				width: 800,
+				height: 500,
+				minWidth: 380,
+				minHeight: 280,
+				layout: 'border',
+				plain: true,		
+				modal: true,
+				items: [{
+					region: 'center',
+                    id: 'pay-group-grid',
+					xtype: 'paygroupgrid'
+                },{
+					region: 'east',
+                    id: 'pay-user-grid',
+                    xtype:'payusergrid',
+                    split:true,
+                    width: 300
+				}]
+			});
+		}
+		win.show();
+	}//end winGroupList
 }));
 
 Ext.app.Payments.Grid = Ext.extend(Ext.grid.GridPanel, {
@@ -314,7 +384,7 @@ Ext.app.Payments.Grid = Ext.extend(Ext.grid.GridPanel, {
 			,totalProperty: 'totalCount'
 			,fields:['id', {name:'datepayment',type:'date',dateFormat:'Y-m-d H:i:s'}, 'username', 'name', 'surname',
 				'amount', 'amountdeposit', 'amountbonus', 'amountfreebyte',
-				'lastdeposit', 'lastbonus', 'lastfreebyte', 'description','status']
+				'lastdeposit', 'lastbonus', 'lastfreebyte', 'description','status','paymentname','id_paymentgroup']
 			,id: 'id'
 			,remoteSort: true
 			,sortInfo:{field:'datepayment', direction:'desc'}
@@ -381,6 +451,10 @@ Ext.app.Payments.Grid = Ext.extend(Ext.grid.GridPanel, {
 		}, {
 			header: "Основание"
 			,dataIndex: 'description'
+            ,sortable: true
+		}, {
+			header: "Тип платежа"
+			,dataIndex: 'paymentname'
             ,sortable: true
 		}]);
 		
@@ -466,6 +540,7 @@ Ext.app.Payments.Grid = Ext.extend(Ext.grid.GridPanel, {
 					,amountbonus 	: g.getStore().getAt(rowIndex).get('amountbonus')
 					,description 	: g.getStore().getAt(rowIndex).get('description')
 					,apply 			: false
+                    ,id_paymentgroup: g.getStore().getAt(rowIndex).get('id_paymentgroup')
 				});
 				var rowcmenu = new Ext.menu.Menu([
 					Ext.app.Payments.Refresh(),
@@ -501,16 +576,24 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
 		var pageLimit = 50;
+        var summary = new Ext.ux.grid.GroupSummary();
 		
 		// create the Data Store
-		var store = new Ext.data.JsonStore({
+		var store = new Ext.data.GroupingStore({
 			url: App.proxy('/ajax/payments/dategrid')
-			,root: 'data'
-			,totalProperty: 'totalCount'
-			,fields:[{name:'rdate', type:'date', dateFormat:'Y-m-d'}, 
-				'sumamount', 'count', 'avg']
+            ,reader: new Ext.data.JsonReader({
+    			root: 'data'
+    			,totalProperty: 'totalCount'
+    			,fields:[
+                    {name:'rdate', type:'date', dateFormat:'Y-m-d'}, 
+    				{name: 'sumamount', type: 'float'}, 
+                    {name: 'count',  type: 'float'}, 
+                    {name: 'paymentname',  type: 'string'} 
+                ]
+            })
 			,remoteSort: true
 			,sortInfo:{field:'rdate', direction:'desc'}
+            ,groupField: 'rdate'
 			,baseParams: {limit:pageLimit}
 		});
 
@@ -520,17 +603,40 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
 			,dataIndex: 'rdate'
 			,renderer: new Ext.util.Format.dateRenderer('d.m.Y, l')
             ,sortable: true
+            ,summaryRenderer: function(v, params, data){
+                return 'Итого:';
+            }
 		}, {
 			header: "Сумма"
 			,dataIndex: 'sumamount'
             ,sortable: true
+            ,summaryType: 'sum'
+            ,align: 'right'
+            ,summaryRenderer: function(v, params, data){
+                return Ext.util.Format.number(v,'0.00');
+            }
+            ,renderer: function(v, params, data){
+                return Ext.util.Format.number(v,'0.00');
+            }
 		}, {
 			header: "Кол-во платежей"
 			,dataIndex: 'count'
+            ,summaryType: 'sum'
+            ,align: 'center'
             ,sortable: true
 		}, {
 			header: "Средняя сумма"
-			,dataIndex: 'avg'
+            ,align: 'right'
+            ,summaryRenderer: function(v, params, data){
+                return Ext.util.Format.number(data.data.sumamount/data.data.count,'0.00');
+            }
+            ,renderer: function(v, params, data){
+                return Ext.util.Format.number(data.data.sumamount/data.data.count,'0.00');
+            }
+            ,sortable: true
+		}, {
+			header: "Тип платежа"
+			,dataIndex: 'paymentname'
             ,sortable: true
 		}]);
 		
@@ -544,6 +650,13 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
 			,trackMouseOver: true
 			,autoScroll :true
 			,loadMask: true
+            ,plugins: summary
+			,view: new Ext.grid.GroupingView({
+				groupByText: 'Группировать по этому полю',
+				showGroupsText: 'Отображать по группам',
+				forceFit: true,
+				groupTextTpl: '{text}',
+			})
 			,viewConfig:{
 				forceFit:true
 			}
@@ -580,16 +693,24 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
 		var pageLimit = 50;
+        var summary = new Ext.ux.grid.GroupSummary();
 		
 		// create the Data Store
-		var store = new Ext.data.JsonStore({
+		var store = new Ext.data.GroupingStore({
 			url: App.proxy('/ajax/payments/monthgrid')
-			,root: 'data'
-			,totalProperty: 'totalCount'
-			,fields:[{name:'rdate', type:'date', dateFormat:'Y-m-d'},
-				'sumamount', 'count', 'avg']
+            ,reader: new Ext.data.JsonReader({
+    			root: 'data'
+    			,totalProperty: 'totalCount'
+    			,fields:[
+                    {name:'rdate', type:'date', dateFormat:'Y-m-d'}, 
+    				{name: 'sumamount', type: 'float'}, 
+                    {name: 'count',  type: 'float'}, 
+                    {name: 'paymentname',  type: 'string'} 
+                ]
+            })
 			,remoteSort: true
 			,sortInfo:{field:'rdate', direction:'desc'}
+            ,groupField: 'rdate'
 			,baseParams: {limit:pageLimit}
 		});
 
@@ -599,17 +720,40 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
 			,dataIndex: 'rdate'
 			,renderer: new Ext.util.Format.dateRenderer('F Y')
             ,sortable: true
+            ,summaryRenderer: function(v, params, data){
+                return 'Итого:';
+            }
 		}, {
 			header: "Сумма"
 			,dataIndex: 'sumamount'
             ,sortable: true
+            ,summaryType: 'sum'
+            ,align: 'right'
+            ,summaryRenderer: function(v, params, data){
+                return Ext.util.Format.number(v,'0.00');
+            }
+            ,renderer: function(v, params, data){
+                return Ext.util.Format.number(v,'0.00');
+            }
 		}, {
 			header: "Кол-во платежей"
 			,dataIndex: 'count'
             ,sortable: true
+            ,summaryType: 'sum'
+            ,align: 'center'
 		}, {
 			header: "Средняя сумма"
-			,dataIndex: 'avg'
+            ,align: 'right'
+            ,summaryRenderer: function(v, params, data){
+                return Ext.util.Format.number(data.data.sumamount/data.data.count,'0.00');
+            }
+            ,renderer: function(v, params, data){
+                return Ext.util.Format.number(data.data.sumamount/data.data.count,'0.00');
+            }
+            ,sortable: true
+		}, {
+			header: "Тип платежа"
+			,dataIndex: 'paymentname'
             ,sortable: true
 		}]);
 		
@@ -623,6 +767,13 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
 			,trackMouseOver: true
 			,autoScroll :true
 			,loadMask: true
+            ,plugins: summary
+			,view: new Ext.grid.GroupingView({
+				groupByText: 'Группировать по этому полю',
+				showGroupsText: 'Отображать по группам',
+				forceFit: true,
+				groupTextTpl: '{text}',
+			})
 			,viewConfig:{
 				forceFit:true
 			}
@@ -653,3 +804,231 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
 	}
 });
 Ext.reg('monthpaymentsgrid', Ext.app.Payments.MonthGrid);
+
+// Грид групп платежей
+Ext.app.Payments.GroupGrid = Ext.extend(Ext.grid.GridPanel, {
+     border:false
+    ,initComponent: function(){
+        var Setting = Ext.data.Record.create([{
+            name: 'id',
+            type: 'int'
+        }, {
+            name: 'name',
+            type: 'string',
+            allowBlank: false
+        }, {
+            name: 'description',
+            type: 'string',
+        },{
+            name: 'users',
+            type: 'string',
+        }]);
+		var cm = new Ext.grid.ColumnModel([
+        {
+			header: "id"
+			,dataIndex: 'id'
+            ,hidden: true
+        },{
+			header: "Наименование"
+			,dataIndex: 'name'
+            ,editor: {
+                xtype: 'textfield'
+                ,allowBlank: false
+            }
+        }, {
+			header: "Описание"
+			,dataIndex: 'description'
+            ,editor: {
+                xtype: 'textfield'
+            }
+        }]);		
+        
+		// create the Data Store
+    	var store = new Ext.data.JsonStore({
+			url: App.proxy('/ajax/payments/settings')
+            ,autoDestroy: true  
+            ,root: 'data'
+			,fields: Setting //['id','name','ifacename','ip','secret','invert','disabled']
+			,id: 'id'
+            ,writer: new Ext.data.JsonWriter({
+                encode: true
+                //,writeAllFields: true // write all fields, not just those that changed
+            })
+		});
+        var editor = new Ext.ux.grid.RowEditor({
+            clicksToEdit: 2,
+            saveText: 'Сохранить',
+            cancelText: 'Отмена',
+            commitChangesText: 'Вы должны сохранить или отменить Ваши изменения',
+            errorText: 'Ошибка'
+        });
+        
+        Ext.apply(this, {
+			margins: '0 5 5 0',
+			store: store,
+			cm: cm,
+			trackMouseOver: true,
+			autoScroll :true,
+            plugins: [editor],
+			loadMask: true,
+			sm: new Ext.grid.RowSelectionModel({
+				singleSelect: true
+                ,listeners:{
+                    'rowselect': function(sm,i,cr){
+                        App.getModule('payments').setContext({id_group:cr.id});   
+                        var u = Ext.decode(cr.get('users'));
+                        var ug =Ext.getCmp('pay-user-grid');
+                        var sr = [];
+                        ug.store.each(function(r){
+                            if (u.indexOf(r.get('id')) != -1) {
+                                sr.push(r);
+                            }
+                        })                 
+                        ug.getSelectionModel().selectRecords(sr);
+                    }
+                    ,'rowdeselect': function(){
+                        App.getModule('payments').clearContext();   
+                        Ext.getCmp('pay-user-grid').getSelectionModel().clearSelections();
+                    }
+                    ,scope: this
+                }
+			}),
+			viewConfig:{
+				enableRowBody: true
+				,forceFit: true
+            },
+            tbar: [{
+                text: 'Добавить'
+                ,iconCls: 'user-payment'
+                ,handler: function(){
+                    var e = new Setting({
+                        name: '',
+                        description: ''
+                    });
+                    editor.stopEditing();
+                    this.store.insert(0, e);
+                    editor.startEditing(0,1);
+                    editor.on('afteredit', function(){
+                        this.store.reload();
+                    },this,{single: true});
+                    editor.on('canceledit', function(){
+                        this.store.remove(e);
+                    },this,{single: true});
+                }
+                ,scope: this
+            },'-',{
+                text: 'Удалить'
+                ,iconCls: 'user-fee'
+                ,handler: function(){
+                    var r;
+                    if (r = this.getSelectionModel().getSelected()){
+                		Ext.Msg.show({
+                			title:'Подтверждение',
+                			msg: 'Вы действительно хотите удалить <b>' + r.get('name') + '?</b>',
+                			buttons: Ext.MessageBox.YESNO,
+                			icon: Ext.MessageBox.QUESTION,
+                			width: '300',
+                			scope: this,
+                			fn: function(btn){
+                				if (btn == 'yes') {
+                                    editor.stopEditing();
+                                    this.store.remove(r);
+                				};
+                			}
+                		})
+                    }
+                }
+                ,scope: this
+            },'->',{
+                iconCls: 'refresh'
+                ,handler:function(){
+                    this.store.reload();    
+                }
+                ,scope: this
+            }]
+        });
+
+        Ext.app.Payments.GroupGrid.superclass.initComponent.apply(this, arguments);
+    } // eo function initComponent
+
+    ,onRender:function() {
+		this.store.load();
+        Ext.app.Payments.GroupGrid.superclass.onRender.apply(this, arguments);
+    } // eo function onRender
+});
+Ext.reg('paygroupgrid', Ext.app.Payments.GroupGrid);
+
+// Грид пользователей в группах платежей
+Ext.app.Payments.UserGrid = Ext.extend(Ext.grid.GridPanel, {
+     border:false
+    ,initComponent: function(){
+        var sm =new Ext.grid.CheckboxSelectionModel({
+			checkOnly: true
+		});
+		var cm = new Ext.grid.ColumnModel([sm,
+        {
+			header: "id"
+			,dataIndex: 'id'
+            ,hidden: true
+        },{
+			header: "Администратор"
+			,dataIndex: 'username'
+        },{
+			header: "Роль"
+			,dataIndex: 'rolename'
+        }]);		
+        
+		// create the Data Store
+    	var store = new Ext.data.JsonStore({
+			url: App.proxy('/ajax/payments/getuser')
+            ,autoDestroy: true  
+			,fields: ['id','username','role','rolename']
+			,id: 'id'
+		});
+        
+        Ext.apply(this, {
+			margins: '0 5 5 0',
+			store: store,
+			cm: cm,
+			trackMouseOver: true,
+			autoScroll :true,
+			loadMask: true,
+			sm: sm,
+			viewConfig:{
+				enableRowBody: true
+				,forceFit: true
+            },
+            tbar: ['->',{
+                text: 'Сохранить'
+                ,iconCls: 'save'
+                ,handler: function(){
+                    var r = this.getSelectionModel().getSelections();
+                    var users = [];
+                    Ext.each(r, function(item){
+                        users.push(item.id);
+                    })
+                    var id = App.getModule('payments').getContext().id_group;
+                    if (id) {
+                        Ext.getCmp('pay-group-grid').store.getById(id).set('users', Ext.encode(users));
+                    } else {
+                		Ext.Msg.show({
+                			title:'Информация',
+                			msg: 'Необходимо выбрать тип платежа!',
+                			buttons: Ext.MessageBox.OK,
+                			icon: Ext.MessageBox.INFO
+                		})
+                    }
+                }
+                ,scope: this
+            }]
+        });
+
+        Ext.app.Payments.UserGrid.superclass.initComponent.apply(this, arguments);
+    } // eo function initComponent
+
+    ,onRender:function() {
+		this.store.load();
+        Ext.app.Payments.UserGrid.superclass.onRender.apply(this, arguments);
+    } // eo function onRender
+});
+Ext.reg('payusergrid', Ext.app.Payments.UserGrid);

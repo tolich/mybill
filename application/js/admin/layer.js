@@ -63,7 +63,9 @@ Ext.app.Layer=function(){
 			border:false,
 			height: 0,
 			margins: '0 0 0 0',
-			tbar: [Ext.app.Users.Add(), 
+			tbar: [
+                Ext.app.Users.Add(), 
+                Ext.app.Tasks.List(),
 			{
 				text: 'Справочники',
 				iconCls: 'table',
@@ -77,7 +79,8 @@ Ext.app.Layer=function(){
 						'-',
 						Ext.app.Zones.List(),
 						Ext.app.Tariffs.List(),
-						Ext.app.Tasks.List(),
+                        '-',
+						Ext.app.Payments.GroupList(),
 						'-',
 						Ext.app.Admin.List()
 					]

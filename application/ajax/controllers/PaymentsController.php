@@ -113,5 +113,38 @@ class Ajax_PaymentsController extends Zend_Controller_Action
 		$result = $oUsers->PayDaily($this->_getAllParams());
 		$this->_helper->json($result);
 	}
+
+	public function settingsAction()
+	{
+		$oPayments = new Payments();
+        $post = $this->_getParam('data');
+        switch ($this->_getParam('xaction')){
+            case 'destroy':
+        		$result = $oPayments->DestroySettings($post);
+            break;
+            case 'update':
+        		$result = $oPayments->UpdateSettings($post);
+            break;
+            case 'read':
+        		$result = $oPayments->ReadSettings();
+            break;    
+            case 'create':
+        		$result = $oPayments->CreateSettings($post);
+            break;    
+        }
+		$this->_helper->json($result);
+	}
+    
+    public function getuserAction(){
+		$oAdmins = new Admins();
+		$result = $oAdmins->GetList();
+		$this->_helper->json($result);
+    }
+
+    public function getgroupAction(){
+		$oPayments = new Payments();
+		$result = $oPayments->GetGroups();
+		$this->_helper->json($result);
+    }
 }
-?>
+

@@ -26,7 +26,7 @@ class Payments
 	public function Add($param)
 	{
 		$aResult = array();
-		$aKey = array('iduser','amount', 'amountdeposit', 'amountfreebyte', 'amountpaybyte', 'amountbonus', 'description');
+		$aKey = array('iduser','amount', 'amountdeposit', 'amountfreebyte', 'amountpaybyte', 'amountbonus', 'description','id_paymentgroup');
 		$aInsData = Utils::ClearPostData($param, $aKey);
 		$aInsData['amount']=$aInsData['amount']*1024*1024;
 		$aInsData['amountdeposit']=$aInsData['amountdeposit']*1024*1024;
@@ -60,7 +60,7 @@ class Payments
 	public function Edit($param)
 	{
 		$aResult = array();
-		$aKey = array('id','amount', 'amountdeposit', 'amountfreebyte', 'amountbonus', 'description');
+		$aKey = array('id','amount', 'amountdeposit', 'amountfreebyte', 'amountbonus', 'description', 'id_paymentgroup');
 		$aUpdData = Utils::ClearPostData($param, $aKey);
 		$aUpdData['amount']=$aUpdData['amount']*1024*1024;
 		$aUpdData['amountdeposit']=$aUpdData['amountdeposit']*1024*1024;
@@ -158,15 +158,16 @@ class Payments
 	 */
 	public function GetList($start=null, $limit=null, $sort=null, $dir=null, $query=null, $status='%')
 	{
+	    $query = Utils::decode($query);
 		$sql = $this->Db->select()
 					->from('payments', array('COUNT(*)'))
 					->join('usergroup','payments.iduser=usergroup.id', array())
 					->where('payments.status LIKE ?', $status);
 		if ($query){
-			$sql-> where("username LIKE ?", '%'.Utils::decode($query).'%')
-				-> orWhere("name LIKE ?", '%'.Utils::decode($query).'%')
-				-> orWhere("surname LIKE ?", '%'.Utils::decode($query).'%')
-				-> orWhere("address LIKE ?", '%'.Utils::decode($query).'%');
+			$sql-> where("username LIKE ?", '%'.$query.'%')
+				-> orWhere("name LIKE ?", '%'.$query.'%')
+				-> orWhere("surname LIKE ?", '%'.$query.'%')
+				-> orWhere("address LIKE ?", '%'.$query.'%');
 		}
 		$aCount = $this->Db->fetchOne($sql);
 					
@@ -174,14 +175,15 @@ class Payments
 					->from('payments', array('id', 'datepayment', 'amount', 'amountdeposit', 'amountfreebyte',
 							'amountbonus', 'lastdeposit', 'lastfreebyte', 'lastbonus', 'status', 'description'))
 					->join('usergroup', 'payments.iduser=usergroup.id',array('username', 'name', 'surname', 'address'))
+					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('id_paymentgroup'=>'id','paymentname'=>'name'))
 					->limit($limit,$start)
 					->order("$sort $dir")
 					->where('payments.status LIKE ?', $status);
 		if ($query){
-			$sql-> where("username LIKE ?", '%'.Utils::decode($query).'%')
-				-> orWhere("name LIKE ?", '%'.Utils::decode($query).'%')
-				-> orWhere("surname LIKE ?", '%'.Utils::decode($query).'%')
-				-> orWhere("address LIKE ?", '%'.Utils::decode($query).'%');
+			$sql-> where("username LIKE ?", '%'.$query.'%')
+				-> orWhere("name LIKE ?", '%'.$query.'%')
+				-> orWhere("surname LIKE ?", '%'.$query.'%')
+				-> orWhere("address LIKE ?", '%'.$query.'%');
 		}
 		$aRows = $this->Db->fetchAll($sql);
 
@@ -207,22 +209,24 @@ class Payments
 	public function GetListByDay($start=null, $limit=null, $sort=null, $dir=null)
 	{
 		$sql = $this->Db->select()
-						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT DATE(datepayment))")))
+						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT DATE(datepayment), paymentgroup.name)")))
+    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
+						->group('paymentname')
 						->where('status=1');
 		$aCount = $this->Db->fetchOne($sql);
-
 		$sql = $this->Db->select()
-						->from('payments', array('rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
+						->from('payments', array('rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)')))
 						->where('status=1')
+    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
 						->group('rdate')
+						->group('paymentname')
 						->limit($limit, $start)
 						->order("$sort $dir");
 		$aRows = $this->Db->fetchAll($sql);
-
+        Utils::encode($aRows);
 		foreach ($aRows as &$aRow)
 		{
 			$aRow['sumamount']=sprintf("%0.2f", $aRow['sumamount']/1024/1024);
-			$aRow['avg']=sprintf("%0.2f", $aRow['avg']/1024/1024);
 		}	
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
@@ -236,19 +240,24 @@ class Payments
 	public function GetListByMonth($start=null, $limit=null, $sort=null, $dir=null)
 	{
 		$sql = $this->Db->select()
-						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT date_format(datepayment, '%Y-%m-01'))")))
+						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT date_format(datepayment, '%Y-%m-01')), paymentgroup.name")))
+    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
+						->group('paymentname')
 						->where('status=1');
 		$aCount = $this->Db->fetchOne($sql);
 
 		$sql = $this->Db->select()
 						->from('payments', array('rdate'=>new Zend_Db_Expr("date_format(datepayment, '%Y-%m-01')"), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
 						->where('status=1')
+    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
 						->group('rdate')
+						->group('paymentname')
 						->limit($limit, $start)
 						->order("$sort $dir");
 		$aRows = $this->Db->fetchAll($sql);
 
 		$aRows = $this->Db->fetchAll($sql);
+        Utils::encode($aRows);
 		
 		foreach ($aRows as &$aRow)
 		{
@@ -261,5 +270,74 @@ class Payments
 		return $aData;
 
 	}
+    
+    public function DestroySettings($post){
+        $id = trim($post,'"');
+        $where = $this->Db->quoteInto('id_paymentgroup=?', $id);
+        $this->Db->delete('paymentuser',$where);
+        $where = $this->Db->quoteInto('id=?', $id);
+        $this->Db->delete('paymentgroup',$where);
+        return array('success'=>true);
+    }
+
+    public function UpdateSettings($post){
+        $aData = Zend_Json::decode($post);
+   		Utils::decode($aData);
+        $id =  $aData['id'];
+        unset($aData['id']);
+        if (isset($aData['users'])){
+            $where = $this->Db->quoteInto('id_paymentgroup=?', $id);
+            $this->Db->delete('paymentuser',$where);
+            $aUsers = Zend_Json::decode($aData['users']);
+            unset($aData['users']);
+            foreach($aUsers as $v){
+                $this->Db->insert('paymentuser',array(
+                    'id_admin' =>$v,
+                    'id_paymentgroup' => $id
+                ));
+            }
+        }
+        if (count($aData)){
+            $where = $this->Db->quoteInto('id=?', $id);
+            $this->Db->update('paymentgroup',$aData,$where);
+        }
+        return array('success'=>true);
+    }
+
+    public function CreateSettings($post){
+        $aData = Zend_Json::decode($post);
+   		Utils::decode($aData);
+        $this->Db->insert('paymentgroup',$aData);
+        return array('success'=>true);
+    }
+    
+    public function ReadSettings(){
+        $sql = $this->Db->select()
+                    ->from('paymentuser',array('id_paymentgroup', 'id_admin'));
+        $aUsers = $this->Db->fetchAll($sql);
+        $sql = $this->Db->select()
+                    ->from('paymentgroup',array('id','name','description'));
+        $aGroups = $this->Db->fetchAll($sql);
+   		Utils::encode($aGroups);
+        foreach ($aGroups as &$v){
+            $users = array_filter($aUsers,create_function('$var', 'return $var["id_paymentgroup"]=='.$v['id'].';'));
+            array_walk($users,create_function('&$item', '$item=$item["id_admin"];'));
+            $v['users'] = Zend_Json::encode(array_values($users));
+        }
+        unset($v);
+        $aData = array(
+            'data' => $aGroups
+        );
+        return $aData;
+    }
+
+    public function GetGroups(){
+        $sql = $this->Db->select()
+                    ->from('paymentgroup',array('id','name'));
+        $aData = $this->Db->fetchAll($sql);
+   		Utils::encode($aData);
+        return $aData;
+    }
+    
 }
 

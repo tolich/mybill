@@ -209,12 +209,12 @@ Ext.app.Bandwidth.Grid = Ext.extend(Ext.grid.GridPanel, {
             }]
         });
 
-        Ext.app.Users.Grid.superclass.initComponent.apply(this, arguments);
+        Ext.app.Bandwidth.Grid.superclass.initComponent.apply(this, arguments);
     } // eo function initComponent
 
     ,onRender:function() {
 		this.store.load();
-        Ext.app.Users.Grid.superclass.onRender.apply(this, arguments);
+        Ext.app.Bandwidth.Grid.superclass.onRender.apply(this, arguments);
     } // eo function onRender
 });
 Ext.reg('bandwidthgrid', Ext.app.Bandwidth.Grid);

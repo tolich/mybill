@@ -566,3 +566,6 @@ html, body {
 .row-etitor-class{
     vertical-align:middle !important;
 }
+.save {
+    background-image: url(/shared/icons/silk/disk.png) !important;
+}

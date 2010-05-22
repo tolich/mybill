@@ -26,6 +26,9 @@ class Mpd5 extends Vendor
     
     public function getSessionsId(){
         $sessions = $this->getSessions();
+        if (is_array($sessions) && count($sessions)==0){
+            $sessions = $this->getSessions();
+        }
         if (false === $sessions){
             return false;
         }

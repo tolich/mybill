@@ -21,8 +21,12 @@ abstract class Modules {
 	 */
 	public function __construct()
 	{	
-		$this->Db = Zend_Registry::get('db');
-		$this->acl= Zend_Registry::get('acl');
+        if (Zend_Registry::isRegistered('db')){
+    		$this->Db = Zend_Registry::get('db');
+        }
+        if (Zend_Registry::isRegistered('acl')){
+    		$this->acl= Zend_Registry::get('acl');
+        }
 		$this->Init();
 		//Utils::decode($this->rn);
 	}
@@ -141,6 +145,8 @@ abstract class Modules {
 		}
 	}
 
+    public function Daily() {}
+    
 	private function _refresh(){
 		$oManager = new Manager();
 		$oManager->SetContext();

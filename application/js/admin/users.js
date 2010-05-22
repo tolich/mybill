@@ -777,8 +777,8 @@ App.register(Ext.extend(Ext.app.Module, {
 		Ext.getCmp('info-tabpanel').items.each(
 			function(i){
 				if (i.xtype) {
-                    //Bug ExtJS 3.1.1
-                    delete i.initialConfig.ownerCt;
+//                    //Bug ExtJS 3.1.1
+//                    delete i.initialConfig.ownerCt;
                     info_panel_items.push(i.initialConfig);
                 }               
 			}
@@ -943,6 +943,7 @@ App.register(Ext.extend(Ext.app.Module, {
 			mode 		: 0 // Добавление
 			,iduser 	: this.getContext().id 
 			,username 	: this.getContext().username 
+            ,lastpaygroup: this.app.getContext('payments').lastpaygroup
 		});
 		this.app.getModule('payments').winPayment();
 	}
@@ -952,6 +953,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		var url = '/ajax/payments/pay';
 		var description = 'Доплата за '+Ext.util.Format.date(datePay, 'F Y');
 			
+		var lastpaygroup = App.getModule('payments').getContext().lastpaygroup;	
 	    var formPanel = new Ext.FormPanel({
 	        labelWidth: 170,
 			labelAlign: 'right',
@@ -959,9 +961,37 @@ App.register(Ext.extend(Ext.app.Module, {
 			frame: false,
 	        bodyStyle:'padding:10px;',
 	        defaultType: 'textfield',
-	
 	        items: 
 			[{
+	            fieldLabel: 'Тип платежа',
+	            id: 'id_paymentgroup',
+                xtype: 'combo',
+				store: new Ext.data.JsonStore({
+                    url: App.proxy('/ajax/payments/getgroup'),
+                    autoDestroy: true,
+					fields: ['id', 'name'],
+                    data: lastpaygroup?[lastpaygroup]:[]  
+				}),
+				valueField: 'id',
+				displayField: 'name',
+				typeAhead: true,
+				triggerAction: 'all',
+				valueNotFoundText: '',
+				selectOnFocus: true,
+				allowBlank: false,
+				width: 127,
+                value: lastpaygroup?lastpaygroup.id:undefined,
+				listeners: {
+					'select':function(cmb,record,index){
+                        App.getModule('payments').applyContext({
+                            'lastpaygroup': {
+                                id: record.id,
+                                name: record.get('name')
+                            }
+                        });
+					}
+				}
+	        },{
 	            fieldLabel: 'Сумма платежа',
 	            id: 'amount',
 				vtype: 'money',
@@ -995,9 +1025,9 @@ App.register(Ext.extend(Ext.app.Module, {
 		        title: t+' - '+this.getContext().username,
 				id: 'win-pay',
 		        width: 380,
-		        height:220,
+		        height:240,
 		        minWidth: 380,
-		        minHeight: 220,
+		        minHeight: 240,
 		        layout: 'fit',
 		        plain:true,
 				modal: true,
@@ -1090,7 +1120,7 @@ App.register(Ext.extend(Ext.app.Module, {
 				var fee = 0;
 			break;
 		}
-			
+		var lastpaygroup = App.getModule('payments').getContext().lastpaygroup;	
 	    var formPanel = new Ext.FormPanel({
 	        labelWidth: 170,
 			labelAlign: 'right',
@@ -1098,9 +1128,37 @@ App.register(Ext.extend(Ext.app.Module, {
 			frame: false,
 	        bodyStyle:'padding:10px;',
 	        defaultType: 'textfield',
-	
 	        items: 
 			[{
+	            fieldLabel: 'Тип платежа',
+	            id: 'id_paymentgroup',
+                xtype: 'combo',
+				store: new Ext.data.JsonStore({
+                    url: App.proxy('/ajax/payments/getgroup'),
+                    autoDestroy: true,
+					fields: ['id', 'name'],
+                    data: lastpaygroup?[lastpaygroup]:[]  
+				}),
+				valueField: 'id',
+				displayField: 'name',
+				typeAhead: true,
+				triggerAction: 'all',
+				valueNotFoundText: '',
+				selectOnFocus: true,
+				allowBlank: false,
+				width: 127,
+                value: lastpaygroup?lastpaygroup.id:undefined,
+				listeners: {
+					'select':function(cmb,record,index){
+                        App.getModule('payments').applyContext({
+                            'lastpaygroup': {
+                                id: record.id,
+                                name: record.get('name')
+                            }
+                        });
+					}
+				}
+	        },{
 	            fieldLabel: 'Сумма платежа',
 	            id: 'amount',
 				vtype: 'money',
@@ -1122,9 +1180,9 @@ App.register(Ext.extend(Ext.app.Module, {
 		        title: t+' - '+this.getContext().username,
 				id: 'win-payfee',
 		        width: 380,
-		        height:190,
+		        height:210,
 		        minWidth: 380,
-		        minHeight: 190,
+		        minHeight: 210,
 		        layout: 'fit',
 		        plain:true,
 				modal: true,
@@ -1134,6 +1192,7 @@ App.register(Ext.extend(Ext.app.Module, {
 					handler: function(){
 						var post = {
 							iduser: this.getContext().id,
+                            id_paymentgroup: '',
 							amount: '0.00',
 							description: '',
 							fee: fee

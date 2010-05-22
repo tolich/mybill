@@ -29,6 +29,7 @@ class Cron {
 		$this->MonthlyFee();
 		$this->ChangeAcctPeriod();
 		$this->CloseCreditSessions();
+        $this->ModulesDaily();
 	}
 	
 	public function sessions(){
@@ -36,6 +37,20 @@ class Cron {
 		$r = $this->obj['sessions']->CheckSessions();
 		AppLog::output("\ttotal clean $r session(s)");
 	}
+
+
+    private function ModulesDaily(){
+        $oManager = new Manager();
+        $aModules = $oManager->GetModules();
+        foreach ($aModules as $k=>$v){
+            $module = ucfirst($k);
+    		if (class_exists($module)){
+    			AppLog::output("{$module} daily runing");
+    			$oModule = new $module();
+    			$result = $oModule->Daily();
+    		}
+        }
+    }
 
 	/**
 	 * Смена тарифа

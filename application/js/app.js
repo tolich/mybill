@@ -122,7 +122,8 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 		this.context.add(id, c);
 	}
 	,clearContext: function(id){
-		this.context.removeKey(id);
+		//this.context.removeKey(id);
+        this.context.add(id, {});
 	}
 	,isContext: function(id){
 		this.context.containsKey(id);
@@ -238,9 +239,6 @@ Ext.extend(Ext.app.App, Ext.util.Observable , {
 			,scope: config.scope
 		});
 	}
-//    ,getHtmlHead: function() {
-//        return document.getElementsByTagName("head")[0] || document.documentElement;
-//    }
     ,addScript: function(data) {
         var script = document.createElement("script");
         script.type = "text/javascript";
