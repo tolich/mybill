@@ -337,7 +337,9 @@ class Payments
 
     public function GetGroups(){
         $sql = $this->Db->select()
-                    ->from('paymentgroup',array('id','name'));
+                    ->from('paymentgroup',array('id','name'))
+                    ->join('paymentuser','paymentgroup.id=paymentuser.id_paymentgroup',array())
+                    ->where('id_admin=?',Context::GetUserData('id'));
         $aData = $this->Db->fetchAll($sql);
    		Utils::encode($aData);
         return $aData;
