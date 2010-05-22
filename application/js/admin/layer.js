@@ -65,7 +65,6 @@ Ext.app.Layer=function(){
 			margins: '0 0 0 0',
 			tbar: [
                 Ext.app.Users.Add(), 
-                Ext.app.Tasks.List(),
 			{
 				text: 'Справочники',
 				iconCls: 'table',
@@ -92,6 +91,8 @@ Ext.app.Layer=function(){
 					items: [
 						Ext.app.Payments.List(),
 						'-',
+                        Ext.app.Tasks.List(),
+                        '-',
 						Ext.app.Sessions.List()
 					]
 				})
