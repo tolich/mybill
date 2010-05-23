@@ -146,5 +146,11 @@ class Ajax_PaymentsController extends Zend_Controller_Action
 		$result = $oPayments->GetGroups();
 		$this->_helper->json($result);
     }
+
+    public function togroupAction(){
+		$oPayments = new Payments();
+		$result = $oPayments->ToGroup($this->_getParam('id'));
+		$this->_helper->json($result);
+    }
 }
 

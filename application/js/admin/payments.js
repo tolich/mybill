@@ -939,6 +939,32 @@ Ext.app.Payments.GroupGrid = Ext.extend(Ext.grid.GridPanel, {
                     }
                 }
                 ,scope: this
+            },'-',{
+                text: 'Перенести свободные'
+                ,iconCls: 'user-fee'
+                ,handler: function(){
+                    var r;
+                    if (r = this.getSelectionModel().getSelected()){
+                		Ext.Msg.show({
+                			title:'Подтверждение',
+                			msg: 'Вы действительно хотите перенести свободные платежи в <b>' + r.get('name') + '?</b>',
+                			buttons: Ext.MessageBox.YESNO,
+                			icon: Ext.MessageBox.QUESTION,
+                			width: '300',
+                			scope: this,
+                			fn: function(btn){
+                				if (btn == 'yes') {
+                                    editor.stopEditing();
+                					App.request({
+                						url : '/ajax/payments/togroup',
+                						params: {id: r.id}
+                					});
+                				};
+                			}
+                		})
+                    }
+                }
+                ,scope: this
             },'->',{
                 iconCls: 'refresh'
                 ,handler:function(){

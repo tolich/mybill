@@ -220,6 +220,9 @@ class Payments
 						->from('payments', array('rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)')))
 						->where('status=1')
     					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
+                        ->joinLeft('paymentuser','paymentgroup.id=paymentuser.id_paymentgroup',array())
+                        ->where('id_admin=?',Context::GetUserData('id'))
+                        ->orWhere('id_admin is null')
 						->group('rdate')
 						->group('paymentname')
 						->limit($limit, $start)
@@ -254,6 +257,9 @@ class Payments
 						->from('payments', array('rdate'=>new Zend_Db_Expr("date_format(datepayment, '%Y-%m-01')"), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
 						->where('status=1')
     					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
+                        ->joinLeft('paymentuser','paymentgroup.id=paymentuser.id_paymentgroup',array())
+                        ->where('id_admin=?',Context::GetUserData('id'))
+                        ->orWhere('id_admin is null')
 						->group('rdate')
 						->group('paymentname')
 						->limit($limit, $start)
@@ -279,6 +285,7 @@ class Payments
         $id = trim($post,'"');
         $where = $this->Db->quoteInto('id_paymentgroup=?', $id);
         $this->Db->delete('paymentuser',$where);
+        $this->Db->update('payments',array('id_paymentgroup'=>0),$where);
         $where = $this->Db->quoteInto('id=?', $id);
         $this->Db->delete('paymentgroup',$where);
         return array('success'=>true);
@@ -345,5 +352,9 @@ class Payments
         return $aData;
     }
     
+    public function ToGroup($id){
+        $this->Db->update('payments',array('id_paymentgroup'=>$id),'id_paymentgroup=0');
+        return array('success'=>true);
+    }
 }
 

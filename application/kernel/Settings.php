@@ -501,7 +501,8 @@ class Settings {
             'settings'=>array(
                 'payments'=>array(
                     'settings',
-                    'getuser'
+                    'getuser',
+                    'togroup'
                 )
             )
 		);
