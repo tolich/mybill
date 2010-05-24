@@ -239,6 +239,7 @@ App.register(Ext.extend(Ext.app.Module, {
 							amountpaybyte: '0.000',
 							amountbonus: '0.000',
 							description: '',
+                            id_paymentgroup: '',
 							apply: false
 						};
 						var url = p.mode==1?'/ajax/payments/edit':'/ajax/payments/add';
