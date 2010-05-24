@@ -1037,6 +1037,7 @@ App.register(Ext.extend(Ext.app.Module, {
 					handler: function(){
 						var post = {
 							iduser: this.getContext().id,
+                            id_paymentgroup: '',
 							amount: '0.00',
 							amountfreebyte: '0.00',
 							description: ''
