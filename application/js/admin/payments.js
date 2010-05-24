@@ -588,7 +588,8 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name:'rdate', type:'date', dateFormat:'Y-m-d'}, 
     				{name: 'sumamount', type: 'float'}, 
                     {name: 'count',  type: 'float'}, 
-                    {name: 'paymentname',  type: 'string'} 
+                    {name: 'paymentname',  type: 'string'},
+                    'avg' 
                 ]
             })
 			,remoteSort: true
@@ -599,9 +600,8 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
 
 		var cm = new Ext.grid.ColumnModel([
 		{
-			header: "Дата"
-			,dataIndex: 'rdate'
-			,renderer: new Ext.util.Format.dateRenderer('d.m.Y, l')
+			header: "Тип платежа"
+			,dataIndex: 'paymentname'
             ,sortable: true
             ,summaryRenderer: function(v, params, data){
                 return 'Итого:';
@@ -626,6 +626,7 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
             ,sortable: true
 		}, {
 			header: "Средняя сумма"
+			,dataIndex: 'avg'
             ,align: 'right'
             ,summaryRenderer: function(v, params, data){
                 return Ext.util.Format.number(data.data.sumamount/data.data.count,'0.00');
@@ -635,8 +636,9 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             ,sortable: true
 		}, {
-			header: "Тип платежа"
-			,dataIndex: 'paymentname'
+			header: "Дата"
+			,dataIndex: 'rdate'
+			,renderer: new Ext.util.Format.dateRenderer('d.m.Y, l')
             ,sortable: true
 		}]);
 		
@@ -705,7 +707,8 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
                     {name:'rdate', type:'date', dateFormat:'Y-m-d'}, 
     				{name: 'sumamount', type: 'float'}, 
                     {name: 'count',  type: 'float'}, 
-                    {name: 'paymentname',  type: 'string'} 
+                    {name: 'paymentname',  type: 'string'},
+                    'avg' 
                 ]
             })
 			,remoteSort: true
@@ -716,9 +719,8 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
 
 		var cm = new Ext.grid.ColumnModel([
 		{
-			header: "Месяц, год"
-			,dataIndex: 'rdate'
-			,renderer: new Ext.util.Format.dateRenderer('F Y')
+			header: "Тип платежа"
+			,dataIndex: 'paymentname'
             ,sortable: true
             ,summaryRenderer: function(v, params, data){
                 return 'Итого:';
@@ -743,6 +745,7 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
             ,align: 'center'
 		}, {
 			header: "Средняя сумма"
+			,dataIndex: 'avg'
             ,align: 'right'
             ,summaryRenderer: function(v, params, data){
                 return Ext.util.Format.number(data.data.sumamount/data.data.count,'0.00');
@@ -752,8 +755,9 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             ,sortable: true
 		}, {
-			header: "Тип платежа"
-			,dataIndex: 'paymentname'
+			header: "Месяц, год"
+			,dataIndex: 'rdate'
+			,renderer: new Ext.util.Format.dateRenderer('F Y')
             ,sortable: true
 		}]);
 		
