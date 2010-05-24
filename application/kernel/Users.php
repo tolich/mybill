@@ -86,11 +86,11 @@ class Users
 //					->where('usergroup.groupname != ?', 'admin')
 //					->where('usergroup.access like ?', $access);
 //
-		if (is_array($filter)) $this->_filter($sql, $filter);
+//		if (is_array($filter)) $this->_filter($sql, $filter);
 		if ($query) $query=str_replace('*','%',Utils::decode($query));
-		if ($query){
-			$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
-		}
+//		if ($query){
+//			$sql -> where("username LIKE '%$query%' or code LIKE '%$query%' or surname LIKE '%$query%' or name LIKE '%$query%' or address LIKE '%$query%' or in_ip LIKE '%$query%' or detail LIKE '%$query%' or mac LIKE '%$query%'");
+//		}
 //		$aCount = $this->Db->fetchOne($sql);
 
 		if (PHP_SORT){
