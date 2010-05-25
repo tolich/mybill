@@ -658,7 +658,7 @@ Ext.app.Payments.DateGrid = Ext.extend(Ext.grid.GridPanel, {
 				groupByText: 'Группировать по этому полю',
 				showGroupsText: 'Отображать по группам',
 				forceFit: true,
-				groupTextTpl: '{text}',
+				groupTextTpl: '{text}'
 			})
 			,viewConfig:{
 				forceFit:true
@@ -777,7 +777,7 @@ Ext.app.Payments.MonthGrid = Ext.extend(Ext.grid.GridPanel, {
 				groupByText: 'Группировать по этому полю',
 				showGroupsText: 'Отображать по группам',
 				forceFit: true,
-				groupTextTpl: '{text}',
+				groupTextTpl: '{text}'
 			})
 			,viewConfig:{
 				forceFit:true
@@ -823,11 +823,11 @@ Ext.app.Payments.GroupGrid = Ext.extend(Ext.grid.GridPanel, {
             allowBlank: false
         }, {
             name: 'description',
-            type: 'string',
+            type: 'string'
         },{
             name: 'users',
-            type: 'string',
-        }]);
+            type: 'string'
+        }])
 		var cm = new Ext.grid.ColumnModel([
         {
 			header: "id"
