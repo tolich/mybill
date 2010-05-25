@@ -144,7 +144,6 @@ class IndexController extends Zend_Controller_Action
                             '/shared'   => '/application/shared',
                             '/modules'  => '/application/modules'
                          ));
-            AppLog::debug(Utils::isBrowser('safari'));                         
             if(GZIP_MODE && strpos($_SERVER['HTTP_ACCEPT_ENCODING'],'gzip')!==false && Utils::isBrowser('safari')===false){
                 $this->view->minifyHeadLink()->setEncode();
                 $this->view->minifyHeadScript()->setEncode();
