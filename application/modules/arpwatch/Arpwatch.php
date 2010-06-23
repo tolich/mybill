@@ -236,7 +236,11 @@ class Arpwatch extends Modules {
         );
         return $aResult;
     }
-
+    
+    public function Daily(){
+        $this->Db->delete('arpwatch','datecreate < adddate(now(),interval -60 day)');
+    }
+    
     private function _mac($mac){
         $aMac = split(':',$mac);
         if (count($aMac)==6){
