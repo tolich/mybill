@@ -26,9 +26,9 @@ class Mpd5 extends Vendor
     
     public function getSessionsId(){
         $sessions = $this->getSessions();
-        if (is_array($sessions) && count($sessions)==0){
-            $sessions = $this->getSessions();
-        }
+//        if (is_array($sessions) && count($sessions)==0){
+//            $sessions = $this->getSessions();
+//        }
         if (false === $sessions){
             return false;
         }
@@ -56,6 +56,7 @@ class Mpd5 extends Vendor
         $ch = curl_init();
         curl_setopt( $ch, CURLOPT_URL, $url );
         curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_TIMEOUT, 5 );
         $this->_lastResponse['body'] = curl_exec( $ch );
         $this->_lastResponse['info'] = curl_getinfo( $ch );
         curl_close ( $ch );
