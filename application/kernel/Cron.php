@@ -29,7 +29,7 @@ class Cron {
 		$this->MonthlyFee();
 		$this->ChangeAcctPeriod();
 		$this->CloseCreditSessions();
-        $this->ModulesDaily();
+//        $this->ModulesDaily();
 	}
 	
 	public function sessions(){
