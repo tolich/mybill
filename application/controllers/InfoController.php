@@ -85,11 +85,15 @@ class InfoController extends Zend_Controller_Action
 		$this->view->assign('check_mac',Context::GetUserData('check_calling'));
     	$checkMsg = "У Вас включена дополнительная проверка сетевого идентификатора.";
     	$checkDescr = "Если у Вас новый компьютер или сетевая карта, и при подключении к интернету возникает ошибка при проверке пароля - обратитесь за помощью по тел. ".Settings::Company('tel');
+    	$infoMsg = "Попробуй новый акционный тариф БЕЗЛИМИТНЫЙ 10+!";
+    	$infoDescr = "Настоящий безлимитный со скоростью до 20 Мбит/сек! ВНИМАНИЕ! Срок дествия тарифа ограничен! Информация по тел. ".Settings::Company('tel');
     	$title=array('wellcome'=>sprintf("%s, %s", Context::GetUserData('username'), 'добро пожаловать на персональную страницу!'),
     				 'statusmsg'=>$statusMsg,
     				 'statusdescr'=>$statusDescr,
     				 'checkmsg'=>$checkMsg,
     				 'checkdescr'=>$checkDescr,
+    				 'infomsg'=>$infoMsg,
+    				 'infodescr'=>$infoDescr,
 		);
     	$title = array_merge($title,$status);
     	$this->view->assign($title);

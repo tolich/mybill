@@ -142,6 +142,11 @@ li {
     background:transparent url(/shared/icons/silk/shield.png) no-repeat 0 2px;
 }
 
+.best {
+    padding-left:20px;
+    background:transparent url(/shared/icons/silk/thumb_up.png) no-repeat 0 2px;
+}
+
 .code-num {
 	color: grey;
 }
