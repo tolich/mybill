@@ -83,9 +83,18 @@ class Bandwidth extends Modules
                 } else {
                     $outd = 0;
                 }
-                $inrate = ((float)$v['inoctets'] - (float)$aPrev['inoctets'] + $ind)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
+                $timed = (float)$v['datecreate'] - (float)$aPrev['datecreate'];
+                if ($timed){
+                    $inrate = ((float)$v['inoctets'] - (float)$aPrev['inoctets'] + $ind)/$timed;
+                } else {
+                    $inrate = 0;
+                }
                 $inrate = sprintf('%0.6f',$inrate*8/1024/1024);
-                $outrate = ((float)$v['outoctets'] - (float)$aPrev['outoctets'] + $outd)/((float)$v['datecreate'] - (float)$aPrev['datecreate']);
+                if ($timed){
+                    $outrate = ((float)$v['outoctets'] - (float)$aPrev['outoctets'] + $outd)/$timed;
+                } else {
+                    $outrate = 0;
+                }
                 $outrate = sprintf('%0.6f',$outrate*8/1024/1024);
                 if ($invert){
                     $aData['outdata'][] = array((float)$v['datecreate']*1000,(float)$inrate);
