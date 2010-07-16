@@ -57,7 +57,6 @@ class Reports
                             'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
                             'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
                     ))
-                    ->group('radacct.acctuniqueid')
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
                     ->group('rdate')
@@ -100,7 +99,6 @@ class Reports
                             'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
                             'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
                     ))
-                    ->group('radacct.acctuniqueid')
                     ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
                     ->where('status = 1')
