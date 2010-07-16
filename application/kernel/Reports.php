@@ -22,10 +22,10 @@ class Reports
 	public function GetStatList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
 	{
 		if (null===$username) $username = Context::GetUserData('username');
-		$sql = $this->Db->select()
-					->from('radacct', array('COUNT(*)'))
-					->where('radacct.username = ?', $username);
-		$aCount = $this->Db->fetchOne($sql);
+//		$sql = $this->Db->select()
+//					->from('radacct', array('COUNT(*)'))
+//					->where('radacct.username = ?', $username);
+//		$aCount = $this->Db->fetchOne($sql);
 					
 		$sql = $this->Db->select()
 					->from('radacct', array('acctstarttime', 'acctstoptime', 'acctsessiontime',
@@ -33,8 +33,9 @@ class Reports
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
 					->order(array("$sort $dir"));
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
-
+		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
 		return $aData;
@@ -55,7 +56,7 @@ class Reports
 					->limit($limit, $start)
                     ->group('rdate')
 					->order(array("$sort $dir"));
-        Db::sql_calc_found_rows($sql);
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
 		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		$aData = array( 'totalCount'=>$aCount,
@@ -95,7 +96,7 @@ class Reports
 					->limit($limit, $start)
                     ->group('acctperiod.id')
 					->order(array("$sort $dir"));
-        Db::sql_calc_found_rows($sql);
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
 		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		$sql = $this->Db->select()
