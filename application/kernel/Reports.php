@@ -88,16 +88,35 @@ class Reports
                             'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
-                    ->joinLeft('acctperiod','true',array('id','datestart', 'datefinish'))
+                    ->joinLeft('acctperiod','true',array('datestart', 'datefinish'))
                     ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
+                    ->where('status = 1')
 					->limit($limit, $start)
                     ->group('acctperiod.id')
 					->order(array("$sort $dir"));
-                    AppLog::Debug($sql->__toString());
         Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
 		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
+		$sql = $this->Db->select()
+					->from('radacct', array(
+                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
+                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
+						   ))
+                    ->joinLeft('acctperiod','true',array('datestart', 'datefinish'))
+                    ->where('acctstarttime > datestart and datefinish = "0000-00-00 00:00:00"')
+					->where('radacct.username = ?', $username)
+                    ->where('status = 0')
+					->limit($limit, $start)
+                    ->group('acctperiod.id')
+					->order(array("$sort $dir"));
+		$aRow = $this->Db->fetchRow($sql);
+        if ($aRow) {
+            $aRows[] = $aRow;
+            $aCount++;
+        }
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
 		return $aData;
