@@ -909,7 +909,6 @@ App.register(Ext.extend(Ext.app.Module, {
                         title: 'Статистика подключений'
                         ,xtype: 'tabpanel'
             			,id:'tab-stat'
-            			,closable:true
             			,iconCls:'tab-link'
                         ,activeTab: 0
                         ,tabPosition:'bottom'
