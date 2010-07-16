@@ -89,7 +89,7 @@ class Reports
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'datefinish'))
-                    ->where('acctstarttime between datestart and adddate(datefinish interval -1 days)')
+                    ->where('acctstarttime between datestart and adddate(datefinish, interval "-1" day)')
 					->where('radacct.username = ?', $username)
                     ->where('status = 1')
 					->limit($limit, $start)
@@ -106,7 +106,7 @@ class Reports
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'datefinish'))
-                    ->where('acctstarttime => datestart')
+                    ->where('acctstarttime >= datestart')
 					->where('radacct.username = ?', $username)
                     ->where('status = 0')
 					->limit($limit, $start)
