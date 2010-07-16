@@ -114,7 +114,7 @@ class Reports
 					->order(array("$sort $dir"));
 		$aRow = $this->Db->fetchRow($sql);
         if ($aRow) {
-            $aRows[] = $aRow;
+            array_unshift($aRows, $aRow);
             $aCount++;
         }
 		$aData = array( 'totalCount'=>$aCount,
