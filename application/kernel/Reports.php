@@ -32,6 +32,7 @@ class Reports
                     ))
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
+                    ->group('radacct.acctuniqueid')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
