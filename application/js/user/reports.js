@@ -393,7 +393,7 @@ Reports.gridStatMonth = Ext.extend(Ext.grid.GridPanel,{
                         'sumsessiontime', 'suminputoctets', 'sumoutputoctets','countsessions']
 			,id: 'id'
 			,remoteSort: true
-			,sortInfo:{field:'rdate', direction:'desc'}
+			,sortInfo:{field:'datestart', direction:'desc'}
 			,baseParams: {limit:pageLimit}
 		});
         Ext.apply(this, {
