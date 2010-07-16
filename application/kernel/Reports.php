@@ -49,10 +49,15 @@ class Reports
 					->from('radacct', array(
                             'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
                             'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
-                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
-                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
+//                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
+//                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
+                    ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
+                            'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
+                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                    ))
+                    ->group('radacct.acctuniqueid')
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
                     ->group('rdate')
@@ -86,11 +91,16 @@ class Reports
 		$sql = $this->Db->select()
 					->from('radacct', array(
                             'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
-                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
-                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
+//                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
+//                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'rdatefinish'=>new Zend_Db_Expr('adddate(datefinish, interval "-1" day)')))
+                    ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
+                            'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
+                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                    ))
+                    ->group('radacct.acctuniqueid')
                     ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
                     ->where('status = 1')
