@@ -88,8 +88,8 @@ class Reports
                             'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
-                    ->joinLeft('acctperiod','true',array('datestart', 'datefinish'))
-                    ->where('acctstarttime between datestart and adddate(datefinish, interval "-1" day)')
+                    ->joinLeft('acctperiod','true',array('datestart', 'datefinish'=>new Zend_Db_Expr('adddate(datefinish, interval "-1" day')))
+                    ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
                     ->where('status = 1')
 					->limit($limit, $start)
