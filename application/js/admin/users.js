@@ -906,14 +906,28 @@ App.register(Ext.extend(Ext.app.Module, {
 				items: new Ext.TabPanel({
 				    activeTab: 0,
 				    items: [{
-						xtype:'statgrid'
-						,iconCls:'tab-link'
-						,listeners:{
-							'beforerender': function(g){
-								g.store.baseParams.username=this.getContext().username;
-							}
-							,scope: this
-						}
+                        title: 'Статистика подключений'
+                        ,xtype: 'tabpanel'
+            			,id:'tab-stat'
+            			,closable:true
+            			,iconCls:'tab-link'
+                        ,activeTab: 0
+                        ,tabPosition:'bottom'
+                        ,defaults:{
+    						listeners:{
+    							'beforerender': function(g){
+    								g.store.baseParams.username=this.getContext().username;
+    							}
+    							,scope: this
+    						}
+                        }
+                        ,items: [{
+                            xtype: 'statgrid'    
+                        },{   
+                            xtype: 'daystatgrid'    
+                        },{   
+                            xtype: 'monthstatgrid'    
+                        }]
 				    },{
 						xtype:'paygrid'
 						,iconCls:'tab-payment'

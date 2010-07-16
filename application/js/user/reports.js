@@ -9,11 +9,21 @@ Reports.context = {};
 Reports.showStat = function(){
 	var sg = Ext.getCmp('tab-stat');
 	if (!sg){
-		var sg = new Reports.gridStat({
-			id:'tab-stat'
+		var sg = new Ext.TabPanel({
+            title: 'Статистика подключений'
+			,id:'tab-stat'
 			,closable:true
 			,iconCls:'tab-link'
-		});
+            ,activeTab: 0
+            ,tabPosition:'bottom'
+            ,items: [{
+                xtype: 'statgrid'    
+            },{   
+                xtype: 'daystatgrid'    
+            },{   
+                xtype: 'monthstatgrid'    
+            }]
+        })
 		Ext.getCmp('center-panel').add(sg);
 	}
 	Ext.getCmp('center-panel').activate('tab-stat')
@@ -215,7 +225,7 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
         Ext.apply(this, {
 			//region: 'center',
 			margins: '0 5 5 0',
-			title: 'Статистика подключений',
+			title: 'По сессиям',
 			store: store,
 			columns: [
 				{
@@ -227,7 +237,7 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
 					dataIndex:'acctstoptime'
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y H:i:s')
 				},{
-					header: 'Длительность (сек.)',
+					header: 'Длительность',
 					dataIndex:'acctsessiontime',
 					align:'right'
 					,renderer: function(v){
@@ -285,6 +295,179 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
     } // eo function onRender
 });
 Ext.reg('statgrid', Reports.gridStat);
+
+Reports.gridStatDay = Ext.extend(Ext.grid.GridPanel,{
+    initComponent:function() {
+    	var pageLimit = 50;
+    
+		var store = new Ext.data.JsonStore({
+			url: App.proxy('/ajax/reports/statday')
+			,root: 'data'
+			,totalProperty: 'totalCount'
+			,fields: [{name:'rdate',type:'date',dateFormat:'Y-m-d'}, 
+                        'sumsessiontime', 'suminputoctets', 'sumoutputoctets','countsessions']
+			,id: 'id'
+			,remoteSort: true
+			,sortInfo:{field:'rdate', direction:'desc'}
+			,baseParams: {limit:pageLimit}
+		});
+        Ext.apply(this, {
+			//region: 'center',
+			margins: '0 5 5 0',
+			title: 'По дням',
+			store: store,
+			columns: [
+				{
+					header: 'Дата подключения',
+					dataIndex:'rdate'
+					,renderer: Ext.util.Format.dateRenderer('d.m.Y, l')
+				},{
+					header: 'Длительность',
+					dataIndex:'sumsessiontime',
+					align:'right'
+					,renderer: function(v){
+						var d = Math.floor(v/86400);
+						var h = Math.floor((v-d*86400)/3600);
+						var m = Math.floor((v-d*86400-h*3600)/60);
+						var s = v-d*86400-h*3600-m*60;
+						return (d!=0?d+" дн ":"")+(h!=0?h+" ч ":"")+(m!=0?m+" мин ":"")+s+" сек"
+					}
+				},{
+					header: 'Исх. траф. (байт)',
+					dataIndex:'suminputoctets',
+					align:'right',
+					renderer: function(v){
+						return Ext.util.Format.fileSize(v)
+					}
+				},{
+					header: 'Вх. траф. (байт)',
+					dataIndex:'sumoutputoctets',
+					align:'right',
+					renderer: function(v){
+						return Ext.util.Format.fileSize(v)
+					}
+				},{
+					header: 'Количество подключений',
+					dataIndex:'countsessions',
+					align:'right'
+				}
+			],
+			trackMouseOver: true,
+			stripeRows:true,
+			autoScroll :true,
+			sm: new Ext.grid.RowSelectionModel({
+				singleSelect: true
+			}),
+			loadMask: true,
+			viewConfig: {
+				forceFit: true
+			},
+			bbar: new Ext.PagingToolbar({
+				pageSize: pageLimit,
+				store: store,
+				displayInfo: true
+			})
+        });
+
+        Reports.gridStatDay.superclass.initComponent.apply(this, arguments);
+    } // eo function initComponent
+
+    ,onRender:function() {
+		this.store.load({params: {start: 0}});
+
+        Reports.gridStatDay.superclass.onRender.apply(this, arguments);
+    } // eo function onRender
+});
+Ext.reg('daystatgrid', Reports.gridStatDay);
+
+Reports.gridStatMonth = Ext.extend(Ext.grid.GridPanel,{
+    initComponent:function() {
+    	var pageLimit = 50;
+    
+		var store = new Ext.data.JsonStore({
+			url: App.proxy('/ajax/reports/statmonth')
+			,root: 'data'
+			,totalProperty: 'totalCount'
+			,fields: [{name:'datestart',type:'date',dateFormat:'Y-m-d H:i:s'}, 
+                      {name:'datefinish',type:'date',dateFormat:'Y-m-d H:i:s'},
+                        'sumsessiontime', 'suminputoctets', 'sumoutputoctets','countsessions']
+			,id: 'id'
+			,remoteSort: true
+			,sortInfo:{field:'rdate', direction:'desc'}
+			,baseParams: {limit:pageLimit}
+		});
+        Ext.apply(this, {
+			//region: 'center',
+			margins: '0 5 5 0',
+			title: 'По месяцам',
+			store: store,
+			columns: [
+				{
+					header: 'С',
+					dataIndex:'datestart'
+					,renderer: Ext.util.Format.dateRenderer('d.m.Y, l')
+				},{
+					header: 'По',
+					dataIndex:'datefinish'
+					,renderer: Ext.util.Format.dateRenderer('d.m.Y, l')
+				},{
+					header: 'Длительность',
+					dataIndex:'sumsessiontime',
+					align:'right'
+					,renderer: function(v){
+						var d = Math.floor(v/86400);
+						var h = Math.floor((v-d*86400)/3600);
+						var m = Math.floor((v-d*86400-h*3600)/60);
+						var s = v-d*86400-h*3600-m*60;
+						return (d!=0?d+" дн ":"")+(h!=0?h+" ч ":"")+(m!=0?m+" мин ":"")+s+" сек"
+					}
+				},{
+					header: 'Исх. траф. (байт)',
+					dataIndex:'suminputoctets',
+					align:'right',
+					renderer: function(v){
+						return Ext.util.Format.fileSize(v)
+					}
+				},{
+					header: 'Вх. траф. (байт)',
+					dataIndex:'sumoutputoctets',
+					align:'right',
+					renderer: function(v){
+						return Ext.util.Format.fileSize(v)
+					}
+				},{
+					header: 'Количество подключений',
+					dataIndex:'countsessions',
+					align:'right'
+				}
+			],
+			trackMouseOver: true,
+			stripeRows:true,
+			autoScroll :true,
+			sm: new Ext.grid.RowSelectionModel({
+				singleSelect: true
+			}),
+			loadMask: true,
+			viewConfig: {
+				forceFit: true
+			},
+			bbar: new Ext.PagingToolbar({
+				pageSize: pageLimit,
+				store: store,
+				displayInfo: true
+			})
+        });
+
+        Reports.gridStatMonth.superclass.initComponent.apply(this, arguments);
+    } // eo function initComponent
+
+    ,onRender:function() {
+		this.store.load({params: {start: 0}});
+
+        Reports.gridStatMonth.superclass.onRender.apply(this, arguments);
+    } // eo function onRender
+});
+Ext.reg('monthstatgrid', Reports.gridStatMonth);
 
 Reports.gridInTariff = Ext.extend(Ext.grid.GridPanel,{
     initComponent:function() {

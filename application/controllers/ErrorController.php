@@ -1,10 +1,6 @@
 <?php
 class ErrorController extends Zend_Controller_Action
 {
-    public function indexAction()
-    {
-        echo 'sefesf';
-    }
     public function errorAction()
     {
 		$doctypeHelper = new Zend_View_Helper_Doctype();

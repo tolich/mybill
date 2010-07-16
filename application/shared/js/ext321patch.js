@@ -126,26 +126,28 @@ if (Ext.util.Format) {
 	};
 	Ext.util.Format.rateSpeed = function(size){
 		if (size < 1024) {
-			var r = size + " байт/сек";
-		}
-		else 
-			if (size < 1048576) {
-				var r = (Math.round(((size * 10) / 1024)) / 10) + " KБайт/сек";
-			}
-			else {
-				var r = (Math.round(((size * 10) / 1048576)) / 10) + " MБайт/сек";
-			}
+            var r = size + " байт/сек";
+        }
+        else {
+            if (size < 1048576) {
+                var r = (Math.round(((size * 10) / 1024)) / 10) + " KБайт/сек";
+            }
+            else {
+                var r = (Math.round(((size * 10) / 1048576)) / 10) + " MБайт/сек";
+            }
+        }
 		size = size*8;
 		if (size < 1024) {
-			return size + " бит/сек " + "(" + r + ")";
-		}
-		else 
-			if (size < 1048576) {
-				return (Math.round(((size * 10) / 1024)) / 10) + " Kбит/сек " + "(" + r + ")";
-			}
-			else {
-				return (Math.round(((size * 10) / 1048576)) / 10) + " Mбит/сек " + "(" + r + ")";
-			}
+            return size + " бит/сек " + "(" + r + ")";
+        }
+        else {
+            if (size < 1048576) {
+                return (Math.round(((size * 10) / 1024)) / 10) + " Kбит/сек " + "(" + r + ")";
+            }
+            else {
+                return (Math.round(((size * 10) / 1048576)) / 10) + " Mбит/сек " + "(" + r + ")";
+            }
+        }
 	};
     Ext.util.Format.dateRenderer= function(format){
         return function(v){

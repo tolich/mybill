@@ -40,6 +40,68 @@ class Reports
 		return $aData;
 	}
 
+	public function GetStatDayList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
+	{
+		if (null===$username) $username = Context::GetUserData('username');
+		$sql = $this->Db->select()
+					->from('radacct', array(
+                            'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
+                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
+                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
+						   ))
+					->where('radacct.username = ?', $username)
+					->limit($limit, $start)
+                    ->group('rdate')
+					->order(array("$sort $dir"));
+        Db::sql_calc_found_rows($sql);
+		$aRows = $this->Db->fetchAll($sql);
+		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
+		$aData = array( 'totalCount'=>$aCount,
+						'data' => $aRows);
+		return $aData;
+	}
+
+	public function GetStatMonthList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
+	{
+		if (null===$username) $username = Context::GetUserData('username');
+        //За месяц
+//		$sql = $this->Db->select()
+//					->from('radacct', array(
+//                            'rdate'=>new Zend_Db_Expr("date_format(acctstarttime, '%Y-%m-01')"), 
+//                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+//                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
+//                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
+//                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
+//						   ))
+//					->where('radacct.username = ?', $username)
+//					->limit($limit, $start)
+//                    ->group('rdate')
+//					->order(array("$sort $dir"));
+
+        //За отчетный период
+		$sql = $this->Db->select()
+					->from('radacct', array(
+                            'rdate'=>new Zend_Db_Expr("date_format(acctstarttime, '%Y-%m-01')"), 
+                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
+                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
+						   ))
+                    ->joinLeft('acctperiod','acctstarttime between datestart and datefinish',array('datestart', 'datefinish'))
+					->where('radacct.username = ?', $username)
+					->limit($limit, $start)
+                    ->group('acctperiod.id')
+					->order(array("$sort $dir"));
+        Db::sql_calc_found_rows($sql);
+		$aRows = $this->Db->fetchAll($sql);
+		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
+		$aData = array( 'totalCount'=>$aCount,
+						'data' => $aRows);
+		return $aData;
+	}
+
 	public function GetTariffList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
 	{
 		if (null===$username) $username = Context::GetUserData('username');

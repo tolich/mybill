@@ -210,14 +210,11 @@ class Payments
 	 */
 	public function GetListByDay($start=null, $limit=null, $sort=null, $dir=null)
 	{
-//		$sql = $this->Db->select()
-//						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT DATE(datepayment), paymentgroup.name)")))
-//    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
-//						->group('paymentname')
-//						->where('status=1');
-//		$aCount = $this->Db->fetchOne($sql);
 		$sql = $this->Db->select()
-						->from('payments', array('rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)')))
+						->from('payments', array(
+                            'rdate'=>new Zend_Db_Expr('DATE(datepayment)'), 
+                            'sumamount'=>new Zend_Db_Expr('SUM(amount)'),
+                            'count'=>new Zend_Db_Expr('COUNT(*)')))
 						->where('status=1')
     					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
                         ->joinLeft('paymentuser','paymentgroup.id=paymentuser.id_paymentgroup',array())
@@ -246,13 +243,6 @@ class Payments
 	 */
 	public function GetListByMonth($start=null, $limit=null, $sort=null, $dir=null)
 	{
-//		$sql = $this->Db->select()
-//						->from('payments', array('count'=>new Zend_Db_Expr("COUNT(DISTINCT date_format(datepayment, '%Y-%m-01')), paymentgroup.name")))
-//    					->joinLeft('paymentgroup', 'payments.id_paymentgroup=paymentgroup.id',array('paymentname'=>'name'))
-//						->group('paymentname')
-//						->where('status=1');
-//		$aCount = $this->Db->fetchOne($sql);
-
 		$sql = $this->Db->select()
 						->from('payments', array('rdate'=>new Zend_Db_Expr("date_format(datepayment, '%Y-%m-01')"), 'sumamount'=>new Zend_Db_Expr('SUM(amount)'),'count'=>new Zend_Db_Expr('COUNT(*)'),'avg'=>new Zend_Db_Expr('AVG(amount)')))
 						->where('status=1')

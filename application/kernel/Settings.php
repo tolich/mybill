@@ -319,6 +319,8 @@ class Settings {
 				),
 				'reports'=>array(
 					'stat',
+					'statday',
+					'statmonth',
 					'payments',
 					'tariff',
 					'intariff'
