@@ -22,14 +22,14 @@ class Reports
 	public function GetStatList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
 	{
 		if (null===$username) $username = Context::GetUserData('username');
-//		$sql = $this->Db->select()
-//					->from('radacct', array('COUNT(*)'))
-//					->where('radacct.username = ?', $username);
-//		$aCount = $this->Db->fetchOne($sql);
 					
 		$sql = $this->Db->select()
 					->from('radacct', array('acctstarttime', 'acctstoptime', 'acctsessiontime',
-							'acctinputoctets', 'acctoutputoctets','callingstationid'))
+							'callingstationid'))
+                    ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
+                            'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
+                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                    ))
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
 					->order(array("$sort $dir"));
