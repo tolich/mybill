@@ -389,7 +389,7 @@ Reports.gridStatMonth = Ext.extend(Ext.grid.GridPanel,{
 			,root: 'data'
 			,totalProperty: 'totalCount'
 			,fields: [{name:'datestart',type:'date',dateFormat:'Y-m-d H:i:s'}, 
-                      {name:'datefinish',type:'date',dateFormat:'Y-m-d H:i:s'},
+                      {name:'rdatefinish',type:'date',dateFormat:'Y-m-d H:i:s'},
                         'sumsessiontime', 'suminputoctets', 'sumoutputoctets','countsessions']
 			,id: 'id'
 			,remoteSort: true
@@ -408,7 +408,7 @@ Reports.gridStatMonth = Ext.extend(Ext.grid.GridPanel,{
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y, l')
 				},{
 					header: 'По',
-					dataIndex:'datefinish'
+					dataIndex:'rdatefinish'
 					,renderer: Ext.util.Format.dateRenderer('d.m.Y, l')
 				},{
 					header: 'Длительность',
