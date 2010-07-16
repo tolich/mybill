@@ -151,6 +151,7 @@ class Reports
 					->limit($limit, $start)
 					->order(array("$sort $dir"));
 		$aRows = $this->Db->fetchAll($sql);
+		Utils::encode($aRows);
 		$aData = array( 'totalCount'=>$aCount,
 						'data' => $aRows);
 		return $aData;
