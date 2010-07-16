@@ -216,7 +216,7 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
 			,totalProperty: 'totalCount'
 			,fields: [{name:'acctstarttime',type:'date',dateFormat:'Y-m-d H:i:s'}, 
                         {name:'acctstoptime',type:'date',dateFormat:'Y-m-d H:i:s'}, 
-                        'acctsessiontime', 'acctinputoctets', 'acctoutputoctets','callingstationid']
+                        'acctsessiontime', 'suminputoctets', 'sumoutputoctets','callingstationid']
 			,id: 'id'
 			,remoteSort: true
 			,sortInfo:{field:'acctstarttime', direction:'desc'}
@@ -249,14 +249,14 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
 					}
 				},{
 					header: 'Исх. траф.',
-					dataIndex:'acctinputoctets',
+					dataIndex:'suminputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
 					header: 'Вх. траф.',
-					dataIndex:'acctoutputoctets',
+					dataIndex:'sumoutputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
