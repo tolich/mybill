@@ -248,14 +248,14 @@ Reports.gridStat = Ext.extend(Ext.grid.GridPanel,{
 						return (d!=0?d+" дн ":"")+(h!=0?h+" ч ":"")+(m!=0?m+" мин ":"")+s+" сек"
 					}
 				},{
-					header: 'Исх. траф. (байт)',
+					header: 'Исх. траф.',
 					dataIndex:'acctinputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
-					header: 'Вх. траф. (байт)',
+					header: 'Вх. траф.',
 					dataIndex:'acctoutputoctets',
 					align:'right',
 					renderer: function(v){
@@ -333,14 +333,14 @@ Reports.gridStatDay = Ext.extend(Ext.grid.GridPanel,{
 						return (d!=0?d+" дн ":"")+(h!=0?h+" ч ":"")+(m!=0?m+" мин ":"")+s+" сек"
 					}
 				},{
-					header: 'Исх. траф. (байт)',
+					header: 'Исх. траф.',
 					dataIndex:'suminputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
-					header: 'Вх. траф. (байт)',
+					header: 'Вх. траф.',
 					dataIndex:'sumoutputoctets',
 					align:'right',
 					renderer: function(v){
@@ -422,14 +422,14 @@ Reports.gridStatMonth = Ext.extend(Ext.grid.GridPanel,{
 						return (d!=0?d+" дн ":"")+(h!=0?h+" ч ":"")+(m!=0?m+" мин ":"")+s+" сек"
 					}
 				},{
-					header: 'Исх. траф. (байт)',
+					header: 'Исх. траф.',
 					dataIndex:'suminputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
-					header: 'Вх. траф. (байт)',
+					header: 'Вх. траф.',
 					dataIndex:'sumoutputoctets',
 					align:'right',
 					renderer: function(v){
