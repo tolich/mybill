@@ -83,17 +83,18 @@ class Reports
         //За отчетный период
 		$sql = $this->Db->select()
 					->from('radacct', array(
-                            'rdate'=>new Zend_Db_Expr("date_format(acctstarttime, '%Y-%m-01')"), 
                             'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
                             'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
                             'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
-                    ->joinLeft('acctperiod','acctstarttime between datestart and datefinish',array('datestart', 'datefinish'))
+                    ->joinLeft('acctperiod','true',array('id','datestart', 'datefinish'))
+                    ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
                     ->group('acctperiod.id')
 					->order(array("$sort $dir"));
+                    AppLog::Debug($sql->__toString());
         Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
 		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
