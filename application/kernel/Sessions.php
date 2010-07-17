@@ -124,12 +124,6 @@ class Sessions
 		    'framedipaddress'=>'sessions.framedipaddress',
 		    'acctstarttime'=>'sessions.acctstarttime'
 		);
-		$sql = $this->Db->select()
-					->from('sessions', array('COUNT(*)'))
-					->join('radacct','radacct.acctuniqueid = sessions.acctuniqueid')
-					->join('usergroup','sessions.username = usergroup.username');
-		if (is_array($filter)) $this->_filter($sql, $filter, $as);
-		$aCount = $this->Db->fetchOne($sql);
 
 		$sql = $this->Db->select()
 					->from('sessions')
@@ -140,7 +134,9 @@ class Sessions
 					->order(array("$sort $dir"))
 					->limit($limit, $start);
 		if (is_array($filter)) $this->_filter($sql, $filter, $as);
+        $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
+        $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow){
 			if ($aRow['acctsessiontime']!=0){
