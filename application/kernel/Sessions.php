@@ -129,7 +129,7 @@ class Sessions
 					->from('sessions')
 					->join('radacct','radacct.acctuniqueid = sessions.acctuniqueid',array('acctinputoctets','acctoutputoctets','acctsessiontime'))
 					->join('usergroup','sessions.username = usergroup.username',array('name','surname','address'))
-                    ->join('sluice','sluice.id=username.id_sluice',array('sluicename'))
+                    ->join('sluice','sluice.id=usergroup.id_sluice',array('sluicename'))
 					->order(array("$sort $dir"))
 					->limit($limit, $start);
 		if (is_array($filter)) $this->_filter($sql, $filter, $as);
