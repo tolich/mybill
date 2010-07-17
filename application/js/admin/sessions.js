@@ -183,7 +183,8 @@ Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
 				[
 					  'acctsessionid','acctuniqueid','username','callingstationid',
 					  'nasipaddress','iface','framedipaddress',{name:'acctstarttime',type:'date',dateFormat:'Y-m-d H:i:s'},
-					  'acctinputoctets','acctoutputoctets','acctsessiontime','rateinput','rateoutput','name','surname','address'
+					  'acctinputoctets','acctoutputoctets','acctsessiontime','rateinput','rateoutput',
+                      'name','surname','address','sluicename'
 				]
 				,id: 'acctsessionid'
 			})
@@ -204,7 +205,18 @@ Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
 		    {type: 'string', 	dataIndex: 'nasipaddress'},
 		    {type: 'string', 	dataIndex: 'iface'},
 		    {type: 'string', 	dataIndex: 'framedipaddress'},
-		    {type: 'date',  	dataIndex: 'acctstarttime'}
+		    {type: 'date',  	dataIndex: 'acctstarttime'},
+		    {
+		      type: 'list',  
+		      dataIndex: 'sluicename', 
+		      //options: [],
+			  store: new Ext.data.JsonStore({
+			  	url: App.proxy('/ajax/sluices/filter')
+			  	,fields: ['id', 'text']
+				,id:'id'
+			  }),
+		      phpMode: true
+		    }
 		]});
 	
 		this.on('filterupdate', function(){
@@ -236,6 +248,10 @@ Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
 			,header: "IP"
 			,dataIndex: 'framedipaddress'
 			,align: 'center'
+		}, {
+			id: 'sluicename'
+			,header: "Шлюз"
+			,dataIndex: 'sluicename'
 		}, {
 			id: 'acctstarttime'
 			,header: "Начало сессии"
