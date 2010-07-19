@@ -48,10 +48,10 @@ class Reports
 		$sql = $this->Db->select()
 					->from('radacct', array(
                             'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
-                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+                            'sumsessiontime'=>new Zend_Db_Expr('AVG(acctsessiontime)'),
 //                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
 //                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
-                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(radacct.id)'),
 						   ))
                     ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
                             'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
