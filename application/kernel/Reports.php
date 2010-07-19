@@ -48,8 +48,8 @@ class Reports
 		$sql = $this->Db->select()
 					->from('radacct', array(
                             'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
-                            'sumsessiontime'=>new Zend_Db_Expr('MAX(acctsessiontime)'),
-                            'countsessions'=>new Zend_Db_Expr('COUNT(radacct.acctsessionid)'),
+                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
                             'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
@@ -58,6 +58,7 @@ class Reports
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
                     ->group('rdate')
+                    ->group('radacct.username')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
@@ -87,8 +88,8 @@ class Reports
         //За отчетный период
 		$sql = $this->Db->select()
 					->from('radacct', array(
-                            'sumsessiontime'=>new Zend_Db_Expr('MAX(acctsessiontime)'),
-                            'countsessions'=>new Zend_Db_Expr('COUNT(radacct.acctsessionid)'),
+                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'rdatefinish'=>new Zend_Db_Expr('adddate(datefinish, interval "-1" day)')))
                     ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
@@ -100,6 +101,7 @@ class Reports
                     ->where('status = 1')
 					->limit($limit, $start)
                     ->group('acctperiod.id')
+                    ->group('radacct.username')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
