@@ -51,6 +51,7 @@ class Reports
                                     'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
                                     'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
                             ))
+                            ->group('acctuniqueid')
         					->where('username = ?', $username);
                         
 		$sql = $this->Db->select()
