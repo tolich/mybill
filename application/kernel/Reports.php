@@ -46,6 +46,7 @@ class Reports
 	{
 		if (null===$username) $username = Context::GetUserData('username');
 		$sql = $this->Db->select()
+                    ->distinct()
 					->from('radacct', array(
                             'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
                             'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
@@ -58,7 +59,6 @@ class Reports
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
                     ->group('rdate')
-                    ->group('radacct.username')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
@@ -101,7 +101,6 @@ class Reports
                     ->where('status = 1')
 					->limit($limit, $start)
                     ->group('acctperiod.id')
-                    ->group('radacct.username')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
