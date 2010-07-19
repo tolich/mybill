@@ -95,15 +95,23 @@ class Reports
 //					->order(array("$sort $dir"));
 
         //За отчетный период
+        $joinSql = $this->Db->select()
+                            ->from('radacctzone', array(
+                                    'acctuniqueid',
+                                    'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
+                                    'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                            ))
+                            ->group('acctuniqueid')
+        					->where('username = ?', $username);
 		$sql = $this->Db->select()
 					->from('radacct', array(
                             'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'rdatefinish'=>new Zend_Db_Expr('adddate(datefinish, interval "-1" day)')))
-                    ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
-                            'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
-                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                    ->join(array('z'=>$joinSql), 'radacct.acctuniqueid=z.acctuniqueid', array(
+                            'suminputoctets',
+                            'sumoutputoctets',
                     ))
                     ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
