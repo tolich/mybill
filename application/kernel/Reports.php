@@ -45,22 +45,30 @@ class Reports
 	public function GetStatDayList($start=null, $limit=null, $sort=null, $dir=null, $username=null)
 	{
 		if (null===$username) $username = Context::GetUserData('username');
+        $joinSql = $this->Db->select()
+                            ->from('radacctzone', array(
+                                    'acctuniqueid',
+                                    'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
+                                    'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                            ))
+        					->where('username = ?', $username);
+                        
 		$sql = $this->Db->select()
-                    ->distinct()
 					->from('radacct', array(
                             'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
                             'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
-                    ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
-                            'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
-                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctoutputoctets)'),
+                    ->join(array('z'=>$joinSql), 'radacct.acctuniqueid=z.acctuniqueid', array(
+                            'suminputoctets',
+                            'sumoutputoctets',
                     ))
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
                     ->group('rdate')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
+        AppLog::debug($sql);
 		$aRows = $this->Db->fetchAll($sql);
 		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		$aData = array( 'totalCount'=>$aCount,
