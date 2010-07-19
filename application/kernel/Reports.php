@@ -69,7 +69,6 @@ class Reports
                     ->group('rdate')
 					->order(array("$sort $dir"));
         $sql = Db::sql_calc_found_rows($sql);
-        AppLog::debug($sql);
 		$aRows = $this->Db->fetchAll($sql);
 		$aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		$aData = array( 'totalCount'=>$aCount,
