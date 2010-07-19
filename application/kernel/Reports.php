@@ -48,10 +48,8 @@ class Reports
 		$sql = $this->Db->select()
 					->from('radacct', array(
                             'rdate'=>new Zend_Db_Expr('DATE(acctstarttime)'), 
-                            'sumsessiontime'=>new Zend_Db_Expr('AVG(acctsessiontime)'),
-//                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
-//                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
-                            'countsessions'=>new Zend_Db_Expr('COUNT(radacct.id)'),
+                            'sumsessiontime'=>new Zend_Db_Expr('MAX(acctsessiontime)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(radacct.acctsessionid)'),
 						   ))
                     ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
                             'suminputoctets'=>new Zend_Db_Expr('SUM(radacctzone.acctinputoctets)'),
@@ -89,10 +87,8 @@ class Reports
         //За отчетный период
 		$sql = $this->Db->select()
 					->from('radacct', array(
-                            'sumsessiontime'=>new Zend_Db_Expr('SUM(acctsessiontime)'),
-//                            'suminputoctets'=>new Zend_Db_Expr('SUM(acctinputoctets)'),
-//                            'sumoutputoctets'=>new Zend_Db_Expr('SUM(acctoutputoctets)'),
-                            'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
+                            'sumsessiontime'=>new Zend_Db_Expr('MAX(acctsessiontime)'),
+                            'countsessions'=>new Zend_Db_Expr('COUNT(radacct.acctsessionid)'),
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'rdatefinish'=>new Zend_Db_Expr('adddate(datefinish, interval "-1" day)')))
                     ->join('radacctzone', 'radacct.acctuniqueid=radacctzone.acctuniqueid', array(
