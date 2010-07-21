@@ -201,7 +201,7 @@ class Utils
 		if (is_array($string)){
 			array_walk($string, array('self', 'array_html_decode'));
 		} else {
-		    $string = html_entity_decode($string, ENT_NOQUOTES, $charset);
+		    $string = html_entity_decode($string, ENT_COMPAT, $charset);
         }
 		return $string;
 	}
