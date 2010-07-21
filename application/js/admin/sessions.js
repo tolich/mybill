@@ -165,8 +165,8 @@ Ext.app.Sessions.Grid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
 		function username(v, p, r){
-	        p.attr = 'ext:qtip="'+
-				r.get('surname')+' '+r.get('name')+'<br>'+r.get('address')+'"';
+	        p.attr = 'ext:qtip=\''+
+				r.get('surname')+' '+r.get('name')+'<br>'+r.get('address')+'\'';
             return v;
         }
 		
