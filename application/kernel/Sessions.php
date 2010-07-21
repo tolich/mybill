@@ -137,6 +137,7 @@ class Sessions
 		$aRows = $this->Db->fetchAll($sql);
         $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
 		Utils::encode($aRows);
+        Utils::nhtml_entity_decode($aRows);
 		foreach ($aRows as &$aRow){
 			if ($aRow['acctsessiontime']!=0){
 				$aRow['rateoutput']=ceil((float)$aRow['acctinputoctets']/(float)$aRow['acctsessiontime']);
