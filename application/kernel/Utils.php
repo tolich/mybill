@@ -195,11 +195,15 @@ class Utils
 	 * @param string $string
 	 * @param string $in_charset
 	 */
-	public static function nhtml_entity_decode ($string)
+	public static function html_decode ($string)
 	{
-
 		$charset=PROJECT_DATABASE_CHARSET;
-		return html_entity_decode($string, ENT_NOQUOTES, $charset);
+		if (is_array($string)){
+			array_walk($string, array('self', 'array_html_decode'));
+		} else {
+		    $string = html_entity_decode($string, ENT_NOQUOTES, $charset);
+        }
+		return $string;
 	}
 	
 	/**
@@ -239,9 +243,9 @@ class Utils
 	 * @param mixed $key
 	 * @param string $in_charset
 	 */	
-	public static function array_nhtml_entity_decode (&$item, $key)
+	public static function array_html_decode (&$item, $key)
 	{
-		$item=self::nhtml_entity_decode($item);
+		$item=self::html_decode($item);
 	}
 	
 //	/**
