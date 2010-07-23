@@ -305,7 +305,7 @@ Reports.gridStatDay = Ext.extend(Ext.grid.GridPanel,{
 			,root: 'data'
 			,totalProperty: 'totalCount'
 			,fields: [{name:'rdate',type:'date',dateFormat:'Y-m-d'}, 
-                        'sumsessiontime', 'suminputoctets', 'sumoutputoctets','countsessions']
+                        'sumsessiontime', 'dsuminputoctets', 'dsumoutputoctets','countsessions']
 			,id: 'id'
 			,remoteSort: true
 			,sortInfo:{field:'rdate', direction:'desc'}
@@ -334,14 +334,14 @@ Reports.gridStatDay = Ext.extend(Ext.grid.GridPanel,{
 					}
 				},{
 					header: 'Исх. траф.',
-					dataIndex:'suminputoctets',
+					dataIndex:'dsuminputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)
 					}
 				},{
 					header: 'Вх. траф.',
-					dataIndex:'sumoutputoctets',
+					dataIndex:'dsumoutputoctets',
 					align:'right',
 					renderer: function(v){
 						return Ext.util.Format.fileSize(v)

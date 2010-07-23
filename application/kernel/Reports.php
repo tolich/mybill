@@ -61,8 +61,8 @@ class Reports
                             'countsessions'=>new Zend_Db_Expr('COUNT(*)'),
 						   ))
                     ->join(array('z'=>$joinSql), 'radacct.acctuniqueid=z.acctuniqueid', array(
-                            'suminputoctets',
-                            'sumoutputoctets',
+                            'dsuminputoctets'=>new Zend_Db_Expr('SUM(suminputoctets)'),
+                            'dsumoutputoctets'=>new Zend_Db_Expr('SUM(sumoutputoctets)'),
                     ))
 					->where('radacct.username = ?', $username)
 					->limit($limit, $start)
