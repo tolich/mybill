@@ -109,8 +109,8 @@ class Reports
 						   ))
                     ->joinLeft('acctperiod','true',array('datestart', 'rdatefinish'=>new Zend_Db_Expr('adddate(datefinish, interval "-1" day)')))
                     ->join(array('z'=>$joinSql), 'radacct.acctuniqueid=z.acctuniqueid', array(
-                            'suminputoctets',
-                            'sumoutputoctets',
+                            'msuminputoctets'=>new Zend_Db_Expr('SUM(suminputoctets)'),
+                            'msumoutputoctets'=>new Zend_Db_Expr('SUM(sumoutputoctets)'),
                     ))
                     ->where('acctstarttime between datestart and datefinish')
 					->where('radacct.username = ?', $username)
