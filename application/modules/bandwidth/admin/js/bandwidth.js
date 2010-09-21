@@ -238,7 +238,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                             },
                             chartConfig: {
                 				chart: {
-                					defaultSeriesType: 'line'
+                					defaultSeriesType: 'spline'
                 				},
                 				title: {
                 					text: 'Загрузка канала ' + cfg.name
@@ -269,7 +269,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                 					}
                 				},
                 				plotOptions: {
-                					area: {
+                					areaspline: {
                                         fillColor: {
                                             linearGradient: [0, 0, 0, 350],
                                             stops: [[0, '#4572A7'], [1, 'rgba(0,0,0,0)']]
@@ -287,7 +287,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                                         },
                                         shadow: false
                                     }
-                					,line: {
+                					,spline: {
                                         marker: {
                                             enabled: false,
                                             symbol: 'triangle',
@@ -301,7 +301,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                 					}
                 				},
                 				series: [{
-                                    type:'area',
+                                    type:'areaspline',
                 					name: 'Входящий трафик',
                                     data: []
                 				},{
