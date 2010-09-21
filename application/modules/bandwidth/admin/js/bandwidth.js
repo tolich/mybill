@@ -269,7 +269,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                 					}
                 				},
                 				plotOptions: {
-                					areaspline: {
+                					area: {
                                         fillColor: {
                                             linearGradient: [0, 0, 0, 350],
                                             stops: [[0, '#4572A7'], [1, 'rgba(0,0,0,0)']]
@@ -287,7 +287,7 @@ Ext.app.Bandwidth.Chart = Ext.extend(Ext.TabPanel,{
                                         },
                                         shadow: false
                                     }
-                					,spline: {
+                					,line: {
                                         marker: {
                                             enabled: false,
                                             symbol: 'triangle',
