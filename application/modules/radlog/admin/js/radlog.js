@@ -405,6 +405,7 @@ App.register(Ext.extend(Ext.app.Module, {
         var tpl = new Ext.XTemplate(
             '<tpl for=".">',
                 '<span class="x-editable">{text}</span></div>',
+                '<br>',
             '</tpl>',
             '<div class="x-clear"></div>'
         );
@@ -465,7 +466,6 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.add(r);
-                //view.doLayout();
             });
             
             realplexor.execute();
