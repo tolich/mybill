@@ -10,7 +10,7 @@ $match = array();
 if (preg_match("/(\w+\s\w+\s{1,2}\d{1,2}\s[\d:]+\s\d{4})[\s:]*(\w+):\s([\w\s]+):\s\[([\w\s]+)\/?\<?([\w\s-]*)\>?\]\s\((.+)\)/s", $row,$match)){
     print_r($match);
     $rpl = new Dklab_Realplexor(
-        "192.168.168.3", // host at which Realplexor listens for incoming data
+        "192.168.168.4", // host at which Realplexor listens for incoming data
         "10010"     // incoming port (see IN_ADDR in dklab_realplexor.conf)
         //"radlog"     // namespace to use (optional)
     );    
