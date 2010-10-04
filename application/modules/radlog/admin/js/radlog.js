@@ -391,19 +391,20 @@ App.register(Ext.extend(Ext.app.Module, {
 //    }
 	,winLog : function(){ //winLog
         if (App.isDeny('radlog', 'view')) return;
-        var record = Ext.data.Record.create([{
-            name: 'id',
-            type: 'string'
-        },{
-            name: 'text',
-            type: 'sring'
-        }]);
+//        var record = Ext.data.Record.create([{
+//            name: 'id',
+//            type: 'string'
+//        },{
+//            name: 'text',
+//            type: 'sring'
+//        }]);
 
         var store = new Ext.data.JsonStore({
             url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
 			totalProperty: 'totalCount',
-            fields: record
+            fields: ['id','text'],
+            id: 'id'
         });
 //        store.load();
         
@@ -478,7 +479,10 @@ App.register(Ext.extend(Ext.app.Module, {
                 });
                 store.loadData({
                     totalCount: 1,
-                    data: [r]
+                    data: [{
+                    id: id,
+                    text: result
+                }]
                 }, true);
             });
             
