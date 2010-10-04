@@ -425,6 +425,7 @@ App.register(Ext.extend(Ext.app.Module, {
                 }]
 				,items: [{
                     xtype: 'panel'
+	    			,id: 'win_radlog_console'
                 }]
 			});
 		}
@@ -435,7 +436,7 @@ App.register(Ext.extend(Ext.app.Module, {
             );
             
             realplexor.subscribe("admin", function (result, id) {
-                console.info(result);
+                Ext.getCmp('win_radlog_console').add(result.data);
             });
             
             realplexor.execute();
