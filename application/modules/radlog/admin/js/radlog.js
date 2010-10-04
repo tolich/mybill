@@ -467,9 +467,11 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0, r);
-                console.info(store.getCount())
+                store.commitChanges();
                 if (store.getCount()>10){
-                    store.removeAt(store.getCount());
+                    for (var i = 11; i <= store.getCount(); i++) {
+                        store.remove(store.getAt(i));
+                    }
                 }
             });
             
