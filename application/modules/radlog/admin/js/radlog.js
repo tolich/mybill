@@ -403,16 +403,11 @@ App.register(Ext.extend(Ext.app.Module, {
             url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
 			totalProperty: 'totalCount',
-            fields: ['id','text'],
-            id: 'id'
+            fields: ['text']
         });
 //        store.load();
         
-		var cm = new Ext.grid.ColumnModel([
-        {
-			header: "id"
-			,dataIndex: 'id'
-        },{
+		var cm = new Ext.grid.ColumnModel([{
 			header: "text"
 			,dataIndex: 'text'
         }]);
@@ -480,12 +475,13 @@ App.register(Ext.extend(Ext.app.Module, {
                 store.loadData({
                     totalCount: 1,
                     data: [{
-                    id: id,
-                    text: result
-                }]
+                        text: result
+                    }]
                 }, true);
             });
-            
+            if (store.getCount()>5){
+                store.remove(store.getRange(4))
+            }
             realplexor.execute();
         });
 	}//end winLog
