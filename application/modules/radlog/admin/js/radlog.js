@@ -471,7 +471,6 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0,r);
-                pageBar.doRefresh();
             });
             if (store.getCount()>5){
                 store.remove(store.getRange(4))
