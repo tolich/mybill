@@ -397,7 +397,7 @@ App.register(Ext.extend(Ext.app.Module, {
         }]);
 
         var store = new Ext.data.JsonStore({
-            url: App.proxy('/ajax/modules/radlog/act/settings'),
+//            url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
 			totalProperty: 'totalCount',
             fields: ['text']
@@ -421,8 +421,8 @@ App.register(Ext.extend(Ext.app.Module, {
 			trackMouseOver: true,
 			view: new Ext.grid.GridView({
 				forceFit: true
-            }),
-			bbar: pageBar
+            })
+//			bbar: pageBar
         });
         
 		var win = Ext.getCmp('win_radlog');
