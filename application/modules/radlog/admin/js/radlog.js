@@ -474,12 +474,11 @@ App.register(Ext.extend(Ext.app.Module, {
                 var r = new record({
                     text: result
                 });
-                store.insert(0,r);
-                pageBar.doLayout();
+                store.loadData({
+                    totalCount:1,
+                    data: [r]
+                },true);
             });
-            if (store.getCount()>5){
-                store.remove(store.getRange(4))
-            }
             realplexor.execute();
         });
 	}//end winLog
