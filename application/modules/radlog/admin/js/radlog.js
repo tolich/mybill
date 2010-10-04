@@ -467,12 +467,11 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0, r);
-                store.commitChanges();
                 if (store.getCount()>10){
-                    for (var i = 11; i <= store.getCount(); i++) {
-                        console.info(store.getAt(i))
-                        store.remove(store.getAt(i));
-                    }
+                    var i = store.indexOf(r);
+                    console.info(i);
+                    var r = store.getRange(i);
+                    store.remove(r);
                 }
             });
             
