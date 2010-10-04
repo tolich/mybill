@@ -410,15 +410,15 @@ App.register(Ext.extend(Ext.app.Module, {
 			,dataIndex: 'text'
         }]);
         
-        var view = new Ext.grid.GridPanel({
+        var log = new Ext.grid.GridPanel({
             store: store,
             cm: cm,
-            autoHeight:true,
-            autoScroll: true,
-            multiSelect: true,
 			trackMouseOver: true,
+			view: new Ext.grid.GridView({
+				forceFit: true
+            }),
 			bbar: new Ext.PagingToolbar({
-				pageSize: 50,
+				pageSize: 5,
 				store: store,
 				displayInfo: true
 			})
@@ -456,7 +456,7 @@ App.register(Ext.extend(Ext.app.Module, {
 //					}
 //                    ,scope: this
                 }]
-				,items: view
+				,items: log
 			});
 		}
 		win.show(null,function(){
