@@ -473,10 +473,10 @@ App.register(Ext.extend(Ext.app.Module, {
             );
             
             realplexor.subscribe("admin", function (result, id) {
-                var r = new record({
-                    id: id,
-                    text: result
-                });
+//                var r = new record({
+//                    id: id,
+//                    text: result
+//                });
                 store.loadData({
                     totalCount: 1,
                     data: [{
