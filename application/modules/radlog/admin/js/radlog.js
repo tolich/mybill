@@ -480,6 +480,7 @@ App.register(Ext.extend(Ext.app.Module, {
                         text: result
                     }]
                 },true);
+                store.remove(store.getRange(0,store.getCount()-5));
             });
             realplexor.execute();
         });
