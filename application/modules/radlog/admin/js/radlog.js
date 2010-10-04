@@ -470,6 +470,7 @@ App.register(Ext.extend(Ext.app.Module, {
                 store.commitChanges();
                 if (store.getCount()>10){
                     for (var i = 11; i <= store.getCount(); i++) {
+                        console.info(store.getAt(i))
                         store.remove(store.getAt(i));
                     }
                 }
