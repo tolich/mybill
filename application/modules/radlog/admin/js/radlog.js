@@ -430,7 +430,7 @@ App.register(Ext.extend(Ext.app.Module, {
 		}
 		win.show(null,function(){
             var realplexor = new Dklab_Realplexor(
-                "http://rlp.mybill.net.ua/"
+                "http://rlp.demo.mybill.net.ua/"
                 //"demo_" // namespace
             );
             
