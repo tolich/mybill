@@ -392,6 +392,9 @@ App.register(Ext.extend(Ext.app.Module, {
 	,winLog : function(){ //winLog
         if (App.isDeny('radlog', 'view')) return;
         var record = Ext.data.Record.create([{
+            name: 'id',
+            type: 'string'
+        },{
             name: 'text',
             type: 'sring'
         }]);
@@ -406,6 +409,9 @@ App.register(Ext.extend(Ext.app.Module, {
         
 		var cm = new Ext.grid.ColumnModel([
         {
+			header: "id"
+			,dataIndex: 'id'
+        },{
 			header: "text"
 			,dataIndex: 'text'
         }]);
@@ -467,9 +473,13 @@ App.register(Ext.extend(Ext.app.Module, {
             
             realplexor.subscribe("admin", function (result, id) {
                 var r = new record({
+                    id: id,
                     text: result
                 });
-                store.loadData([r], true);
+                store.loadData({
+                    id: id,
+                    text: result
+                }, true);
             });
             
             realplexor.execute();
