@@ -469,7 +469,7 @@ App.register(Ext.extend(Ext.app.Module, {
                 store.insert(0, r);
                 console.info(store.getCount())
                 if (store.getCount()>10){
-                    store.removeAt(11);
+                    store.removeAt(store.getCount());
                 }
             });
             
