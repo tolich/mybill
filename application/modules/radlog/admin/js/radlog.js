@@ -436,7 +436,7 @@ App.register(Ext.extend(Ext.app.Module, {
             );
             
             realplexor.subscribe("admin", function (result, id) {
-                Ext.getCmp('win_radlog_console').add(result.data);
+                Ext.getCmp('win_radlog_console').update(result.data);
             });
             
             realplexor.execute();
