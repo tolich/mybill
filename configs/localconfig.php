@@ -129,5 +129,14 @@ $aDBConfigs = array (
     		PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARSET ".PROJECT_DATABASE_CHARSET
     	)
     ),
+    'sms'=>array(
+    	'dbname'   => 'users',
+    	'username' => 'tolich',
+    	'password' => '1q2w3e', 
+    	'host'     => '77.120.116.10',
+    	'driver_options' => array(
+    		PDO::MYSQL_ATTR_INIT_COMMAND => "SET CHARSET utf8"
+    	)
+    ),
 );
 Zend_Registry::set('db_params', $aDBConfigs);

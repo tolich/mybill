@@ -136,7 +136,6 @@ class Sessions
         $sql = Db::sql_calc_found_rows($sql);
 		$aRows = $this->Db->fetchAll($sql);
         $aCount = $this->Db->fetchOne('SELECT FOUND_ROWS()');
-        Utils::html_decode($aRows);
 		Utils::encode($aRows);
 		foreach ($aRows as &$aRow){
 			if ($aRow['acctsessiontime']!=0){

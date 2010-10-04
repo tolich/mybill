@@ -577,7 +577,7 @@ CREATE TABLE settings(
   id int(11) NOT NULL auto_increment,
   text varchar(256) NOT NULL default '',
   param varchar(32) NOT NULL default '',
-  value varchar(32) NOT NULL default '',
+  value varchar(256) NOT NULL default '',
   answer text,
   type int NOT NULL default 0,
   PRIMARY KEY id (id),
