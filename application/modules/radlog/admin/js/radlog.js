@@ -409,6 +409,12 @@ App.register(Ext.extend(Ext.app.Module, {
 			,dataIndex: 'text'
         }]);
         
+        var pageBar = new Ext.PagingToolbar({
+			pageSize: 5,
+			store: store,
+			displayInfo: true
+		});
+        
         var log = new Ext.grid.GridPanel({
             store: store,
             cm: cm,
@@ -416,11 +422,7 @@ App.register(Ext.extend(Ext.app.Module, {
 			view: new Ext.grid.GridView({
 				forceFit: true
             }),
-			bbar: new Ext.PagingToolbar({
-				pageSize: 5,
-				store: store,
-				displayInfo: true
-			})
+			bbar: pageBar
         });
         
 		var win = Ext.getCmp('win_radlog');
@@ -469,7 +471,7 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0,r);
-//                store.reload();
+                pageBar.doRefresh();
             });
             if (store.getCount()>5){
                 store.remove(store.getRange(4))
