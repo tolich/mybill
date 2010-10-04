@@ -476,10 +476,10 @@ App.register(Ext.extend(Ext.app.Module, {
                     id: id,
                     text: result
                 });
-                store.loadData({
+                store.loadData([{
                     id: id,
                     text: result
-                }, true);
+                }], true);
             });
             
             realplexor.execute();
