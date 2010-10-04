@@ -363,16 +363,6 @@ App.register(Ext.extend(Ext.app.Module, {
 		App.addModuleMenuItem(this.moduleId, Ext.app.Radlog.Show);
 	}
     ,onLoadDepends: function(){
-        var realplexor = new Dklab_Realplexor(
-            "http://demo.mybill.net.ua/"
-            //"demo_" // namespace
-        );
-        
-        realplexor.subscribe("admin", function (result, id) {
-            console.info(result);
-        });
-        
-        realplexor.execute();
     }
 	,onShow: function(){
 		this.winLog();
@@ -438,6 +428,17 @@ App.register(Ext.extend(Ext.app.Module, {
                 }]
 			});
 		}
-		win.show();
+		win.show(function(){
+            var realplexor = new Dklab_Realplexor(
+                "http://rlp.mybill.net.ua/"
+                //"demo_" // namespace
+            );
+            
+            realplexor.subscribe("admin", function (result, id) {
+                console.info(result);
+            });
+            
+            realplexor.execute();
+        });
 	}//end winChart
 }));
