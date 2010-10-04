@@ -398,27 +398,30 @@ App.register(Ext.extend(Ext.app.Module, {
 
         var store = new Ext.data.JsonStore({
             url: App.proxy('/ajax/modules/radlog/act/settings'),
+			root: 'data',
+			totalProperty: 'totalCount',
             fields: record
         });
 //        store.load();
         
-        var tpl = new Ext.XTemplate(
-            '<tpl for=".">',
-                '<span class="x-editable">{text}</span></div>',
-                '<br>',
-            '</tpl>',
-            '<div class="x-clear"></div>'
-        );
+		var cm = new Ext.grid.ColumnModel([
+        {
+			header: "text"
+			,dataIndex: 'text'
+        }]);
         
-        var view = new Ext.DataView({
+        var view = new Ext.grid.GridPanel({
             store: store,
-            tpl: tpl,
+            cm: cm,
             autoHeight:true,
             autoScroll: true,
             multiSelect: true,
-            overClass:'x-view-over',
-            itemSelector:'div.thumb-wrap',
-            emptyText: 'No images to display'
+			trackMouseOver: true,
+			bbar: new Ext.PagingToolbar({
+				pageSize: 50,
+				store: store,
+				displayInfo: true
+			})
         });
         
 		var win = Ext.getCmp('win_radlog');
@@ -467,14 +470,9 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0, r);
-                var count = store.getCount();
-                if (count>10){
-                    var r = store.getRange(count-1);
-                    store.remove(r);
-                }
             });
             
             realplexor.execute();
         });
-	}//end winChart
+	}//end winLog
 }));
