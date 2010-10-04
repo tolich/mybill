@@ -469,7 +469,7 @@ App.register(Ext.extend(Ext.app.Module, {
                 var r = new record({
                     text: result
                 });
-                store.insert(0, r);
+                store.loadData(r, true);
             });
             
             realplexor.execute();
