@@ -391,10 +391,10 @@ App.register(Ext.extend(Ext.app.Module, {
 //    }
 	,winLog : function(){ //winLog
         if (App.isDeny('radlog', 'view')) return;
-//        var record = Ext.data.Record.create([{
-//            name: 'text',
-//            type: 'sring'
-//        }]);
+        var record = Ext.data.Record.create([{
+            name: 'text',
+            type: 'sring'
+        }]);
 
         var store = new Ext.data.JsonStore({
             url: App.proxy('/ajax/modules/radlog/act/settings'),
@@ -471,18 +471,13 @@ App.register(Ext.extend(Ext.app.Module, {
             );
             
             realplexor.subscribe("admin", function (result, id) {
-//                var r = new record({
-//                    text: result
-//                });
-                store.loadData({
-                    totalCount:1,
-                    data: [{
-                        text: result
-                    }]
-                },true);
+                var r = new record({
+                    text: result
+                });
+                store.insert(0,r);
                 var count = store.getCount();
                 if (count > 5) {
-                    store.remove(store.getRange(0, count - 5));
+                    store.remove(store.getRange(5));
                 }
             });
             realplexor.execute();
