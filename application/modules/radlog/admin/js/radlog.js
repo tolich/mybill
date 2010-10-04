@@ -391,6 +391,34 @@ App.register(Ext.extend(Ext.app.Module, {
 //    }
 	,winLog : function(){ //winLog
         if (App.isDeny('radlog', 'view')) return;
+        var record = Ext.data.Record.create([{
+            name: 'text',
+            type: 'sring'
+        }]);
+
+        var store = new Ext.data.JsonStore({
+            url: App.proxy('/ajax/modules/radlog/act/settings'),
+            fields: record
+        });
+//        store.load();
+        
+        var tpl = new Ext.XTemplate(
+            '<tpl for=".">',
+                '<span class="x-editable">{text}</span></div>',
+            '</tpl>',
+            '<div class="x-clear"></div>'
+        );
+        
+        var view = new Ext.DataView({
+            store: store,
+            tpl: tpl,
+            autoHeight:true,
+            multiSelect: true,
+            overClass:'x-view-over',
+            itemSelector:'div.thumb-wrap',
+            emptyText: 'No images to display'
+        });
+        
 		var win = Ext.getCmp('win_radlog');
 		if (win == undefined) {
 			var win = new Ext.Window({
@@ -423,10 +451,7 @@ App.register(Ext.extend(Ext.app.Module, {
 //					}
 //                    ,scope: this
                 }]
-				,items: [{
-                    xtype: 'panel'
-	    			,id: 'win_radlog_console'
-                }]
+				,items: view
 			});
 		}
 		win.show(null,function(){
@@ -436,8 +461,11 @@ App.register(Ext.extend(Ext.app.Module, {
             );
             
             realplexor.subscribe("admin", function (result, id) {
-                console.info(result);
-                Ext.getCmp('win_radlog_console').update(result);
+                var r = new record({
+                    text: result
+                });
+                store.add(r);
+                //view.doLayout();
             });
             
             realplexor.execute();
