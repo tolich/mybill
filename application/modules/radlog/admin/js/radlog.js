@@ -364,7 +364,7 @@ App.register(Ext.extend(Ext.app.Module, {
 	}
     ,onLoadDepends: function(){
         var realplexor = new Dklab_Realplexor(
-            "http://demo.mybill.net.ua:8088/"
+            "http://demo.mybill.net.ua/"
             //"demo_" // namespace
         );
         
