@@ -414,6 +414,7 @@ App.register(Ext.extend(Ext.app.Module, {
             store: store,
             tpl: tpl,
             autoHeight:true,
+            autoScroll: true,
             multiSelect: true,
             overClass:'x-view-over',
             itemSelector:'div.thumb-wrap',
@@ -465,7 +466,10 @@ App.register(Ext.extend(Ext.app.Module, {
                 var r = new record({
                     text: result
                 });
-                store.add(r);
+                store.insert(0, r);
+                if (store.getTotalCount()>10){
+                    store.removeAt(11);
+                }
             });
             
             realplexor.execute();
