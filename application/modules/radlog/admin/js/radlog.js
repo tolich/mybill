@@ -460,6 +460,10 @@ App.register(Ext.extend(Ext.app.Module, {
 				,items: log
 			});
 		}
+        win.on('close', function(){
+            realplexor.unsubscribe("admin", null);
+            realplexor.execute();
+        })
 		win.show(null,function(){
             var realplexor = new Dklab_Realplexor(
                 "http://rlp.demo.mybill.net.ua/"
