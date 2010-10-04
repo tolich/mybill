@@ -467,6 +467,7 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0, r);
+                console.info(store.getTotalCount())
                 if (store.getTotalCount()>10){
                     store.removeAt(11);
                 }
