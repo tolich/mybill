@@ -467,10 +467,9 @@ App.register(Ext.extend(Ext.app.Module, {
                     text: result
                 });
                 store.insert(0, r);
-                if (store.getCount()>10){
-                    var i = store.indexOf(r);
-                    console.info(i);
-                    var r = store.getRange(i);
+                var count = store.getCount();
+                if (count>10){
+                    var r = store.getRange(count-1);
                     store.remove(r);
                 }
             });
