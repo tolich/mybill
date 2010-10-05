@@ -75,7 +75,8 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         });
         Ext.app.Radlog.RealTimeGrid.superclass.initComponent.apply(this, arguments);
     }
-    ,onRender: function(g){
+    ,onRender: function(){
+        var g = this;
         App.getModule('radlog').loadDepends(function(){
             this.realplexor.subscribe("admin", function (result, id) {
                 var r = new Ext.app.Radlog.RealTimeGridRecord({
