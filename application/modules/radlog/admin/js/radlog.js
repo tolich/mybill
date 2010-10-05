@@ -38,7 +38,7 @@ Ext.app.Radlog.BaseTab = function(){
 Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
-//        App.getModule('radlog').loadDepends(function(){
+        App.getModule('radlog').loadDepends(function(){
             var realplexor = new Dklab_Realplexor(
                 "http://rlp.stat.svs-tv.lan/"
                 //"demo_" // namespace
@@ -95,7 +95,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
     //			bbar: pageBar
             });
-//        },this);
+        },this);
         Ext.app.Radlog.RealTimeGrid.superclass.initComponent.apply(this, arguments);
     }
 });
