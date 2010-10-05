@@ -476,8 +476,8 @@ App.register(Ext.extend(Ext.app.Module, {
                 });
                 store.insert(0,r);
                 var count = store.getCount();
-                if (count > 5) {
-                    store.remove(store.getRange(5));
+                if (count > 50) {
+                    store.remove(store.getRange(50));
                 }
             });
             realplexor.execute();
