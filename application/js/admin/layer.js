@@ -187,17 +187,19 @@ Ext.app.Layer=function(){
 					}
 				}
 			}]
-		}, {
+		}, Ext.ComponentMgr.isRegistered('radlogrtgrid')?{
 			id: 'mod-panel',
-			title: 'Дополнительно',
+			title: 'Консоль событий',
 			region: 'west',
 			split: true,
 			width: width_mod,
 			collapsible: true,
 			border:false,
 			collapsed: mod_collapsed,
-    		items:[App.emptyMod]
-		},{
+    		items:[{
+                xtype: 'radlogrtgrid'
+            }]
+		}:undefined,{
 			id: 'base-panel',
 			xtype: 'tabpanel',
 			activeTab: App.settings.users['base-panel-active-tab']||0,
@@ -220,16 +222,16 @@ Ext.app.Layer=function(){
 			layout: 'border',
 			items:
 			[{
-				id: 'log-panel',
-				title: 'События',
-				region: 'west',
-				split: true,
-				width: width_info,
-				collapsible: true,
-				border:false,
-				collapsed: log_collapsed,
-        		items:[App.emptyMod]
-			},{
+//				id: 'log-panel',
+//				title: 'События',
+//				region: 'west',
+//				split: true,
+//				width: width_info,
+//				collapsible: true,
+//				border:false,
+//				collapsed: log_collapsed,
+//        		items:[App.emptyMod]
+//			},{
 				id: 'info-tabpanel',
 				region: 'center',
 				xtype: 'tabpanel',
