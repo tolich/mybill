@@ -187,22 +187,21 @@ Ext.app.Layer=function(){
 					}
 				}
 			}]
-		}, 
-//        Ext.ComponentMgr.isRegistered('radlogrtgrid')?{
-//			id: 'mod-panel',
-//			title: 'Консоль событий',
-//			region: 'west',
-//			split: true,
-//			width: width_mod,
-//			collapsible: true,
-//			border:false,
-//            layout: 'fit',
-//			collapsed: mod_collapsed,
-//    		items:[{
-//                xtype: 'radlogrtgrid'
-//            }]
-//		}:undefined,
-        {
+		}, {
+			id: 'mod-panel',
+			title: 'Консоль событий',
+			region: 'west',
+			split: true,
+			width: width_mod,
+			collapsible: true,
+			border:false,
+            layout: 'fit',
+			collapsed: mod_collapsed,
+            hidden: !Ext.ComponentMgr.isRegistered('radlogrtgrid'),
+    		items: Ext.ComponentMgr.isRegistered('radlogrtgrid')?[{
+                xtype: 'radlogrtgrid'
+            }]:[]
+		}, {
 			id: 'base-panel',
 			xtype: 'tabpanel',
 			activeTab: App.settings.users['base-panel-active-tab']||0,
