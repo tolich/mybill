@@ -122,16 +122,15 @@ App.register(Ext.extend(Ext.app.Module, {
 				,items: log
 			});
 		}
+        var realplexor = new Dklab_Realplexor(
+            "http://rlp.stat.svs-tv.lan/"
+            //"demo_" // namespace
+        );
         win.on('close', function(){
             realplexor.unsubscribe("admin", null);
             realplexor.execute();
         })
 		win.show(null,function(){
-            var realplexor = new Dklab_Realplexor(
-                "http://rlp.stat.svs-tv.lan/"
-                //"demo_" // namespace
-            );
-            
             realplexor.subscribe("admin", function (result, id) {
                 var r = new record({
                     text: result
