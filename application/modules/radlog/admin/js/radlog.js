@@ -13,26 +13,28 @@ Ext.app.Radlog.Show = function(config){
 
 Ext.app.Radlog.Tab = function(){
 	Ext.getCmp('info-tabpanel').add({
-		id:'radlog-charts-tab'
+		id:'radlog-tab'
 		,title: 'Лог подключений'
 		,closable:true
 		,iconCls:'radlog'
-		,xtype: 'panel'
+		//,xtype: 'panel'
         ,tabPosition: 'bottom'
+        ,items: log
 	});
-	Ext.getCmp('info-tabpanel').setActiveTab('radlog-charts-tab');
+	Ext.getCmp('info-tabpanel').setActiveTab('radlog-tab');
 };
 
 Ext.app.Radlog.BaseTab = function(){
 	Ext.getCmp('base-panel').add({
-		id:'radlog-charts-basetab'
+		id:'radlog-basetab'
 		,title: 'Лог подключений'
 		,closable:true
 		,iconCls:'radlog'
-		,xtype: 'panel'
+		//,xtype: 'panel'
         ,tabPosition: 'bottom'
+        ,items: log
 	});
-	Ext.getCmp('base-panel').setActiveTab('radlog-charts-basetab');
+	Ext.getCmp('base-panel').setActiveTab('radlog-basetab');
 };
 
 
