@@ -90,7 +90,21 @@ App.register(Ext.extend(Ext.app.Module, {
             })
 //			bbar: pageBar
         });
-
+        
+        log.on('render',function(){
+            realplexor.subscribe("admin", function (result, id) {
+                var r = new record({
+                    text: result
+                });
+                store.insert(0,r);
+                var count = store.getCount();
+                if (count > 50) {
+                    store.remove(store.getRange(50));
+                }
+            });
+            realplexor.execute();
+        });
+        
         log.on('destroy', function(){
             realplexor.unsubscribe("admin", null);
             realplexor.execute();
@@ -132,18 +146,6 @@ App.register(Ext.extend(Ext.app.Module, {
 				,items: log
 			});
 		}
-		win.show(null,function(){
-            realplexor.subscribe("admin", function (result, id) {
-                var r = new record({
-                    text: result
-                });
-                store.insert(0,r);
-                var count = store.getCount();
-                if (count > 50) {
-                    store.remove(store.getRange(50));
-                }
-            });
-            realplexor.execute();
-        });
+		win.show();
 	}//end winLog
 }));
