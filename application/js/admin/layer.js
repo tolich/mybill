@@ -195,6 +195,7 @@ Ext.app.Layer=function(){
 			width: width_mod,
 			collapsible: true,
 			border:false,
+            layout: 'fit',
 			collapsed: mod_collapsed,
     		items:[{
                 xtype: 'radlogrtgrid'
