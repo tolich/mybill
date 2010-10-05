@@ -47,16 +47,16 @@ App.register(Ext.extend(Ext.app.Module, {
 		App.addModuleMenuItem(this.moduleId, Ext.app.Radlog.Show);
 	}
     ,onLoadDepends: function(){
+        this.realplexor = new Dklab_Realplexor(
+            "http://rlp.stat.svs-tv.lan/"
+            //"demo_" // namespace
+        );
     }
 	,onShow: function(){
 		this.winLog();
 	}
 	,winLog : function(){ //winLog
         if (App.isDeny('radlog', 'view')) return;
-        var realplexor = new Dklab_Realplexor(
-            "http://rlp.stat.svs-tv.lan/"
-            //"demo_" // namespace
-        );
         var record = Ext.data.Record.create([{
             name: 'text',
             type: 'sring'
@@ -92,7 +92,7 @@ App.register(Ext.extend(Ext.app.Module, {
         });
         
         log.on('render',function(){
-            realplexor.subscribe("admin", function (result, id) {
+            this.realplexor.subscribe("admin", function (result, id) {
                 var r = new record({
                     text: result
                 });
@@ -102,13 +102,13 @@ App.register(Ext.extend(Ext.app.Module, {
                     store.remove(store.getRange(50));
                 }
             });
-            realplexor.execute();
-        });
+            this.realplexor.execute();
+        }, this);
         
         log.on('destroy', function(){
-            realplexor.unsubscribe("admin", null);
-            realplexor.execute();
-        })
+            this.realplexor.unsubscribe("admin", null);
+            this.realplexor.execute();
+        }, this);
 
         
 		var win = Ext.getCmp('win_radlog');
