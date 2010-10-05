@@ -95,9 +95,8 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 }
     //			bbar: pageBar
             });
-            
-            Ext.app.Radlog.RealTimeGrid.superclass.initComponent.apply(this, arguments);
         });
+        Ext.app.Radlog.RealTimeGrid.superclass.initComponent.apply(this, arguments);
     }
 });
 Ext.reg('radlogrtgrid', Ext.app.Radlog.RealTimeGrid);
