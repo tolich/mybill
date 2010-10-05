@@ -35,14 +35,14 @@ Ext.app.Radlog.BaseTab = function(){
 	Ext.getCmp('base-panel').setActiveTab('radlog-basetab');
 };
 
+Ext.app.Radlog.RealTimeGridRecord = Ext.data.Record.create([{
+    name: 'text',
+    type: 'sring'
+}]);
+
 Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
      border:false
     ,initComponent:function() {
-        var record = Ext.data.Record.create([{
-            name: 'text',
-            type: 'sring'
-        }]);
-
         var store = new Ext.data.JsonStore({
 //            url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
@@ -78,7 +78,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
     ,onRender: function(g){
         App.getModule('radlog').loadDepends(function(){
             this.realplexor.subscribe("admin", function (result, id) {
-                var r = new record({
+                var r = new Ext.app.Radlog.RealTimeGridRecord({
                     text: result
                 });
                 g.store.insert(0,r);
