@@ -1,5 +1,5 @@
 .x-grid3-cell-first .x-grid3-cell-inner {
-    padding-left:1px !important;
+    padding-left:0 !important;
 }
 .x-grid3-row-selected .x-grid3-row-level0 {
     width:100%;
