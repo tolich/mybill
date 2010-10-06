@@ -11,4 +11,5 @@ if ($argv) {
     $msg = array_shift($argv);   
     $type = array_shift($argv);   
     $rpl->send($argv, $msg);    
+    print_r($argv);
 }
