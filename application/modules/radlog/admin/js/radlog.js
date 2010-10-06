@@ -209,6 +209,6 @@ Ext.extend(Ext.app.Radlog.LevelIcon, Ext.util.Observable, {
     },
     renderer : function(v, p, record){
         p.cellAttr = 'rowspan="2"';
-        return '<div class="x-grid3-row-level"'+record.get('level')+'>&#160;</div>';
+        return '<div class="x-grid3-row-level'+record.get('level')+'">&#160;</div>';
     }
 });
