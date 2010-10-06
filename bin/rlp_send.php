@@ -15,7 +15,7 @@ if ($argv) {
     );
     $aMsg = preg_split("/:/", array_shift($argv));
     if (count($aMsg)!=count($aKey)){
-        $aMsg = array_pad(count($aMsg)-1, count($aKey)-count($aMsg), '');
+        $aMsg = array_pad($aMsg, count($aKey), '');
     }
     $aMsg = array_combine($aKey, $aMsg); 
     $aMsg['date'] = date('Y-m-d H:i:s');
