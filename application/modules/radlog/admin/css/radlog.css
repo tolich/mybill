@@ -66,14 +66,14 @@
     height:18px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/exclamation.png);
+	background-image:url(/shared/icons/silk/error.png);
 }
 .x-grid3-cell-first .x-grid3-row-level4 {
     width:100%;
     height:18px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/exclamation.png);
+	background-image:url(/shared/icons/silk/error.png);
 }
 
 .x-grid3-row-selected .x-grid3-row-level10 {
