@@ -14,5 +14,5 @@ if ($argv) {
         'msg'
     ), preg_split(':', array_shift($argv))); 
     $aMsg['date'] = date('Y-m-d H:i:s');
-    $rpl->send($argv, $msg);    
+    $rpl->send($argv, $aMsg);    
 }
