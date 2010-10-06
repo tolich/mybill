@@ -69,7 +69,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         },{
 			header: "Логин"
 			,dataIndex: 'username'
-            ,width: 25
+            ,width: 45
             ,align: 'center'
         },{
 			header: "Сообщение"
