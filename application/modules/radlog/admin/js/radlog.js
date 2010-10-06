@@ -65,12 +65,12 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 		var cm = new Ext.grid.ColumnModel([{
 			header: "Дата"
 			,dataIndex: 'date'
-            ,width: 50
-            ,renderer: Ext.util.Format.dateRenderer()
+            ,width: 40
+            ,renderer: Ext.util.Format.dateRenderer('H:i:s d.m.Y')
         },{
 			header: "Логин"
 			,dataIndex: 'username'
-            ,width: 50
+            ,width: 20
         },{
 			header: "Сообщение"
 			,dataIndex: 'msg'
