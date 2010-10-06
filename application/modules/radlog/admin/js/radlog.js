@@ -58,7 +58,21 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 //            url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
 			totalProperty: 'totalCount',
-            fields: Ext.app.Radlog.RealTimeGridRecord.fields
+            fields: [
+            {
+                name: 'level',
+                type: 'sring'
+            },{    
+                name: 'logdate',
+                type: 'date',
+                dateFormat: 'Y-m-d H:i:s'
+            },{    
+                name: 'username',
+                type: 'sring'
+            },{    
+                name: 'msg',
+                type: 'sring'
+            }]//Ext.app.Radlog.RealTimeGridRecord.fields
         });
 //        store.load();
         
