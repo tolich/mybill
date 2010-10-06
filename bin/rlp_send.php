@@ -9,5 +9,5 @@ if ($argv) {
         //"radlog"     // namespace to use (optional)
     ); 
     $channel = array_shift($argv);   
-    $rpl->send($channel, $argv);    
+    $rpl->send($channel, $argv[0]);    
 }
