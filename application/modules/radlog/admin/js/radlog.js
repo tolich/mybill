@@ -196,7 +196,7 @@ Ext.app.Radlog.LevelIcon = function(config){
 
 Ext.extend(Ext.app.Radlog.LevelIcon, Ext.util.Observable, {
     header: "",
-    width: 25,
+    width: 20,
     sortable: false,
     fixed:true,
     dataIndex: '',
