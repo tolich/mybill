@@ -10,5 +10,4 @@ if ($argv) {
     ); 
     $msg = array_shift($argv);   
     $rpl->send($argv, $msg);    
-    print_r($argv);
 }
