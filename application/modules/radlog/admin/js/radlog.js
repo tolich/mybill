@@ -62,8 +62,14 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 //        store.load();
         
 		var cm = new Ext.grid.ColumnModel([{
-			header: "text"
-			,dataIndex: 'text'
+			header: "Дата"
+			,dataIndex: 'date'
+        },{
+			header: "Логин"
+			,dataIndex: 'username'
+        },{
+			header: "Сообщение"
+			,dataIndex: 'msg'
         }]);
         
         var pageBar = new Ext.PagingToolbar({
