@@ -8,6 +8,7 @@ if ($argv) {
         "10010"     // incoming port (see IN_ADDR in dklab_realplexor.conf)
         //"radlog"     // namespace to use (optional)
     ); 
-    $channel = array_shift($argv);   
-    $rpl->send($channel, $argv[0]);    
+    $msg = array_shift($argv);   
+    $type = array_shift($argv);   
+    $rpl->send($argv, $msg);    
 }
