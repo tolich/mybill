@@ -8,7 +8,7 @@ if ($argv) {
         "10010"     // incoming port (see IN_ADDR in dklab_realplexor.conf)
         //"radlog"     // namespace to use (optional)
     ); 
-    $aMsg = preg_split("/:/", array_shift($argv));
+    $aMsg = preg_split("/:/", array_shift($argv),3);
     $aMsg = array_combine(array(
         'level',
         'username',
