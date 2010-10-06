@@ -6,16 +6,16 @@ Ext.BLANK_IMAGE_URL="/shared/icons/s.gif";
 Ext.ns('Ext.app.Layer');
 Ext.app.Layer=function(){
 	var height = 300;
-	var width_info = 300;
-	var width_base = 300;
+	//var width_info = 300;
+	var width_mod = 300;
 	var info_collapsed = false;
 	var log_collapsed = true;
 	var mod_collapsed = true;
 	if (App.settings.users['info-panel']) {
 		var height = App.settings.users['info-panel'].height || 300;
-		var width_info = App.settings.users['info-panel'].width || 300;
+		//var width_info = App.settings.users['info-panel'].width || 300;
 		var info_collapsed = App.settings.users['info-panel'].info_collapsed || false;
-		var log_collapsed = App.settings.users['info-panel'].log_collapsed || false;
+		//var log_collapsed = App.settings.users['info-panel'].log_collapsed || false;
 	};
   	var info_tab_items = [];
 	if (App.settings.users['info-panel-items']) {
@@ -35,9 +35,9 @@ Ext.app.Layer=function(){
     		,items:[App.emptyMod]
     	});
     }
-    if(App.settings.users['base-panel']){
-		var width_mod = App.settings.users['base-panel'].width || 300;
-		var mod_collapsed = App.settings.users['base-panel'].mod_collapsed || false;
+    if(App.settings.users['mod-panel']){
+		var width_mod = App.settings.users['mod-panel'].width || 300;
+		var mod_collapsed = App.settings.users['mod-panel'].mod_collapsed || false;
 	};
    	var base_tab_items = [];
 	if (App.settings.users['base-panel-items']) {

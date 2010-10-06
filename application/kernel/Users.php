@@ -1099,7 +1099,7 @@ class Users
 	}
 
 	 /**
-	  * Снимает абонплату за месяц
+	  * Снимает абонплату за день
 	  */ 
 	public function DailyFee($id,$force=true,$opdate=false)
 	{

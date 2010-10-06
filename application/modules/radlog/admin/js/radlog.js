@@ -97,21 +97,21 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
     }
     ,onRender: function(){
         var g = this;
-        App.getModule('radlog').loadDepends(function(){
-            this.realplexor.subscribe("admin", function (result, id) {
-                var r = new Ext.app.Radlog.RealTimeGridRecord(result);
-                g.store.insert(0,r);
-                var count = g.store.getCount();
-                if (count > 50) {
-                    g.store.remove(g.store.getRange(50));
-                }
-            });
-            this.realplexor.execute();
-            g.on('destroy', function(){
-                this.realplexor.unsubscribe("admin", null);
-                this.realplexor.execute();
-            },this);
-        });
+//        App.getModule('radlog').loadDepends(function(){
+//            this.realplexor.subscribe("admin", function (result, id) {
+//                var r = new Ext.app.Radlog.RealTimeGridRecord(result);
+//                g.store.insert(0,r);
+//                var count = g.store.getCount();
+//                if (count > 50) {
+//                    g.store.remove(g.store.getRange(50));
+//                }
+//            });
+//            this.realplexor.execute();
+//            g.on('destroy', function(){
+//                this.realplexor.unsubscribe("admin", null);
+//                this.realplexor.execute();
+//            },this);
+//        });
         Ext.app.Radlog.RealTimeGrid.superclass.onRender.apply(this, arguments);
     }
 });
@@ -128,10 +128,10 @@ App.register(Ext.extend(Ext.app.Module, {
 		App.addModuleMenuItem(this.moduleId, Ext.app.Radlog.Show);
 	}
     ,onLoadDepends: function(){
-        this.realplexor = new Dklab_Realplexor(
-            "http://rlp.stat.svs-tv.lan/"
-            //"demo_" // namespace
-        );
+//        this.realplexor = new Dklab_Realplexor(
+//            "http://rlp.stat.svs-tv.lan/"
+//            //"demo_" // namespace
+//        );
     }
 	,onShow: function(){
 		this.winLog();

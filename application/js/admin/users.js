@@ -777,8 +777,6 @@ App.register(Ext.extend(Ext.app.Module, {
 		Ext.getCmp('info-tabpanel').items.each(
 			function(i){
 				if (i.xtype) {
-//                    //Bug ExtJS 3.1.1
-//                    delete i.initialConfig.ownerCt;
                     info_panel_items.push(i.initialConfig);
                 }               
 			}
@@ -787,8 +785,6 @@ App.register(Ext.extend(Ext.app.Module, {
 		Ext.getCmp('base-panel').items.each(
 			function(i){
 				if (i.xtype) {
-                    //Bug ExtJS 3.1.1
-                    delete i.initialConfig.ownerCt;
                     base_panel_items.push(i.initialConfig);
                 }               
 			}
@@ -800,17 +796,17 @@ App.register(Ext.extend(Ext.app.Module, {
 				groupField: g.store.getGroupState()
 			}
 			,'view_user': Ext.getCmp('view_user').getValue()
-			,'base-panel': {
+			,'mod-panel': {
 				width: Ext.getCmp('mod-panel').getInnerWidth()
 				,mod_collapsed : Ext.getCmp('mod-panel').collapsed 
 			}
 			,'base-panel-items': base_panel_items
 			,'base-panel-active-tab':Ext.getCmp('base-panel').items.indexOf(Ext.getCmp('base-panel').getActiveTab()) 
 			,'info-panel': {
-				width: Ext.getCmp('log-panel').getInnerWidth()
-				,height: Ext.getCmp('info-panel').getInnerHeight()
+				//width: Ext.getCmp('log-panel').getInnerWidth()
+				height: Ext.getCmp('info-panel').getInnerHeight()
 				,info_collapsed : Ext.getCmp('info-panel').collapsed
-				,log_collapsed : Ext.getCmp('log-panel').collapsed 
+				//,log_collapsed : Ext.getCmp('log-panel').collapsed 
 			}
 			,'info-panel-items': info_panel_items
 			,'info-panel-active-tab':Ext.getCmp('info-tabpanel').items.indexOf(Ext.getCmp('info-tabpanel').getActiveTab()) 
