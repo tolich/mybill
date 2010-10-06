@@ -61,19 +61,20 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
             fields: Ext.app.Radlog.RealTimeGridRecord
         });
 //        store.load();
-        
+        var level = new Ext.app.Radlog.LevelIcon();
 		var cm = new Ext.grid.ColumnModel([{
 			header: "Дата"
 			,dataIndex: 'logdate'
-            ,width: 40
+            ,width: 45
         },{
 			header: "Логин"
 			,dataIndex: 'username'
-            ,width: 20
+            ,width: 25
+            ,align: 'center'
         },{
 			header: "Сообщение"
 			,dataIndex: 'msg'
-        }]);
+        },level]);
         
         var pageBar = new Ext.PagingToolbar({
 			pageSize: 5,
@@ -179,3 +180,35 @@ App.register(Ext.extend(Ext.app.Module, {
 		win.show();
 	}//end winLog
 }));
+
+Ext.app.Radlog.LevelIcon = function(config){
+    Ext.apply(this, config);
+
+    this.addEvents({
+        beforeexpand : true,
+        expand: true,
+        beforecollapse: true,
+        collapse: true
+    });
+
+    Ext.app.Radlog.LevelIcon.superclass.constructor.call(this);
+};
+
+Ext.extend(Ext.app.Radlog.LevelIcon, Ext.util.Observable, {
+    header: "",
+    width: 25,
+    sortable: false,
+    fixed:true,
+    dataIndex: '',
+//    id: 'arrower',
+    lazyRender : true,
+	menuDisabled : true,
+    init : function(grid){
+        this.grid = grid;
+        var view = grid.getView();
+    },
+    renderer : function(v, p, record){
+        p.cellAttr = 'rowspan="2"';
+        return '<div class="x-grid3-row-level"'+record.get('level')+'>&#160;</div>';
+    }
+});

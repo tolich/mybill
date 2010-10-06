@@ -1,0 +1,104 @@
+.x-grid3-body .x-grid3-td-level0 .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-selected .x-grid3-row-level0 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_go.png);
+}
+.x-grid3-row-level0 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_green.png);
+}
+
+.x-grid3-body .x-grid3-td-level1 .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-selected .x-grid3-row-level1 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_go.png);
+}
+.x-grid3-row-level1 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_green.png);
+}
+
+.x-grid3-body .x-grid3-td-level2 .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-selected .x-grid3-row-level2 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_go.png);
+}
+.x-grid3-row-level2 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_green.png);
+}
+
+.x-grid3-body .x-grid3-td-level3 .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-selected .x-grid3-row-level3 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_go.png);
+}
+.x-grid3-row-level3 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_green.png);
+}
+
+.x-grid3-body .x-grid3-td-level4 .x-grid3-cell-inner {
+    padding:0 !important;
+    height:100%;
+}
+.x-grid3-row-selected .x-grid3-row-level4 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_go.png);
+}
+.x-grid3-row-level4 {
+    width:100%;
+    height:18px;
+    background-position:4px 2px;
+    background-repeat:no-repeat;
+    background-color:transparent;
+	background-image:url(/shared/icons/silk/bullet_green.png);
+}
