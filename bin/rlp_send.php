@@ -13,7 +13,7 @@ if ($argv) {
         'username',
         'msg'
     );
-    $aMsg = preg_split("/\:\:/", array_shift($argv));
+    $aMsg = preg_split("/:{2}/", array_shift($argv));
     if (count($aMsg)!=count($aKey)){
         $aMsg = array_pad($aMsg, count($aKey), '');
     }
