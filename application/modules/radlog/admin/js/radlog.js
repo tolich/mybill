@@ -35,8 +35,18 @@ Ext.app.Radlog.BaseTab = function(){
 	Ext.getCmp('base-panel').setActiveTab('radlog-basetab');
 };
 
-Ext.app.Radlog.RealTimeGridRecord = Ext.data.Record.create([{
-    name: 'text',
+Ext.app.Radlog.RealTimeGridRecord = Ext.data.Record.create([
+{
+    name: 'level',
+    type: 'sring'
+},{    
+    name: 'date',
+    type: 'sring'
+},{    
+    name: 'username',
+    type: 'sring'
+},{    
+    name: 'msg',
     type: 'sring'
 }]);
 
@@ -47,7 +57,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 //            url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
 			totalProperty: 'totalCount',
-            fields: ['text']
+            fields: Ext.app.Radlog.RealTimeGridRecord
         });
 //        store.load();
         
@@ -79,9 +89,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         var g = this;
         App.getModule('radlog').loadDepends(function(){
             this.realplexor.subscribe("admin", function (result, id) {
-                var r = new Ext.app.Radlog.RealTimeGridRecord({
-                    text: result
-                });
+                var r = new Ext.app.Radlog.RealTimeGridRecord(result);
                 g.store.insert(0,r);
                 var count = g.store.getCount();
                 if (count > 50) {
