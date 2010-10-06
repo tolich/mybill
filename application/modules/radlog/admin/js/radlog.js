@@ -35,21 +35,21 @@ Ext.app.Radlog.BaseTab = function(){
 	Ext.getCmp('base-panel').setActiveTab('radlog-basetab');
 };
 
-Ext.app.Radlog.RealTimeGridRecord = Ext.data.Record.create([
-{
-    name: 'level',
-    type: 'sring'
-},{    
-    name: 'logdate',
-    type: 'date',
-    dateFormat: 'Y-m-d H:i:s'
-},{    
-    name: 'username',
-    type: 'sring'
-},{    
-    name: 'msg',
-    type: 'sring'
-}]);
+Ext.app.Radlog.RealTimeGridRecord = Ext.data.Record.create(
+    [{
+        name: 'level',
+        type: 'sring'
+    },{    
+        name: 'logdate',
+        type: 'string'
+    },{    
+        name: 'username',
+        type: 'sring'
+    },{    
+        name: 'msg',
+        type: 'sring'
+    }]
+);
 
 Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
      border:false
@@ -58,21 +58,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 //            url: App.proxy('/ajax/modules/radlog/act/settings'),
 			root: 'data',
 			totalProperty: 'totalCount',
-            fields: [
-            {
-                name: 'level',
-                type: 'sring'
-            },{    
-                name: 'logdate',
-                type: 'date',
-                dateFormat: 'Y-m-d H:i:s'
-            },{    
-                name: 'username',
-                type: 'sring'
-            },{    
-                name: 'msg',
-                type: 'sring'
-            }]//Ext.app.Radlog.RealTimeGridRecord.fields
+            fields: Ext.app.Radlog.RealTimeGridRecord
         });
 //        store.load();
         
@@ -80,7 +66,6 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 			header: "Дата"
 			,dataIndex: 'logdate'
             ,width: 40
-            ,renderer: Ext.util.Format.dateRenderer('H:i:s d.m.Y')
         },{
 			header: "Логин"
 			,dataIndex: 'username'
