@@ -40,7 +40,7 @@ Ext.app.Radlog.RealTimeGridRecord = Ext.data.Record.create([
     name: 'level',
     type: 'sring'
 },{    
-    name: 'date',
+    name: 'logdate',
     type: 'date',
     dateFormat: 'Y-m-d H:i:s'
 },{    
@@ -64,7 +64,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         
 		var cm = new Ext.grid.ColumnModel([{
 			header: "Дата"
-			,dataIndex: 'date'
+			,dataIndex: 'logdate'
             ,width: 40
             ,renderer: Ext.util.Format.dateRenderer('H:i:s d.m.Y')
         },{
