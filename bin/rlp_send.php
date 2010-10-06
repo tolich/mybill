@@ -18,6 +18,6 @@ if ($argv) {
         $aMsg = array_pad($aMsg, count($aKey), '');
     }
     $aMsg = array_combine($aKey, $aMsg); 
-    $aMsg['logdate'] = date('H:i:s d.m.Y');
+    $aMsg['logdate'] = date('d.m.Y H:i:s');
     $rpl->send($argv, $aMsg); 
 }
