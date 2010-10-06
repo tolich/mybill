@@ -8,12 +8,11 @@ if ($argv) {
         "10010"     // incoming port (see IN_ADDR in dklab_realplexor.conf)
         //"radlog"     // namespace to use (optional)
     ); 
-    $aMsg = preg_split("/:/", array_shift($argv),3);
     $aMsg = array_combine(array(
         'level',
         'username',
         'msg'
-    ), $aMsg); 
+    ), array_merge(array_fill(0,3,''),preg_split("/:/", array_shift($argv)))); 
     $aMsg['date'] = date('Y-m-d H:i:s');
     $rpl->send($argv, $aMsg); 
     print_r($aMsg);   
