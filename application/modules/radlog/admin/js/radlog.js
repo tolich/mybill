@@ -62,7 +62,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         });
 //        store.load();
         var level = new Ext.app.Radlog.LevelIcon();
-		var cm = new Ext.grid.ColumnModel([{
+		var cm = new Ext.grid.ColumnModel([level,{
 			header: "Дата"
 			,dataIndex: 'logdate'
             ,width: 45
@@ -74,7 +74,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         },{
 			header: "Сообщение"
 			,dataIndex: 'msg'
-        },level]);
+        }]);
         
         var pageBar = new Ext.PagingToolbar({
 			pageSize: 5,

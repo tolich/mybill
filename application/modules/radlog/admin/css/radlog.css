@@ -8,7 +8,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_go.png);
+	background-image:url(/shared/icons/silk/wrench.png);
 }
 .x-grid3-row-level0 {
     width:100%;
@@ -16,7 +16,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_green.png);
+	background-image:url(/shared/icons/silk/wrench.png);
 }
 
 .x-grid3-body .x-grid3-td-level1 .x-grid3-cell-inner {
@@ -29,7 +29,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_go.png);
+	background-image:url(/shared/icons/silk/textfield_key.png);
 }
 .x-grid3-row-level1 {
     width:100%;
@@ -37,7 +37,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_green.png);
+	background-image:url(/shared/icons/silk/textfield_key.png);
 }
 
 .x-grid3-body .x-grid3-td-level2 .x-grid3-cell-inner {
@@ -50,7 +50,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_go.png);
+	background-image:url(/shared/icons/silk/asterisk_orange.png);
 }
 .x-grid3-row-level2 {
     width:100%;
@@ -58,7 +58,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_green.png);
+	background-image:url(/shared/icons/silk/asterisk_orange.png);
 }
 
 .x-grid3-body .x-grid3-td-level3 .x-grid3-cell-inner {
@@ -71,7 +71,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_go.png);
+	background-image:url(/shared/icons/silk/information.png);
 }
 .x-grid3-row-level3 {
     width:100%;
@@ -79,7 +79,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_green.png);
+	background-image:url(/shared/icons/silk/information.png);
 }
 
 .x-grid3-body .x-grid3-td-level4 .x-grid3-cell-inner {
@@ -92,7 +92,7 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_go.png);
+	background-image:url(/shared/icons/silk/exclamation.png);
 }
 .x-grid3-row-level4 {
     width:100%;
@@ -100,5 +100,5 @@
     background-position:4px 2px;
     background-repeat:no-repeat;
     background-color:transparent;
-	background-image:url(/shared/icons/silk/bullet_green.png);
+	background-image:url(/shared/icons/silk/exclamation.png);
 }
