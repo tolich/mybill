@@ -140,3 +140,10 @@ $aDBConfigs = array (
     ),
 );
 Zend_Registry::set('db_params', $aDBConfigs);
+
+$aRlpConfig =array(
+    'host' => '192.168.168.3',    // host at which Realplexor listens for incoming data
+    'port' => '10010',            // incoming port (see IN_ADDR in dklab_realplexor.conf)
+    'namespace' => ''             // namespace to use (optional)
+);
+Zend_Registry::set('rlp_params', $aRlpConfigs);
