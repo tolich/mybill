@@ -78,7 +78,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         
         var statusBar = new Ext.ux.StatusBar({
             text: 'Работает'
-            ,height: 25
+            ,height: 27
         });
         
         Ext.apply(this, {
