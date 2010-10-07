@@ -92,9 +92,9 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 ,id: 'radlog-btn-run'
                 ,handler: function(btn_run){
                     var btn_stop = Ext.getCmp('radlog-btn-stop');
-                    btn_run.removeClass('radlog-run');
+                    //btn_run.removeClass('radlog-run');
                     btn_run.addClass('radlog-run-active');
-                    btn_stop.removeClass('radlog-run-active');
+                    //btn_stop.removeClass('radlog-run-active');
                     btn_stop.addClass('radlog-run');
                     statusBar.setText('Работает');
                     this.subscribe('admin');
@@ -105,9 +105,9 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 ,id: 'radlog-btn-stop'
                 ,handler: function(btn_stop){
                     var btn_run = Ext.getCmp('radlog-btn-run');
-                    btn_run.removeClass('radlog-run-active');
+                    //btn_run.removeClass('radlog-run-active');
                     btn_run.addClass('radlog-run');
-                    btn_stop.removeClass('radlog-run');
+                    //btn_stop.removeClass('radlog-run');
                     btn_stop.addClass('radlog-run-active');
                     statusBar.setText('Остановлено');
                     this.unsubscribe('admin');
@@ -130,7 +130,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
             if (count > 200) {
                 this.store.remove(this.store.getRange(200));
             }
-        });
+        },this);
         mod.realplexor.execute();
     }
     ,unsubscribe: function(channel){
