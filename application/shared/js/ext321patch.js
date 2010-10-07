@@ -155,8 +155,6 @@ if (Ext.util.Format) {
 	};
     Ext.util.Format.dateRenderer= function(format){
         return function(v){
-            console.info(v)
-            console.info(Date.parse(v))
 			if (Date.parse(v)>0) {
                 return Ext.util.Format.date(v, format);
             }
