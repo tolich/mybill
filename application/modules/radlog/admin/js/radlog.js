@@ -88,33 +88,63 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 				forceFit: true
             }),
             tbar: [{
-                iconCls: 'radlog-run'
+                iconCls: 'radlog-run-active'
+                ,id: 'radlog-btn-run'
+                ,handler: function(btn_run){
+                    var btn_stop = Ext.getCmp('radlog-btn-stop');
+                    btn_run = Ext.removeClass('radlog-run');
+                    btn_run = Ext.addClass('radlog-run-active');
+                    btn_stop = Ext.removeClass('radlog-run-active');
+                    btn_stop = Ext.addClass('radlog-run');
+                    statusBar.setText('Работает');
+                    this.subscribe('admin');
+                }
+                ,scope: this
             },{
                 iconCls: 'radlog-stop'
+                ,id: 'radlog-btn-stop'
+                ,handler: function(btn_stop){
+                    var btn_run = Ext.getCmp('radlog-btn-run');
+                    btn_run = Ext.removeClass('radlog-run-active');
+                    btn_run = Ext.addClass('radlog-run');
+                    btn_stop = Ext.removeClass('radlog-run');
+                    btn_stop = Ext.addClass('radlog-run-active');
+                    statusBar.setText('Остановлено');
+                    this.unsubscribe('admin');
+                }
+                ,scope: this
             },'->',{
                 iconCls: 'radlog-clean'
+                ,id: 'radlog-btn-clean'
             }],
 			bbar: statusBar
         });
         Ext.app.Radlog.RealTimeGrid.superclass.initComponent.apply(this, arguments);
     }
-    ,onRender: function(){
-        var g = this;
-        App.getModule('radlog').loadDepends(function(){
-            this.realplexor.subscribe("admin", function (result, id) {
-                var r = new Ext.app.Radlog.RealTimeGridRecord(result);
-                g.store.insert(0,r);
-                var count = g.store.getCount();
-                if (count > 200) {
-                    g.store.remove(g.store.getRange(200));
-                }
-            });
-            this.realplexor.execute();
-            g.on('destroy', function(){
-                this.realplexor.unsubscribe("admin", null);
-                this.realplexor.execute();
-            },this);
+    ,subscribe: function(channel){
+        var mod = App.getModule('radlog');
+        mod.realplexor.subscribe(channel, function (result, id) {
+            var r = new Ext.app.Radlog.RealTimeGridRecord(result);
+            this.store.insert(0,r);
+            var count = this.store.getCount();
+            if (count > 200) {
+                this.store.remove(this.store.getRange(200));
+            }
         });
+        mod.realplexor.execute();
+    }
+    ,unsubscribe: function(channel){
+        var mod = App.getModule('radlog');
+        mod.realplexor.unsubscribe(channel, null);
+        mod.realplexor.execute();
+    }
+    ,onRender: function(){
+        App.getModule('radlog').loadDepends(function(){
+            this.subscribe('admin');
+            this.on('destroy', function(){
+                this.unsubscribe('admin');
+            },this);
+        },this);
         Ext.app.Radlog.RealTimeGrid.superclass.onRender.apply(this, arguments);
     }
 });
