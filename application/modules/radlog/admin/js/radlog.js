@@ -76,11 +76,9 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 			,dataIndex: 'msg'
         }]);
         
-        var pageBar = new Ext.PagingToolbar({
-			pageSize: 5,
-			store: store,
-			displayInfo: true
-		});
+        var statusBar = new Ext.ux.StatusBar({
+            text: 'Работает'
+        });
         
         Ext.apply(this, {
             store: store,
@@ -89,9 +87,14 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
 			view: new Ext.grid.GridView({
 				forceFit: true
             }),
-            listeners: {
-            }
-//			bbar: pageBar
+            tbar: [{
+                iconCls: 'radlog-run'
+            },{
+                iconCls: 'radlog-stop'
+            },'->',{
+                iconCls: 'radlog-clean'
+            }],
+			bbar: statusBar
         });
         Ext.app.Radlog.RealTimeGrid.superclass.initComponent.apply(this, arguments);
     }
