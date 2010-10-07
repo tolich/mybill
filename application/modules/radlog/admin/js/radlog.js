@@ -102,8 +102,8 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 var r = new Ext.app.Radlog.RealTimeGridRecord(result);
                 g.store.insert(0,r);
                 var count = g.store.getCount();
-                if (count > 50) {
-                    g.store.remove(g.store.getRange(50));
+                if (count > 200) {
+                    g.store.remove(g.store.getRange(200));
                 }
             });
             this.realplexor.execute();
