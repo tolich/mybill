@@ -1,3 +1,21 @@
+.radlog{
+    background-image: url(/shared/icons/silk/application_xp_terminal.png) !important;
+}
+.radlog-run{
+    background-image: url(/shared/icons/silk/control_play.png) !important;
+}
+.radlog-run-active{
+    background-image: url(/shared/icons/silk/control_play_blue.png) !important;
+}
+.radlog-stop{
+    background-image: url(/shared/icons/silk/control_stop.png) !important;
+}
+.radlog-stop-active{
+    background-image: url(/shared/icons/silk/control_stop_blue.png) !important;
+}
+.radlog-clean{
+    background-image: url(/shared/icons/silk/table_delete.png) !important;
+}
 .x-grid3-cell-first .x-grid3-cell-inner {
     padding-left:0 !important;
 }
