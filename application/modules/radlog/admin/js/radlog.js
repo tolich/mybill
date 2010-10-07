@@ -91,11 +91,8 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 iconCls: 'radlog-run-active'
                 ,id: 'radlog-btn-run'
                 ,handler: function(btn_run){
-                    var btn_stop = Ext.getCmp('radlog-btn-stop');
-                    //btn_run.removeClass('radlog-run');
-                    btn_run.addClass('radlog-run-active');
-                    //btn_stop.removeClass('radlog-run-active');
-                    btn_stop.addClass('radlog-run');
+                    btn_run.setIconClass('radlog-run-active');
+                    Ext.getCmp('radlog-btn-stop').setIconClass('radlog-run');
                     statusBar.setText('Работает');
                     this.subscribe('admin');
                 }
@@ -104,11 +101,8 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                 iconCls: 'radlog-stop'
                 ,id: 'radlog-btn-stop'
                 ,handler: function(btn_stop){
-                    var btn_run = Ext.getCmp('radlog-btn-run');
-                    //btn_run.removeClass('radlog-run-active');
-                    btn_run.addClass('radlog-run');
-                    //btn_stop.removeClass('radlog-run');
-                    btn_stop.addClass('radlog-run-active');
+                    Ext.getCmp('radlog-btn-run').setIconClass('radlog-run');
+                    btn_stop.setIconClass('radlog-run-active');
                     statusBar.setText('Остановлено');
                     this.unsubscribe('admin');
                 }
