@@ -128,10 +128,11 @@ App.register(Ext.extend(Ext.app.Module, {
 		App.addModuleMenuItem(this.moduleId, Ext.app.Radlog.Show);
 	}
     ,onLoadDepends: function(){
-        this.realplexor = new Dklab_Realplexor(
-            "http://rlp.stat.svs-tv.lan/"
-            //"demo_" // namespace
-        );
+        console.info(window.location.pathname);
+//        this.realplexor = new Dklab_Realplexor(
+//            "http://rlp.stat.svs-tv.lan/"
+//            //"demo_" // namespace
+//        );
     }
 	,onShow: function(){
 		this.winLog();
