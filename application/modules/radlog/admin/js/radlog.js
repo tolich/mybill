@@ -78,7 +78,7 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
         
         var statusBar = new Ext.ux.StatusBar({
             text: 'Работает'
-            ,iconCls: 'radlog-run-active'
+            ,height: 25
         });
         
         Ext.apply(this, {
@@ -95,7 +95,6 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                     btn_run.setIconClass('radlog-run-active');
                     Ext.getCmp('radlog-btn-stop').setIconClass('radlog-stop');
                     statusBar.setText('Работает');
-                    statusBar.setIcon('radlog-run-active');
                     this.subscribe('admin');
                 }
                 ,scope: this
@@ -106,7 +105,6 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
                     Ext.getCmp('radlog-btn-run').setIconClass('radlog-run');
                     btn_stop.setIconClass('radlog-stop-active');
                     statusBar.setText('Остановлено');
-                    statusBar.setIcon('radlog-stop-active');
                     this.unsubscribe('admin');
                 }
                 ,scope: this
