@@ -117,14 +117,15 @@ Ext.app.Radlog.RealTimeGrid = Ext.extend(Ext.grid.GridPanel, {
     }
     ,subscribe: function(channel){
         var mod = App.getModule('radlog');
+        var _this = this;
         mod.realplexor.subscribe(channel, function (result, id) {
             var r = new Ext.app.Radlog.RealTimeGridRecord(result);
-            this.store.insert(0,r);
-            var count = this.store.getCount();
+            _this.store.insert(0,r);
+            var count = _this.store.getCount();
             if (count > 200) {
-                this.store.remove(this.store.getRange(200));
+                _this.store.remove(_this.store.getRange(200));
             }
-        },this);
+        });
         mod.realplexor.execute();
     }
     ,unsubscribe: function(channel){
